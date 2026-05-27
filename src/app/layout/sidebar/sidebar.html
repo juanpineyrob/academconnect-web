@@ -1,0 +1,35 @@
+<div class="sidebar__brand">
+  <span class="sidebar__brand-mark" aria-hidden="true">AC</span>
+  <span class="sidebar__brand-text">
+    <span class="sidebar__brand-name">AcademConnect</span>
+    <span class="sidebar__brand-sub t-overline">Plataforma editorial</span>
+  </span>
+</div>
+
+@for (section of sections(); track section.title) {
+  <nav class="sidebar__section" [attr.aria-label]="section.title">
+    <p class="sidebar__section-title t-overline">{{ section.title }}</p>
+    <ul role="list" class="sidebar__list">
+      @for (item of section.items; track item.label) {
+        <li class="sidebar__item">
+          @if (item.route) {
+            <a
+              [routerLink]="item.route"
+              routerLinkActive="is-active"
+              [routerLinkActiveOptions]="{ exact: true }"
+              class="sidebar__link">
+              <span class="sidebar__link-dot" aria-hidden="true"></span>
+              {{ item.label }}
+            </a>
+          } @else {
+            <span class="sidebar__link sidebar__link--disabled" aria-disabled="true">
+              <span class="sidebar__link-dot" aria-hidden="true"></span>
+              {{ item.label }}
+              <span class="sidebar__pill">Pronto</span>
+            </span>
+          }
+        </li>
+      }
+    </ul>
+  </nav>
+}

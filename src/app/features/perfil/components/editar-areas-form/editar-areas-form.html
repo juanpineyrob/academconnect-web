@@ -1,0 +1,87 @@
+<!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+<div class="areas__backdrop" (click)="onBackdrop($event)">
+  <aside
+    class="areas__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="areas-title">
+    <header class="areas__header">
+      <div>
+        <p class="t-overline">Editar áreas</p>
+        <h2 id="areas-title" class="areas__title">Tus líneas de investigación</h2>
+        <p class="areas__sub t-body-sm">
+          Seleccioná las disciplinas en las que querés ser visible y marcá tu nivel.
+        </p>
+      </div>
+      <button
+        type="button"
+        class="areas__close"
+        aria-label="Cerrar"
+        (click)="onCancel()">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </header>
+
+    <form class="areas__form" (submit)="onSubmit($event)" novalidate>
+      <p class="areas__count t-caption">{{ selectedCount() }} seleccionadas</p>
+
+      @if (availableAreas().length === 0) {
+        <p class="areas__empty">Cargando áreas temáticas…</p>
+      } @else {
+        <ul role="list" class="areas__list">
+          @for (area of availableAreas(); track area.id) {
+            <li class="areas__item">
+              <label class="areas__row">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(area.id)"
+                  (change)="onCheckboxChange(area.id, $event)" />
+                <span class="areas__row-name">{{ area.nombre }}</span>
+                @if (isSelected(area.id)) {
+                  <select
+                    class="areas__select"
+                    [value]="nivelFor(area.id)"
+                    (change)="onNivelChange(area.id, $event)"
+                    [attr.aria-label]="'Nivel para ' + area.nombre">
+                    @for (n of niveles; track n) {
+                      <option [value]="n">{{ nivelLabel(n) }}</option>
+                    }
+                  </select>
+                }
+              </label>
+            </li>
+          }
+        </ul>
+      }
+
+      @if (serverError()) {
+        <p class="areas__server-error" role="alert">{{ serverError() }}</p>
+      }
+
+      <footer class="areas__footer">
+        <ac-button variant="ghost" size="md" type="button" (click)="onCancel()">
+          Cancelar
+        </ac-button>
+        <ac-button
+          variant="primary"
+          size="md"
+          type="submit"
+          [disabled]="saving()"
+          [loading]="saving()">
+          {{ saving() ? 'Guardando…' : 'Guardar áreas' }}
+        </ac-button>
+      </footer>
+    </form>
+  </aside>
+</div>

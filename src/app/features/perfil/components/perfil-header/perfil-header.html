@@ -1,0 +1,34 @@
+<div class="perfil-header">
+  <div class="perfil-header__decor" aria-hidden="true"></div>
+
+  <div class="perfil-header__inner">
+    <div class="perfil-header__avatar">
+      <ac-avatar size="xl" [name]="perfil().nombre" [photoUrl]="perfil().fotoUrl" />
+    </div>
+
+    <div class="perfil-header__body">
+      <div class="perfil-header__chips">
+        <ac-badge variant="role">{{ rolLabel() }}</ac-badge>
+        @if (perfil().activo) {
+          <ac-badge variant="state" state="aprobado">Verificado</ac-badge>
+        }
+      </div>
+
+      <h1 class="perfil-header__name">{{ perfil().nombre }}</h1>
+      <p class="perfil-header__afiliacion">{{ afiliacion() }}</p>
+
+      @if (perfil().ubicacion) {
+        <p class="perfil-header__meta">
+          <span aria-hidden="true">◇</span>
+          {{ perfil().ubicacion }}
+        </p>
+      }
+
+      <div class="perfil-header__actions">
+        <ac-button variant="ghost" size="sm" [disabled]="true">Contactar</ac-button>
+        <ac-button variant="ghost" size="sm" [disabled]="true">Seguir</ac-button>
+        <ac-button variant="primary" size="sm" (click)="onEdit()">Editar perfil</ac-button>
+      </div>
+    </div>
+  </div>
+</div>

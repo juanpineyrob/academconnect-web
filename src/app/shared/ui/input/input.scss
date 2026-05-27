@@ -1,0 +1,80 @@
+:host {
+  display: block;
+}
+
+.ac-input {
+  position: relative;
+  display: block;
+  cursor: text;
+}
+
+.ac-input__field {
+  width: 100%;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: var(--sp-5) var(--sp-4) var(--sp-2);
+  min-height: 56px;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+  outline: none;
+}
+
+.ac-input__field:hover:not(:disabled) {
+  border-color: var(--c-text-muted);
+}
+
+.ac-input__field:focus {
+  border-color: var(--c-accent);
+  box-shadow: var(--sh-focus);
+}
+
+.ac-input__label {
+  position: absolute;
+  left: var(--sp-4);
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text-muted);
+  background: var(--c-surface);
+  padding-inline: var(--sp-1);
+  pointer-events: none;
+  transition: transform var(--t-fast), font-size var(--t-fast), color var(--t-fast);
+}
+
+.ac-input__field:focus + .ac-input__label,
+.ac-input__field:not(:placeholder-shown) + .ac-input__label {
+  top: 0;
+  transform: translateY(-50%) scale(1);
+  font-size: var(--fs-caption);
+  color: var(--c-text-muted);
+  font-weight: var(--fw-medium);
+}
+
+.ac-input--invalid .ac-input__field {
+  border-color: var(--c-state-rechazado);
+}
+
+.ac-input--invalid .ac-input__field:focus {
+  box-shadow: 0 0 0 3px rgba(179, 38, 30, 0.2);
+}
+
+.ac-input--invalid .ac-input__label {
+  color: var(--c-state-rechazado);
+}
+
+.ac-input--disabled .ac-input__field {
+  background: var(--c-surface-muted);
+  color: var(--c-text-faint);
+  cursor: not-allowed;
+}
+
+.ac-input__error {
+  margin-top: var(--sp-1);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  color: var(--c-state-rechazado);
+}

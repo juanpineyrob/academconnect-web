@@ -1,0 +1,33 @@
+:host {
+  display: block;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  box-shadow: var(--sh-card);
+}
+
+.ac-stat__label {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-wide);
+  color: var(--c-text-muted);
+  margin-bottom: var(--sp-2);
+}
+
+.ac-stat__value {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+}
+
+.ac-stat__sub {
+  margin-top: var(--sp-2);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+}

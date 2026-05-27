@@ -1,0 +1,127 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  width: 260px;
+  min-height: 100vh;
+  padding: var(--sp-5) var(--sp-4);
+  background: var(--c-surface);
+  border-right: 1px solid var(--c-border);
+}
+
+.sidebar__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding-bottom: var(--sp-4);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.sidebar__brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--r-md);
+  background: var(--c-primary);
+  color: var(--c-primary-contrast);
+  font-family: var(--ff-serif);
+  font-weight: var(--fw-semibold);
+  font-size: 0.95rem;
+  letter-spacing: var(--ls-wide);
+}
+
+.sidebar__brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar__brand-name {
+  font-family: var(--ff-serif);
+  font-size: 1rem;
+  color: var(--c-text);
+}
+
+.sidebar__brand-sub {
+  color: var(--c-text-faint);
+  margin-top: 2px;
+}
+
+.sidebar__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.sidebar__section-title {
+  margin: 0 var(--sp-3) var(--sp-1);
+  color: var(--c-text-faint);
+}
+
+.sidebar__list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar__item {
+  display: block;
+}
+
+.sidebar__link {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text);
+  text-decoration: none;
+  cursor: pointer;
+  transition: background var(--t-fast), color var(--t-fast);
+  position: relative;
+}
+
+.sidebar__link:hover:not(.sidebar__link--disabled) {
+  background: var(--c-surface-muted);
+  color: var(--c-primary);
+}
+
+.sidebar__link.is-active {
+  background: var(--c-accent-soft);
+  color: var(--c-accent);
+  font-weight: var(--fw-medium);
+}
+
+.sidebar__link.is-active .sidebar__link-dot {
+  background: var(--c-accent);
+}
+
+.sidebar__link-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-border-strong);
+  flex-shrink: 0;
+}
+
+.sidebar__link--disabled {
+  color: var(--c-text-faint);
+  cursor: not-allowed;
+}
+
+.sidebar__pill {
+  margin-left: auto;
+  font-size: 0.65rem;
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-pill);
+  background: var(--c-surface-muted);
+  color: var(--c-text-faint);
+}

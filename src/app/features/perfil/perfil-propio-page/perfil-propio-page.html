@@ -1,0 +1,49 @@
+<div class="perfil-page">
+  @if (loading()) {
+    <div class="perfil-page__skeleton" aria-busy="true" aria-label="Cargando perfil">
+      <div class="perfil-page__skeleton-header"></div>
+      <div class="perfil-page__skeleton-row"></div>
+      <div class="perfil-page__skeleton-row"></div>
+    </div>
+  } @else if (loadError()) {
+    <div role="alert" class="perfil-page__error">
+      <p class="t-h3">No pudimos cargar tu perfil</p>
+      <p class="t-body">{{ loadError() }}</p>
+    </div>
+  } @else if (perfil(); as p) {
+    <ac-perfil-header [perfil]="p" (editClick)="openEditPerfil()" />
+
+    <ac-perfil-stats [perfil]="p" [evaluadorStats]="evaluadorStats()" />
+
+    <div class="perfil-page__cols">
+      <div class="perfil-page__col perfil-page__col--main">
+        <ac-bio-academica [biografia]="p.biografia" (editClick)="openEditPerfil()" />
+        @if (isEstudiante()) {
+          <ac-publicaciones-recientes [items]="trabajos()" />
+        }
+        <ac-reconocimientos [items]="reconocimientos()" />
+      </div>
+      <div class="perfil-page__col perfil-page__col--side">
+        <ac-lineas-investigacion [areas]="p.areas" (editClick)="openEditAreas()" />
+      </div>
+    </div>
+  }
+</div>
+
+@if (editPerfilOpen() && perfil(); as p) {
+  <ac-editar-perfil-form
+    [perfil]="p"
+    [saving]="savingPerfil()"
+    [serverError]="perfilFormError()"
+    (closeRequested)="closeEditPerfil()"
+    (save)="onSavePerfil($event)" />
+}
+
+@if (editAreasOpen() && perfil(); as p) {
+  <ac-editar-areas-form
+    [currentAreas]="p.areas"
+    [saving]="savingAreas()"
+    [serverError]="areasFormError()"
+    (closeRequested)="closeEditAreas()"
+    (save)="onSaveAreas($event)" />
+}

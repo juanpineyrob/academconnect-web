@@ -1,0 +1,56 @@
+:host {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  padding: 4px var(--sp-2);
+  border-radius: var(--r-pill);
+  border: 1px solid transparent;
+  white-space: nowrap;
+  line-height: 1;
+}
+
+:host(.ac-badge--role) {
+  background: var(--c-primary);
+  color: var(--c-primary-contrast);
+}
+
+:host(.ac-badge--area) {
+  background: var(--c-accent-soft);
+  color: var(--c-accent);
+  border-color: rgba(48, 86, 245, 0.15);
+}
+
+:host(.ac-badge--state-aprobado) {
+  background: var(--c-state-aprobado-bg);
+  color: var(--c-state-aprobado);
+}
+
+:host(.ac-badge--state-revision) {
+  background: var(--c-state-revision-bg);
+  color: var(--c-state-revision);
+}
+
+:host(.ac-badge--state-rechazado) {
+  background: var(--c-state-rechazado-bg);
+  color: var(--c-state-rechazado);
+}
+
+:host(.ac-badge--state-borrador) {
+  background: var(--c-state-borrador-bg);
+  color: var(--c-state-borrador);
+}
+
+:host(.ac-badge--state-enviado) {
+  background: var(--c-state-enviado-bg);
+  color: var(--c-state-enviado);
+}
+
+:host(.ac-badge--state-observado) {
+  background: var(--c-state-observado-bg);
+  color: var(--c-state-observado);
+}

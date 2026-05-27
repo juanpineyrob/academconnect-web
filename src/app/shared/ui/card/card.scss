@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-card);
+}
+
+:host(.ac-card--elevated) {
+  box-shadow: var(--sh-elevated);
+}
+
+:host(.ac-card--p-none) {
+  padding: 0;
+}
+
+:host(.ac-card--p-sm) {
+  padding: var(--sp-4);
+}
+
+:host(.ac-card--p-md) {
+  padding: var(--sp-5);
+}
+
+:host(.ac-card--p-lg) {
+  padding: var(--sp-6);
+}

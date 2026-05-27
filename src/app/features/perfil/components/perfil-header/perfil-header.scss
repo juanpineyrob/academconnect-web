@@ -1,0 +1,95 @@
+:host {
+  display: block;
+}
+
+.perfil-header {
+  position: relative;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  box-shadow: var(--sh-card);
+}
+
+.perfil-header__decor {
+  position: relative;
+  height: 140px;
+  background: linear-gradient(135deg, #0a1f44 0%, #142a55 55%, #1d3a6e 100%);
+}
+
+.perfil-header__decor::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 85% 30%, rgba(255, 255, 255, 0.06), transparent 40%),
+    radial-gradient(circle at 15% 80%, rgba(48, 86, 245, 0.2), transparent 50%);
+}
+
+.perfil-header__inner {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--sp-5);
+  padding: var(--sp-5) var(--sp-6) var(--sp-6);
+  align-items: start;
+}
+
+.perfil-header__avatar {
+  padding: var(--sp-1);
+  background: var(--c-surface);
+  border-radius: 50%;
+  border: 3px solid var(--c-surface);
+  box-shadow: var(--sh-card);
+}
+
+.perfil-header__body {
+  padding-bottom: var(--sp-1);
+}
+
+.perfil-header__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-3);
+}
+
+.perfil-header__name {
+  font-family: var(--ff-serif);
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+  margin: 0;
+}
+
+.perfil-header__afiliacion {
+  margin-top: var(--sp-1);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text-muted);
+}
+
+.perfil-header__meta {
+  margin-top: var(--sp-2);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-faint);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.perfil-header__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-5);
+}
+
+@media (max-width: 640px) {
+  .perfil-header__inner {
+    grid-template-columns: 1fr;
+    margin-top: -48px;
+  }
+}

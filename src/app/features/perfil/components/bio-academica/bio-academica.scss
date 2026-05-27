@@ -1,0 +1,40 @@
+:host {
+  display: block;
+}
+
+.bio__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--sp-3);
+}
+
+.bio__title {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+  margin: 0;
+}
+
+.bio__quote {
+  margin: 0;
+  padding-left: var(--sp-4);
+  border-left: 3px solid var(--c-accent);
+  font-family: var(--ff-serif);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-relaxed);
+  color: var(--c-text);
+}
+
+.bio__empty {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-faint);
+  padding-left: var(--sp-4);
+  border-left: 3px dashed var(--c-border);
+}

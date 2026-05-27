@@ -1,0 +1,110 @@
+<div class="header__search" role="search">
+  <svg
+    class="header__search-icon"
+    aria-hidden="true"
+    viewBox="0 0 24 24"
+    width="18"
+    height="18"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round">
+    <circle cx="11" cy="11" r="7" />
+    <path d="m20 20-3.5-3.5" />
+  </svg>
+  <input
+    type="search"
+    class="header__search-input"
+    placeholder="Buscar trabajos, autores, áreas…"
+    disabled
+    aria-label="Buscar (próximamente)" />
+  <span class="header__search-pill">Pronto</span>
+</div>
+
+<div class="header__actions">
+  <button
+    type="button"
+    class="header__icon-btn"
+    disabled
+    aria-label="Cambiar tema (próximamente)"
+    title="Cambiar tema (próximamente)">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round">
+      <circle cx="12" cy="12" r="4" />
+      <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" />
+    </svg>
+  </button>
+
+  <button
+    type="button"
+    class="header__icon-btn"
+    disabled
+    aria-label="Notificaciones (próximamente)"
+    title="Notificaciones (próximamente)">
+    <svg
+      aria-hidden="true"
+      viewBox="0 0 24 24"
+      width="18"
+      height="18"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round">
+      <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+      <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+    </svg>
+  </button>
+
+  <div class="header__user">
+    <button
+      type="button"
+      class="header__user-trigger"
+      [attr.aria-expanded]="menuOpen()"
+      aria-haspopup="menu"
+      aria-label="Abrir menú de usuario"
+      (click)="toggleMenu()">
+      <ac-avatar size="sm" [name]="user()?.nombre ?? '?'" />
+      <span class="header__user-name">{{ user()?.nombre }}</span>
+      <svg
+        class="header__user-chevron"
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        width="14"
+        height="14"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </button>
+
+    @if (menuOpen()) {
+      <div role="menu" class="header__menu" aria-label="Menú de usuario">
+        <div class="header__menu-id">
+          <p class="header__menu-name">{{ user()?.nombre }}</p>
+          <p class="header__menu-email">{{ user()?.email }}</p>
+        </div>
+        <div class="header__menu-divider" role="separator"></div>
+        <button
+          type="button"
+          role="menuitem"
+          class="header__menu-item"
+          (click)="logout()">
+          Cerrar sesión
+        </button>
+      </div>
+    }
+  </div>
+</div>

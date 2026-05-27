@@ -1,0 +1,199 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--c-bg);
+}
+
+.login {
+  display: grid;
+  grid-template-columns: 1fr;
+  min-height: 100vh;
+}
+
+@media (min-width: 960px) {
+  .login {
+    grid-template-columns: 1.1fr 1fr;
+  }
+}
+
+.login__hero {
+  position: relative;
+  background: linear-gradient(135deg, #0a1f44 0%, #142a55 55%, #1d3a6e 100%);
+  color: var(--c-text-on-primary);
+  padding: var(--sp-7) var(--sp-6);
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.login__hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.06), transparent 45%),
+    radial-gradient(circle at 20% 80%, rgba(48, 86, 245, 0.18), transparent 50%);
+  pointer-events: none;
+}
+
+.login__hero-inner {
+  position: relative;
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.login__brand {
+  color: rgba(247, 245, 240, 0.6);
+  margin-bottom: var(--sp-6);
+}
+
+.login__hero-title {
+  font-family: var(--ff-serif);
+  font-size: clamp(2.25rem, 4vw, 3.25rem);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+  margin-bottom: var(--sp-5);
+}
+
+.login__hero-title em {
+  font-style: italic;
+  color: #b8c6ff;
+}
+
+.login__hero-copy {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  line-height: var(--lh-relaxed);
+  color: rgba(247, 245, 240, 0.78);
+  margin-bottom: var(--sp-7);
+  max-width: 38ch;
+}
+
+.login__hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--sp-5);
+  margin: 0;
+  padding-top: var(--sp-5);
+  border-top: 1px solid rgba(247, 245, 240, 0.12);
+}
+
+.login__hero-stat dt {
+  color: rgba(247, 245, 240, 0.55);
+  margin: 0;
+}
+
+.login__hero-stat-value {
+  margin: var(--sp-1) 0 0;
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h2);
+  font-weight: var(--fw-regular);
+  color: var(--c-text-on-primary);
+}
+
+.login__panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-7) var(--sp-5);
+}
+
+.login__card {
+  width: 100%;
+  max-width: 440px;
+}
+
+.login__pill {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--c-text-muted);
+  background: var(--c-surface-muted);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-pill);
+  padding: var(--sp-1) var(--sp-3);
+  margin: 0 0 var(--sp-5);
+}
+
+.login__pill-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--c-state-aprobado);
+  box-shadow: 0 0 0 3px rgba(31, 122, 72, 0.18);
+}
+
+.login__heading {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+  margin: 0 0 var(--sp-2);
+}
+
+.login__sub {
+  color: var(--c-text-muted);
+  margin: 0 0 var(--sp-6);
+}
+
+.login__form {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.login__remember {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text);
+  cursor: pointer;
+  margin-top: var(--sp-1);
+}
+
+.login__remember input {
+  width: 16px;
+  height: 16px;
+  accent-color: var(--c-primary);
+  cursor: pointer;
+}
+
+.login__server-error {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-state-rechazado);
+  background: var(--c-state-rechazado-bg);
+  border: 1px solid rgba(179, 38, 30, 0.2);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  margin: 0;
+}
+
+.login__footer {
+  margin: var(--sp-6) 0 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+  text-align: center;
+}
+
+.login__footer-link {
+  color: var(--c-text-faint);
+  cursor: not-allowed;
+  pointer-events: auto;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+.login__footer-link:hover {
+  text-decoration: underline;
+  color: var(--c-text-faint);
+}

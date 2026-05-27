@@ -1,0 +1,102 @@
+<main class="login">
+  <aside class="login__hero">
+    <div class="login__hero-inner">
+      <p class="login__brand t-overline">AcademConnect</p>
+
+      <h1 class="login__hero-title">
+        Centraliza la <em>evaluación científica</em> de tu institución.
+      </h1>
+
+      <p class="login__hero-copy">
+        Una plataforma para gestionar trabajos académicos, evaluaciones por pares y reconocimientos
+        en un solo espacio editorial.
+      </p>
+
+      <dl class="login__hero-stats" aria-label="Estadísticas públicas">
+        <div class="login__hero-stat">
+          <dt class="t-overline">Trabajos publicados</dt>
+          <dd class="login__hero-stat-value">
+            {{ publicStats()?.trabajosPublicados ?? '—' }}
+          </dd>
+        </div>
+        <div class="login__hero-stat">
+          <dt class="t-overline">Áreas activas</dt>
+          <dd class="login__hero-stat-value">
+            {{ publicStats()?.areasActivas ?? '—' }}
+          </dd>
+        </div>
+        <div class="login__hero-stat">
+          <dt class="t-overline">Evaluadores activos</dt>
+          <dd class="login__hero-stat-value">
+            {{ publicStats()?.evaluadoresActivos ?? '—' }}
+          </dd>
+        </div>
+      </dl>
+    </div>
+  </aside>
+
+  <section class="login__panel">
+    <ac-card padding="lg" class="login__card">
+      <p class="login__pill">
+        <span aria-hidden="true" class="login__pill-dot"></span>
+        Acceso institucional seguro
+      </p>
+
+      <h2 class="login__heading">Inicia sesión</h2>
+      <p class="login__sub t-body">Accedé con tu correo institucional para continuar.</p>
+
+      <form
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()"
+        class="login__form"
+        novalidate
+        aria-label="Formulario de inicio de sesión">
+        <ac-input
+          label="Correo institucional"
+          type="email"
+          autocomplete="email"
+          [invalid]="emailError() !== null"
+          [errorMessage]="emailError()"
+          formControlName="email" />
+
+        <ac-input
+          label="Contraseña"
+          type="password"
+          autocomplete="current-password"
+          [invalid]="passwordError() !== null"
+          [errorMessage]="passwordError()"
+          formControlName="password" />
+
+        <label class="login__remember">
+          <input type="checkbox" formControlName="remember" />
+          <span>Mantener sesión en este dispositivo</span>
+        </label>
+
+        @if (serverError()) {
+          <p class="login__server-error" role="alert">{{ serverError() }}</p>
+        }
+
+        <ac-button
+          type="submit"
+          variant="primary"
+          [fullWidth]="true"
+          [disabled]="submitting()"
+          [loading]="submitting()">
+          {{ submitting() ? 'Ingresando…' : 'Acceder al panel →' }}
+        </ac-button>
+      </form>
+
+      <p class="login__footer">
+        ¿Primer ingreso?
+        <a
+          href="#"
+          class="login__footer-link"
+          aria-disabled="true"
+          title="Contactá a tu administrador institucional"
+          (click)="$event.preventDefault()">
+          Solicitar cuenta
+        </a>
+      </p>
+    </ac-card>
+  </section>
+</main>
