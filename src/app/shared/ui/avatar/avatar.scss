@@ -13,6 +13,10 @@
   user-select: none;
 }
 
+:host(.ac-avatar--has-image) {
+  background: transparent;
+}
+
 :host(.ac-avatar--sm) {
   font-size: 0.75rem;
 }
@@ -30,6 +34,7 @@
 }
 
 .ac-avatar__img {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;

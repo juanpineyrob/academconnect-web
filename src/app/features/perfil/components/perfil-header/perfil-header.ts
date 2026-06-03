@@ -21,6 +21,7 @@ const ROL_LABEL: Record<string, string> = {
 })
 export class PerfilHeader {
   readonly perfil = input.required<Perfil>();
+  readonly isOwn = input<boolean>(false);
   readonly editClick = output<void>();
 
   protected readonly rolLabel = computed(() => ROL_LABEL[this.perfil().rol] ?? this.perfil().rol);

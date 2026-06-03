@@ -1,0 +1,98 @@
+<!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
+<div class="cropper__backdrop" (click)="onBackdrop($event)">
+  <aside
+    class="cropper__panel"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="cropper-title">
+    <header class="cropper__header">
+      <div>
+        <p class="t-overline">Editar foto</p>
+        <h2 id="cropper-title" class="cropper__title">Ajustá tu foto</h2>
+      </div>
+      <button
+        type="button"
+        class="cropper__close"
+        aria-label="Cerrar"
+        (click)="onCancel()">
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          width="20"
+          height="20"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="M18 6 6 18M6 6l12 12" />
+        </svg>
+      </button>
+    </header>
+
+    <div class="cropper__body">
+      <p class="cropper__hint">
+        Arrastrá la imagen para centrarla. Usá la rueda del mouse o los botones para hacer zoom.
+      </p>
+
+      <div class="cropper__stage">
+        <canvas
+          #canvas
+          class="cropper__canvas"
+          role="img"
+          aria-label="Vista previa circular de tu foto"
+          (pointerdown)="onPointerDown($event)"
+          (pointermove)="onPointerMove($event)"
+          (pointerup)="onPointerUp($event)"
+          (pointercancel)="onPointerUp($event)"
+          (wheel)="onWheel($event)">
+        </canvas>
+
+        @if (!imageReady() && !loadError()) {
+          <p class="cropper__status" role="status">Cargando imagen…</p>
+        }
+        @if (loadError()) {
+          <p class="cropper__status cropper__status--error" role="alert">{{ loadError() }}</p>
+        }
+      </div>
+
+      <div class="cropper__zoom" role="group" aria-label="Zoom">
+        <ac-button
+          variant="ghost"
+          size="sm"
+          type="button"
+          [disabled]="!canZoomOut() || !imageReady()"
+          (click)="onZoomOut()">
+          <span aria-hidden="true">−</span>
+          <span class="sr-only">Alejar</span>
+        </ac-button>
+        <ac-button
+          variant="ghost"
+          size="sm"
+          type="button"
+          [disabled]="!canZoomIn() || !imageReady()"
+          (click)="onZoomIn()">
+          <span aria-hidden="true">+</span>
+          <span class="sr-only">Acercar</span>
+        </ac-button>
+      </div>
+    </div>
+
+    <footer class="cropper__footer">
+      <ac-button variant="ghost" size="md" type="button" (click)="onCancel()">
+        Cancelar
+      </ac-button>
+      <span #applyBtn tabindex="-1">
+        <ac-button
+          variant="primary"
+          size="md"
+          type="button"
+          [disabled]="!imageReady() || exporting()"
+          [loading]="exporting()"
+          (click)="onApply()">
+          {{ exporting() ? 'Generando…' : 'Aplicar' }}
+        </ac-button>
+      </span>
+    </footer>
+  </aside>
+</div>

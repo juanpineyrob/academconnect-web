@@ -8,14 +8,19 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable, of, switchMap } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import { Perfil, PerfilUpdateRequest, UsuarioAreasRequest } from '../perfil.models';
+import { Perfil, UsuarioAreasRequest } from '../perfil.models';
 import { PerfilService } from '../perfil.service';
 import { ProblemDetail, isProblemDetail } from '@core/http/problem-detail';
 
 import { BioAcademica } from '../components/bio-academica/bio-academica';
 import { EditarAreasForm } from '../components/editar-areas-form/editar-areas-form';
-import { EditarPerfilForm } from '../components/editar-perfil-form/editar-perfil-form';
+import {
+  EditarPerfilForm,
+  EditarPerfilSavePayload,
+} from '../components/editar-perfil-form/editar-perfil-form';
 import { LineasInvestigacion } from '../components/lineas-investigacion/lineas-investigacion';
 import { PerfilHeader } from '../components/perfil-header/perfil-header';
 import { PerfilStats } from '../components/perfil-stats/perfil-stats';
@@ -118,12 +123,22 @@ export class PerfilPropioPage {
     this.editPerfilOpen.set(false);
   }
 
-  protected onSavePerfil(payload: PerfilUpdateRequest): void {
+  protected onSavePerfil(evt: EditarPerfilSavePayload): void {
     this.savingPerfil.set(true);
     this.perfilFormError.set(null);
-    this.perfilService
-      .putMiPerfil(payload)
-      .pipe(takeUntilDestroyed(this.destroyRef))
+
+    const currentFotoUrl = this.perfil()?.fotoUrl ?? null;
+    const fotoUrl$: Observable<string | null> = evt.photoBlob
+      ? this.perfilService.uploadFotoPerfil(evt.photoBlob).pipe(map((r) => r.fotoUrl))
+      : of(evt.removePhoto ? null : currentFotoUrl);
+
+    fotoUrl$
+      .pipe(
+        switchMap((fotoUrl) =>
+          this.perfilService.putMiPerfil({ ...evt.payload, fotoUrl }),
+        ),
+        takeUntilDestroyed(this.destroyRef),
+      )
       .subscribe({
         next: (updated) => {
           this.perfil.set(updated);

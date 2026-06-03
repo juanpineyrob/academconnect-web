@@ -3,7 +3,11 @@
 
   <div class="perfil-header__inner">
     <div class="perfil-header__avatar">
-      <ac-avatar size="xl" [name]="perfil().nombre" [photoUrl]="perfil().fotoUrl" />
+      <ac-avatar
+        size="xl"
+        [name]="perfil().nombre"
+        [photoUrl]="perfil().fotoUrl"
+        [version]="perfil().updatedAt" />
     </div>
 
     <div class="perfil-header__body">
@@ -25,9 +29,12 @@
       }
 
       <div class="perfil-header__actions">
-        <ac-button variant="ghost" size="sm" [disabled]="true">Contactar</ac-button>
-        <ac-button variant="ghost" size="sm" [disabled]="true">Seguir</ac-button>
-        <ac-button variant="primary" size="sm" (click)="onEdit()">Editar perfil</ac-button>
+        @if (isOwn()) {
+          <ac-button variant="primary" size="sm" (click)="onEdit()">Editar perfil</ac-button>
+        } @else {
+          <ac-button variant="ghost" size="sm" [disabled]="true">Contactar</ac-button>
+          <ac-button variant="ghost" size="sm" [disabled]="true">Seguir</ac-button>
+        }
       </div>
     </div>
   </div>

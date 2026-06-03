@@ -11,7 +11,7 @@
       <p class="t-body">{{ loadError() }}</p>
     </div>
   } @else if (perfil(); as p) {
-    <ac-perfil-header [perfil]="p" (editClick)="openEditPerfil()" />
+    <ac-perfil-header [perfil]="p" [isOwn]="true" (editClick)="openEditPerfil()" />
 
     <ac-perfil-stats [perfil]="p" [evaluadorStats]="evaluadorStats()" />
 

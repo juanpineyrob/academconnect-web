@@ -53,11 +53,40 @@
           type="text"
           autocomplete="address-level2"
           formControlName="ubicacion" />
-        <ac-input
-          label="URL de foto"
-          type="text"
-          autocomplete="photo"
-          formControlName="fotoUrl" />
+        <div class="photo-field">
+          <span class="photo-field__label">Foto de perfil</span>
+          <div class="photo-field__row">
+            <div
+              class="photo-field__preview"
+              [class.photo-field__preview--empty]="!hasPhoto()"
+              aria-hidden="true">
+              @if (hasPhoto()) {
+                <img [src]="resolvedPreviewUrl()!" alt="" width="72" height="72" />
+              } @else {
+                <span class="photo-field__placeholder">Sin foto</span>
+              }
+            </div>
+            <div class="photo-field__actions">
+              <ac-button variant="ghost" size="sm" type="button" (click)="onPickPhoto()">
+                {{ hasPhoto() ? 'Cambiar foto' : 'Subir foto' }}
+              </ac-button>
+              @if (hasPhoto()) {
+                <ac-button variant="ghost" size="sm" type="button" (click)="onClearPhoto()">
+                  Quitar
+                </ac-button>
+              }
+            </div>
+          </div>
+          <input
+            #fileInput
+            type="file"
+            class="photo-field__input"
+            accept="image/jpeg,image/png,image/webp"
+            (change)="onFileChosen($event)" />
+          @if (photoError()) {
+            <p class="photo-field__error" role="alert">{{ photoError() }}</p>
+          }
+        </div>
       </fieldset>
 
       <fieldset class="drawer__group">
@@ -125,3 +154,10 @@
     </form>
   </aside>
 </div>
+
+@if (cropperFile(); as f) {
+  <ac-avatar-cropper
+    [file]="f"
+    (closeRequested)="onCropperClose()"
+    (apply)="onCropApplied($event)" />
+}

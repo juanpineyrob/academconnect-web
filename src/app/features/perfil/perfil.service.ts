@@ -27,6 +27,13 @@ export class PerfilService {
     return this.http.put<Perfil>(`${this.api}/me/perfil`, payload);
   }
 
+  uploadFotoPerfil(blob: Blob): Observable<{ fotoUrl: string }> {
+    const fd = new FormData();
+    const ext = blob.type === 'image/jpeg' ? 'jpg' : blob.type === 'image/webp' ? 'webp' : 'png';
+    fd.append('file', blob, `avatar.${ext}`);
+    return this.http.post<{ fotoUrl: string }>(`${this.api}/me/perfil/foto`, fd);
+  }
+
   putMisAreas(payload: UsuarioAreasRequest): Observable<UsuarioAreaTematica[]> {
     return this.http.put<UsuarioAreaTematica[]>(`${this.api}/me/areas`, payload);
   }
