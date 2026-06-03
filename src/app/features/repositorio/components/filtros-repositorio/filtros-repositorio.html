@@ -1,0 +1,76 @@
+<aside class="filtros" aria-label="Filtros del repositorio">
+  <header class="filtros__header">
+    <h2 class="filtros__title t-overline">Filtros</h2>
+    @if (hasFilters()) {
+      <ac-button variant="link" size="sm" (click)="onClear()">Limpiar</ac-button>
+    }
+  </header>
+
+  <section class="filtros__group" aria-labelledby="filtros-tipo">
+    <h3 id="filtros-tipo" class="filtros__group-title">Tipo de trabajo</h3>
+    <ul role="list" class="filtros__list">
+      <li>
+        <label class="filtros__radio">
+          <input
+            type="radio"
+            name="tipo"
+            [checked]="value().tipo === null"
+            (change)="setTipo(null)" />
+          <span>Todos</span>
+        </label>
+      </li>
+      @for (t of tipos; track t) {
+        <li>
+          <label class="filtros__radio">
+            <input
+              type="radio"
+              name="tipo"
+              [checked]="value().tipo === t"
+              (change)="setTipo(t)" />
+            <span>{{ tipoLabel[t] }}</span>
+          </label>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="filtros__group" aria-labelledby="filtros-anios">
+    <h3 id="filtros-anios" class="filtros__group-title">Año</h3>
+    <ul role="list" class="filtros__list">
+      @for (anio of anios(); track anio) {
+        <li>
+          <label class="filtros__checkbox">
+            <input
+              type="checkbox"
+              [checked]="isAnioSelected(anio)"
+              (change)="toggleAnio(anio)" />
+            <span>{{ anio }}</span>
+          </label>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="filtros__group" aria-labelledby="filtros-areas">
+    <h3 id="filtros-areas" class="filtros__group-title">Áreas temáticas</h3>
+    @if (areasLoading()) {
+      <p class="filtros__empty t-caption">Cargando áreas…</p>
+    } @else if (areas().length === 0) {
+      <p class="filtros__empty t-caption">No hay áreas para filtrar.</p>
+    } @else {
+      <ul role="list" class="filtros__list filtros__list--scroll">
+        @for (a of areas(); track a.id) {
+          <li>
+            <label class="filtros__checkbox">
+              <input
+                type="checkbox"
+                [checked]="isAreaSelected(a.id)"
+                (change)="toggleArea(a.id)" />
+              <span>{{ a.nombre }}</span>
+            </label>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+</aside>

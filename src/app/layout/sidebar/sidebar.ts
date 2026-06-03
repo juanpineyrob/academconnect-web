@@ -7,6 +7,7 @@ import { Rol } from '@core/auth/models';
 interface NavItem {
   label: string;
   route?: string;
+  exact?: boolean;
 }
 
 interface NavSection {
@@ -20,7 +21,7 @@ const SECTIONS_ESTUDIANTE: NavSection[] = [
     items: [
       { label: 'Mi perfil', route: '/perfil' },
       { label: 'Mis trabajos' },
-      { label: 'Repositorio' },
+      { label: 'Repositorio', route: '/repositorio', exact: false },
     ],
   },
   {
@@ -40,6 +41,7 @@ const SECTIONS_EVALUADOR: NavSection[] = [
       { label: 'Mi perfil', route: '/perfil' },
       { label: 'Evaluaciones asignadas' },
       { label: 'Bandeja de revisión' },
+      { label: 'Repositorio', route: '/repositorio', exact: false },
     ],
   },
   {
@@ -57,6 +59,7 @@ const SECTIONS_ADMIN: NavSection[] = [
     title: 'Sistema',
     items: [
       { label: 'Mi perfil', route: '/perfil' },
+      { label: 'Repositorio', route: '/repositorio', exact: false },
       { label: 'Usuarios' },
       { label: 'Áreas' },
       { label: 'Auditoría' },

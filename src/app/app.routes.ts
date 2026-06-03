@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from '@core/auth/auth.guard';
 import { AUTH_ROUTES } from '@features/auth/auth.routes';
 import { PERFIL_ROUTES } from '@features/perfil/perfil.routes';
+import { REPOSITORIO_ROUTES } from '@features/repositorio/repositorio.routes';
 
 export const routes: Routes = [
   ...AUTH_ROUTES,
@@ -12,6 +13,7 @@ export const routes: Routes = [
     loadComponent: () => import('@app/layout/shell/shell').then((m) => m.Shell),
     children: [
       ...PERFIL_ROUTES,
+      ...REPOSITORIO_ROUTES,
       { path: '', pathMatch: 'full', redirectTo: 'perfil' },
       { path: '**', redirectTo: 'perfil' },
     ],

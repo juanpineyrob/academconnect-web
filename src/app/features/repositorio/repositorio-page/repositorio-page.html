@@ -1,0 +1,109 @@
+<div class="repositorio">
+  <header class="repositorio__hero">
+    <p class="t-overline">Repositorio académico</p>
+    <h1 class="repositorio__title">Trabajos publicados</h1>
+    <p class="repositorio__lead">
+      Buscá tesis, monografías, artículos y proyectos evaluados por la comunidad.
+    </p>
+  </header>
+
+  <div class="repositorio__toolbar">
+    <label class="repositorio__search">
+      <span class="sr-only">Buscar trabajos</span>
+      <svg
+        aria-hidden="true"
+        viewBox="0 0 24 24"
+        width="20"
+        height="20"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round">
+        <circle cx="11" cy="11" r="7" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <input
+        type="search"
+        [formControl]="searchControl"
+        placeholder="Buscar por título, descripción o keyword…"
+        autocomplete="off" />
+    </label>
+
+    <label class="repositorio__sort">
+      <span class="sr-only">Ordenar</span>
+      <select [value]="sort()" (change)="onSortChange($event)">
+        <option value="createdAt,desc">Más recientes</option>
+        <option value="createdAt,asc">Más antiguos</option>
+        <option value="titulo,asc">Título A–Z</option>
+        <option value="titulo,desc">Título Z–A</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="repositorio__layout">
+    <ac-filtros-repositorio
+      [areas]="areas()"
+      [areasLoading]="areasLoading()"
+      [value]="filtros()"
+      (valueChange)="onFiltrosChange($event)"
+      (clearAll)="onClearFiltros()" />
+
+    <section class="repositorio__results" aria-live="polite">
+      <p class="repositorio__count t-caption">
+        @if (loading()) {
+          Buscando…
+        } @else if (error()) {
+          {{ error() }}
+        } @else if (hasResults()) {
+          {{ totalResultados() }} {{ totalResultados() === 1 ? 'resultado' : 'resultados' }}
+        } @else {
+          Sin resultados para los filtros aplicados.
+        }
+      </p>
+
+      @if (loading() && !results()) {
+        <div class="repositorio__skeletons" aria-busy="true">
+          <div class="repositorio__skeleton"></div>
+          <div class="repositorio__skeleton"></div>
+          <div class="repositorio__skeleton"></div>
+        </div>
+      } @else if (error()) {
+        <div class="repositorio__error" role="alert">
+          <p>{{ error() }}</p>
+        </div>
+      } @else if (!hasResults()) {
+        <div class="repositorio__empty">
+          <p class="t-h3">No encontramos trabajos.</p>
+          <p class="t-body">Ajustá los filtros o probá con otra búsqueda.</p>
+        </div>
+      } @else {
+        <ul role="list" class="repositorio__list">
+          @for (t of results()!.content; track t.id) {
+            <li><ac-trabajo-card [trabajo]="t" /></li>
+          }
+        </ul>
+
+        <nav class="repositorio__pagination" aria-label="Paginación">
+          <ac-button
+            variant="ghost"
+            size="sm"
+            [disabled]="isFirstPage() || loading()"
+            (click)="prevPage()">
+            ← Anterior
+          </ac-button>
+          <span class="t-caption">
+            Página {{ currentPage() }} de {{ totalPaginas() }}
+          </span>
+          <ac-button
+            variant="ghost"
+            size="sm"
+            [disabled]="isLastPage() || loading()"
+            (click)="nextPage()">
+            Siguiente →
+          </ac-button>
+        </nav>
+      }
+    </section>
+  </div>
+</div>

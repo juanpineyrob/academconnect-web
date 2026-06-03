@@ -16,7 +16,7 @@
             <a
               [routerLink]="item.route"
               routerLinkActive="is-active"
-              [routerLinkActiveOptions]="{ exact: true }"
+              [routerLinkActiveOptions]="{ exact: item.exact ?? true }"
               class="sidebar__link">
               <span class="sidebar__link-dot" aria-hidden="true"></span>
               {{ item.label }}

@@ -1,0 +1,53 @@
+<ac-card padding="md">
+  <article class="trabajo-card">
+    <div class="trabajo-card__meta">
+      <ac-badge variant="role">{{ tipoLabel() }}</ac-badge>
+      <ac-badge variant="state" [state]="estadoBadgeState(trabajo().estado)">
+        {{ estadoLabel() }}
+      </ac-badge>
+      <span class="trabajo-card__anio t-caption">{{ anio() }}</span>
+    </div>
+
+    <h3 class="trabajo-card__titulo">
+      <a [routerLink]="['/repositorio', trabajo().id]">{{ trabajo().titulo }}</a>
+    </h3>
+
+    @if (trabajo().descripcion) {
+      <p class="trabajo-card__descripcion">{{ trabajo().descripcion }}</p>
+    }
+
+    <dl class="trabajo-card__autoria">
+      @if (trabajo().estudianteNombre) {
+        <div class="trabajo-card__autoria-item">
+          <dt class="t-caption">Autor</dt>
+          <dd>{{ trabajo().estudianteNombre }}</dd>
+        </div>
+      }
+      @if (trabajo().orientadorNombre) {
+        <div class="trabajo-card__autoria-item">
+          <dt class="t-caption">Orientación</dt>
+          <dd>{{ trabajo().orientadorNombre }}</dd>
+        </div>
+      }
+    </dl>
+
+    @if (resumenAreas().length > 0) {
+      <ul role="list" class="trabajo-card__areas">
+        @for (area of resumenAreas(); track area.id) {
+          <li><ac-badge variant="area">{{ area.nombre }}</ac-badge></li>
+        }
+        @if (areasRestantes() > 0) {
+          <li class="trabajo-card__areas-mas t-caption">+{{ areasRestantes() }}</li>
+        }
+      </ul>
+    }
+
+    @if (keywordsResumen().length > 0) {
+      <p class="trabajo-card__keywords t-caption">
+        @for (kw of keywordsResumen(); track kw; let last = $last) {
+          <span>#{{ kw }}</span>@if (!last) { <span aria-hidden="true"> · </span> }
+        }
+      </p>
+    }
+  </article>
+</ac-card>

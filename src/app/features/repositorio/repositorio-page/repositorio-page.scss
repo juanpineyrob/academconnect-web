@@ -1,0 +1,199 @@
+:host {
+  display: block;
+}
+
+.repositorio {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.repositorio__hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.repositorio__title {
+  font-family: var(--ff-serif);
+  font-size: clamp(2rem, 3vw, 2.75rem);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+  margin: 0;
+}
+
+.repositorio__lead {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text-muted);
+}
+
+.repositorio__toolbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--sp-3);
+  align-items: stretch;
+}
+
+.repositorio__search {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.repositorio__search svg {
+  position: absolute;
+  left: var(--sp-3);
+  color: var(--c-text-faint);
+  pointer-events: none;
+}
+
+.repositorio__search input {
+  width: 100%;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4) var(--sp-3) calc(var(--sp-3) + 20px + var(--sp-2));
+  min-height: 48px;
+  outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+}
+
+.repositorio__search input:focus {
+  border-color: var(--c-accent);
+  box-shadow: var(--sh-focus);
+}
+
+.repositorio__sort select {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: 0 var(--sp-4);
+  min-height: 48px;
+  cursor: pointer;
+  outline: none;
+}
+
+.repositorio__sort select:focus {
+  border-color: var(--c-accent);
+  box-shadow: var(--sh-focus);
+}
+
+.repositorio__layout {
+  display: grid;
+  grid-template-columns: minmax(220px, 280px) minmax(0, 1fr);
+  gap: var(--sp-5);
+  align-items: start;
+}
+
+.repositorio__results {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.repositorio__count {
+  margin: 0;
+  color: var(--c-text-muted);
+}
+
+.repositorio__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.repositorio__skeletons {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.repositorio__skeleton {
+  height: 180px;
+  border-radius: var(--r-lg);
+  background: linear-gradient(
+    90deg,
+    var(--c-surface-muted),
+    var(--c-surface),
+    var(--c-surface-muted)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.repositorio__empty,
+.repositorio__error {
+  background: var(--c-surface);
+  border: 1px dashed var(--c-border-strong);
+  border-radius: var(--r-lg);
+  padding: var(--sp-6);
+  text-align: center;
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.repositorio__error {
+  border-style: solid;
+  border-color: rgba(179, 38, 30, 0.2);
+  background: var(--c-state-rechazado-bg);
+}
+
+.repositorio__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding-top: var(--sp-3);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 960px) {
+  .repositorio__layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .repositorio {
+    padding: var(--sp-4) var(--sp-4);
+  }
+
+  .repositorio__toolbar {
+    grid-template-columns: 1fr;
+  }
+}

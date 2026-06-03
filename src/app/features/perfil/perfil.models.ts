@@ -2,15 +2,15 @@ import { Rol } from '@core/auth/models';
 
 export type NivelExperticia = 'BAJO' | 'MEDIO' | 'ALTO';
 export type ThesaurusOrigen = 'INTERNO' | 'EXTERNO' | string;
-export type TipoTrabajo = 'TESIS' | 'MONOGRAFIA' | 'ARTICULO' | 'PROYECTO' | string;
+export type TipoTrabajo = 'TCC' | 'TESIS' | 'PAPER' | 'MONOGRAFIA' | 'PROYECTO_INVESTIGACION' | string;
 export type EstadoTrabajo =
   | 'BORRADOR'
-  | 'ENVIADO'
-  | 'EN_REVISION'
-  | 'OBSERVADO'
+  | 'ABIERTO'
+  | 'EN_DESARROLLO'
+  | 'EN_EVALUACION'
   | 'APROBADO'
   | 'RECHAZADO'
-  | 'PUBLICADO'
+  | 'CANCELADO'
   | string;
 
 export interface UsuarioAreaTematica {
