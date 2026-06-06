@@ -6,6 +6,8 @@
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
   margin-bottom: var(--sp-3);
 }
 
@@ -20,19 +22,34 @@
 }
 
 .lineas__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--sp-2);
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-width: 0;
 }
 
 .lineas__item {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   gap: var(--sp-2);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.lineas__item ac-badge {
+  white-space: normal;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  line-height: var(--lh-tight);
+  text-align: left;
 }
 
 .lineas__nivel {
   color: var(--c-text-faint);
+  white-space: nowrap;
 }
 
 .lineas__empty {
