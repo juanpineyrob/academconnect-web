@@ -60,6 +60,7 @@ const SECTIONS_ADMIN: NavSection[] = [
     items: [
       { label: 'Mi perfil', route: '/perfil' },
       { label: 'Repositorio', route: '/repositorio', exact: false },
+      { label: 'Importar trabajos', route: '/admin/importar-trabajo' },
       { label: 'Usuarios' },
       { label: 'Áreas' },
       { label: 'Auditoría' },

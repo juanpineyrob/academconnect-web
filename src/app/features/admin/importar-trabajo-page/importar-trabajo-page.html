@@ -1,0 +1,194 @@
+<section class="importar-page">
+  <header class="importar-page__header">
+    <h1 class="importar-page__title">Importar trabajo</h1>
+    <p class="importar-page__subtitle">
+      Da de alta un trabajo finalizado fuera del sistema directamente en su estado final.
+    </p>
+  </header>
+
+  @if (loadingOpciones()) {
+    <p class="importar-page__loading" role="status">Cargando opciones…</p>
+  }
+
+  <ac-card padding="lg" [elevated]="true">
+    <form class="importar-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <div class="importar-form__row">
+        <label class="importar-form__field importar-form__field--full">
+          <span class="importar-form__label">Título *</span>
+          <input
+            class="importar-form__input"
+            type="text"
+            formControlName="titulo"
+            maxlength="300"
+            autocomplete="off" />
+          @if (tituloError) {
+            <span class="importar-form__error" role="alert">{{ tituloError }}</span>
+          }
+        </label>
+      </div>
+
+      <div class="importar-form__row">
+        <label class="importar-form__field importar-form__field--full">
+          <span class="importar-form__label">Descripción</span>
+          <textarea
+            class="importar-form__textarea"
+            formControlName="descripcion"
+            rows="4"></textarea>
+        </label>
+      </div>
+
+      <div class="importar-form__row importar-form__row--grid">
+        <label class="importar-form__field">
+          <span class="importar-form__label">Tipo *</span>
+          <select class="importar-form__select" formControlName="tipo">
+            @for (t of tipos; track t) {
+              <option [value]="t">{{ tipoLabel[t] }}</option>
+            }
+          </select>
+        </label>
+
+        <label class="importar-form__field">
+          <span class="importar-form__label">Estado *</span>
+          <select class="importar-form__select" formControlName="estado">
+            @for (e of estados; track e) {
+              <option [value]="e">{{ estadoLabel[e] }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="importar-form__row importar-form__row--grid">
+        <label class="importar-form__field">
+          <span class="importar-form__label">Orientador *</span>
+          <select class="importar-form__select" formControlName="orientadorId">
+            <option [ngValue]="null">— Seleccionar —</option>
+            @for (p of profesores(); track p.id) {
+              <option [ngValue]="p.id">{{ p.nombre }}</option>
+            }
+          </select>
+          @if (orientadorError) {
+            <span class="importar-form__error" role="alert">{{ orientadorError }}</span>
+          }
+        </label>
+
+        <label class="importar-form__field">
+          <span class="importar-form__label">Estudiante (opcional)</span>
+          <select class="importar-form__select" formControlName="estudianteId">
+            <option [ngValue]="null">— Sin estudiante —</option>
+            @for (e of estudiantes(); track e.id) {
+              <option [ngValue]="e.id">{{ e.nombre }}</option>
+            }
+          </select>
+        </label>
+      </div>
+
+      <div class="importar-form__row">
+        <fieldset class="importar-form__fieldset">
+          <legend class="importar-form__label">Áreas temáticas</legend>
+          <div class="importar-form__chips">
+            @for (a of areas(); track a.id) {
+              <button
+                type="button"
+                class="importar-form__chip"
+                [class.importar-form__chip--active]="isAreaSelected(a.id)"
+                [attr.aria-pressed]="isAreaSelected(a.id)"
+                (click)="toggleArea(a.id)">
+                {{ a.nombre }}
+              </button>
+            }
+            @if (areas().length === 0 && !loadingOpciones()) {
+              <span class="importar-form__hint">No hay áreas disponibles.</span>
+            }
+          </div>
+        </fieldset>
+      </div>
+
+      <div class="importar-form__row">
+        <fieldset class="importar-form__fieldset">
+          <legend class="importar-form__label">
+            Palabras clave * <span class="importar-form__hint">(entre 3 y 8)</span>
+          </legend>
+          <div class="importar-form__keyword-input">
+            <input
+              type="text"
+              class="importar-form__input"
+              [formControl]="keywordInput"
+              placeholder="Escribí y presioná Enter"
+              (keydown)="onKeywordKey($event)" />
+            <ac-button type="button" variant="ghost" size="sm" (click)="addKeyword()">
+              Agregar
+            </ac-button>
+          </div>
+          @if (keywords().length > 0) {
+            <ul class="importar-form__chips importar-form__chips--values" aria-label="Palabras clave">
+              @for (kw of keywords(); track kw) {
+                <li class="importar-form__chip importar-form__chip--value">
+                  <span>{{ kw }}</span>
+                  <button
+                    type="button"
+                    class="importar-form__chip-remove"
+                    [attr.aria-label]="'Quitar ' + kw"
+                    (click)="removeKeyword(kw)">
+                    ×
+                  </button>
+                </li>
+              }
+            </ul>
+          }
+          @if (keywordsError) {
+            <span class="importar-form__error" role="alert">{{ keywordsError }}</span>
+          }
+        </fieldset>
+      </div>
+
+      <div class="importar-form__row importar-form__row--grid">
+        <label class="importar-form__field">
+          <span class="importar-form__label">Puntaje agregado</span>
+          <input
+            type="number"
+            class="importar-form__input"
+            formControlName="puntajeAgregado"
+            min="0"
+            max="100"
+            step="0.1" />
+        </label>
+
+        <label class="importar-form__field">
+          <span class="importar-form__label">Fecha de evaluación</span>
+          <input
+            type="datetime-local"
+            class="importar-form__input"
+            formControlName="evaluadoEn" />
+        </label>
+      </div>
+
+      <div class="importar-form__row">
+        <label class="importar-form__field importar-form__field--full">
+          <span class="importar-form__label">URL del archivo</span>
+          <input
+            type="text"
+            class="importar-form__input"
+            formControlName="archivoUrl"
+            placeholder="/storage/trabajos/1.pdf"
+            maxlength="500" />
+          <span class="importar-form__hint">
+            Ruta servida por el backend (subí el PDF a <code>./data/trabajos/</code>).
+          </span>
+        </label>
+      </div>
+
+      @if (serverError()) {
+        <p class="importar-form__server-error" role="alert">{{ serverError() }}</p>
+      }
+      @if (successMessage()) {
+        <p class="importar-form__server-success" role="status">{{ successMessage() }}</p>
+      }
+
+      <div class="importar-form__actions">
+        <ac-button type="submit" variant="primary" [loading]="submitting()" [disabled]="submitting()">
+          Importar trabajo
+        </ac-button>
+      </div>
+    </form>
+  </ac-card>
+</section>
