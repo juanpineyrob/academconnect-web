@@ -1,0 +1,67 @@
+<section class="crear-page">
+  <header class="crear-page__header">
+    <h1 class="crear-page__title">Nueva publicación</h1>
+    <p class="crear-page__subtitle">Creá un BORRADOR. Después publicalo con TTL desde el detalle.</p>
+  </header>
+
+  <ac-card padding="lg" [elevated]="true">
+    <form class="crear-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+      <label class="crear-form__field">
+        <span class="crear-form__label">Título *</span>
+        <input type="text" formControlName="titulo" maxlength="300" class="crear-form__input" />
+        @if (tituloError) { <span class="crear-form__error" role="alert">{{ tituloError }}</span> }
+      </label>
+
+      <label class="crear-form__field">
+        <span class="crear-form__label">Descripción</span>
+        <textarea formControlName="descripcion" rows="4" class="crear-form__textarea"></textarea>
+      </label>
+
+      <label class="crear-form__field">
+        <span class="crear-form__label">Tipo *</span>
+        <select formControlName="tipo" class="crear-form__select">
+          @for (t of tipos; track t) { <option [value]="t">{{ tipoLabel[t] }}</option> }
+        </select>
+      </label>
+
+      <fieldset class="crear-form__field">
+        <legend class="crear-form__label">Áreas temáticas</legend>
+        <div class="crear-form__chips">
+          @for (a of areas(); track a.id) {
+            <button type="button" class="crear-form__chip"
+                    [class.crear-form__chip--active]="isAreaSelected(a.id)"
+                    [attr.aria-pressed]="isAreaSelected(a.id)"
+                    (click)="toggleArea(a.id)">{{ a.nombre }}</button>
+          }
+        </div>
+      </fieldset>
+
+      <fieldset class="crear-form__field">
+        <legend class="crear-form__label">Palabras clave * <span class="crear-form__hint">(3 a 8)</span></legend>
+        <div class="crear-form__keyword-input">
+          <input type="text" class="crear-form__input" [formControl]="keywordInput"
+                 placeholder="Escribí y presioná Enter" (keydown)="onKeywordKey($event)" />
+          <ac-button type="button" variant="ghost" size="sm" (click)="addKeyword()">Agregar</ac-button>
+        </div>
+        @if (keywords().length > 0) {
+          <ul class="crear-form__chips crear-form__chips--values">
+            @for (kw of keywords(); track kw) {
+              <li class="crear-form__chip crear-form__chip--value">
+                <span>{{ kw }}</span>
+                <button type="button" class="crear-form__chip-remove"
+                        [attr.aria-label]="'Quitar ' + kw" (click)="removeKeyword(kw)">×</button>
+              </li>
+            }
+          </ul>
+        }
+        @if (keywordsError) { <span class="crear-form__error" role="alert">{{ keywordsError }}</span> }
+      </fieldset>
+
+      @if (serverError()) { <p class="crear-form__server-error" role="alert">{{ serverError() }}</p> }
+
+      <div class="crear-form__actions">
+        <ac-button type="submit" [loading]="submitting()" [disabled]="submitting()">Crear borrador</ac-button>
+      </div>
+    </form>
+  </ac-card>
+</section>
