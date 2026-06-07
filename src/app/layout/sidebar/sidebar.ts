@@ -62,7 +62,7 @@ const SECTIONS_ADMIN: NavSection[] = [
   {
     title: 'Sistema',
     items: [
-      { label: 'Mi perfil', route: '/perfil' },
+      { label: 'Panel de administración', route: '/admin', exact: true },
       { label: 'Repositorio', route: '/repositorio', exact: false },
       { label: 'Importar trabajos', route: '/admin/importar-trabajo' },
       { label: 'Usuarios' },

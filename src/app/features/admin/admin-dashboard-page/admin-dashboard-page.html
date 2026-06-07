@@ -1,0 +1,26 @@
+<section class="admin-dashboard">
+  <header class="admin-dashboard__header">
+    <h1 class="admin-dashboard__title">Panel de administración</h1>
+    <p class="admin-dashboard__subtitle">
+      Operaciones CRUD sobre las entidades del sistema.
+    </p>
+  </header>
+
+  <ul class="admin-dashboard__grid">
+    @for (a of acciones; track a.titulo) {
+      <li class="admin-dashboard__cell">
+        <ac-card padding="lg" [elevated]="true">
+          <article class="admin-dashboard__accion">
+            <h2 class="admin-dashboard__a-title">{{ a.titulo }}</h2>
+            <p class="admin-dashboard__a-desc">{{ a.descripcion }}</p>
+            @if (a.disponible && a.route) {
+              <a [routerLink]="a.route" class="admin-dashboard__a-link">Ir al módulo</a>
+            } @else {
+              <span class="admin-dashboard__a-soon" aria-label="No disponible aún">Próximamente</span>
+            }
+          </article>
+        </ac-card>
+      </li>
+    }
+  </ul>
+</section>
