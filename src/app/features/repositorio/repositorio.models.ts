@@ -15,6 +15,7 @@ export interface TrabajoListItem {
   coorientadoresNombres: string[];
   puntajeAgregado: number | null;
   evaluadoEn: string | null;
+  expiraEn: string | null;
   archivoUrl: string | null;
   createdAt: string;
   updatedAt: string;
