@@ -1,0 +1,27 @@
+<section class="mis-trabajos">
+  <header class="mis-trabajos__header">
+    <h1 class="mis-trabajos__title">Mis trabajos</h1>
+    <ac-button [routerLink]="['/mis-trabajos/nuevo']">Crear trabajo</ac-button>
+  </header>
+
+  @if (loading()) {
+    <p role="status">Cargando…</p>
+  } @else if (error()) {
+    <p role="alert" class="mis-trabajos__error">{{ error() }}</p>
+  } @else if (trabajos().length === 0) {
+    <p class="mis-trabajos__empty">Aún no tenés trabajos. Empezá creando un borrador.</p>
+  } @else {
+    <ul class="mis-trabajos__list">
+      @for (t of trabajos(); track t.id) {
+        <li class="mis-trabajos__item">
+          <a [routerLink]="['/mis-trabajos', t.id]" class="mis-trabajos__link">
+            <span class="mis-trabajos__t-title">{{ t.titulo }}</span>
+            <span class="mis-trabajos__t-meta">
+              {{ tipoLabel[t.tipo] }} · {{ estadoLabel[t.estado] }}
+            </span>
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</section>
