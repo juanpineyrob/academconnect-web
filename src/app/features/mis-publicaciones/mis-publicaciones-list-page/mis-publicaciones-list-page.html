@@ -1,0 +1,64 @@
+<section class="mis-pubs">
+  <header class="mis-pubs__header">
+    <h1 class="mis-pubs__title">Mis publicaciones</h1>
+    <ac-button [routerLink]="['/mis-publicaciones/nuevo']">Crear publicación</ac-button>
+  </header>
+
+  @if (loading()) {
+    <p role="status">Cargando…</p>
+  } @else if (error()) {
+    <p role="alert" class="mis-pubs__error">{{ error() }}</p>
+  } @else if (trabajos().length === 0) {
+    <p class="mis-pubs__empty">Aún no creaste publicaciones.</p>
+  } @else {
+    @if (borradores().length > 0) {
+      <h2 class="mis-pubs__h2">Borradores</h2>
+      <ul class="mis-pubs__list">
+        @for (t of borradores(); track t.id) {
+          <li><a [routerLink]="['/mis-publicaciones', t.id]" class="mis-pubs__link">{{ t.titulo }}</a></li>
+        }
+      </ul>
+    }
+    @if (abiertos().length > 0) {
+      <h2 class="mis-pubs__h2">Abiertos</h2>
+      <ul class="mis-pubs__list">
+        @for (t of abiertos(); track t.id) {
+          <li>
+            <a [routerLink]="['/mis-publicaciones', t.id]" class="mis-pubs__link">
+              <span>{{ t.titulo }}</span>
+              @if (t.expiraEn) {
+                <span class="mis-pubs__meta">Expira: {{ t.expiraEn | date:'mediumDate' }}</span>
+              }
+            </a>
+          </li>
+        }
+      </ul>
+    }
+    @if (enDesarrollo().length > 0) {
+      <h2 class="mis-pubs__h2">En desarrollo</h2>
+      <ul class="mis-pubs__list">
+        @for (t of enDesarrollo(); track t.id) {
+          <li>
+            <a [routerLink]="['/mis-publicaciones', t.id]" class="mis-pubs__link">
+              <span>{{ t.titulo }}</span>
+              @if (t.estudianteNombre) { <span class="mis-pubs__meta">Estudiante: {{ t.estudianteNombre }}</span> }
+            </a>
+          </li>
+        }
+      </ul>
+    }
+    @if (otros().length > 0) {
+      <h2 class="mis-pubs__h2">Otros</h2>
+      <ul class="mis-pubs__list">
+        @for (t of otros(); track t.id) {
+          <li>
+            <a [routerLink]="['/mis-publicaciones', t.id]" class="mis-pubs__link">
+              <span>{{ t.titulo }}</span>
+              <span class="mis-pubs__meta">{{ estadoLabel[t.estado] }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>
