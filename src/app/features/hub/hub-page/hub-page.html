@@ -1,0 +1,49 @@
+<section class="hub">
+  <header class="hub__header">
+    <h1 class="hub__title">Hub de necesidades</h1>
+  </header>
+
+  <div class="hub__layout">
+    <aside class="hub__aside">
+      <ac-filtros-repositorio
+        [areas]="areas()"
+        [value]="filtros()"
+        (valueChange)="onFiltrosChange($event)"
+        (clearAll)="onClearFiltros()" />
+    </aside>
+
+    <div class="hub__main">
+      @if (loading()) {
+        <p role="status">Cargando…</p>
+      } @else if (error()) {
+        <p role="alert" class="hub__error">{{ error() }}</p>
+      } @else if (ranked().length === 0) {
+        <p class="hub__empty">No hay necesidades publicadas que coincidan con los filtros.</p>
+      } @else {
+        <ul class="hub__list">
+          @for (t of ranked(); track t.id) {
+            <li class="hub__item">
+              <a [routerLink]="['/hub', t.id]" class="hub__link">
+                <h3 class="hub__t-title">{{ t.titulo }}</h3>
+                <p class="hub__t-meta">
+                  {{ tipoLabel[t.tipo] }}
+                  @if (t.orientadorNombre) { · Orientador: {{ t.orientadorNombre }} }
+                  @if (t.expiraEn) { · Expira: {{ t.expiraEn | date:'mediumDate' }} }
+                </p>
+                @if (t.keywords?.length) {
+                  <ul class="hub__t-kw">@for (k of t.keywords; track k) { <li>{{ k }}</li> }</ul>
+                }
+              </a>
+            </li>
+          }
+        </ul>
+
+        <nav class="hub__pager" aria-label="Paginación">
+          <ac-button variant="ghost" (click)="prevPage()" [disabled]="results()?.first ?? false">Anterior</ac-button>
+          <span class="hub__pager-info">{{ (results()?.number ?? 0) + 1 }} / {{ results()?.totalPages ?? 1 }}</span>
+          <ac-button variant="ghost" (click)="nextPage()" [disabled]="results()?.last ?? false">Siguiente</ac-button>
+        </nav>
+      }
+    </div>
+  </div>
+</section>
