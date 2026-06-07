@@ -1,0 +1,47 @@
+<section class="mis-sol">
+  <header class="mis-sol__header">
+    <h1 class="mis-sol__title">Mis solicitudes</h1>
+    <nav class="mis-sol__tabs" aria-label="Filtrar solicitudes">
+      <button type="button" class="mis-sol__tab"
+              [class.mis-sol__tab--active]="filtro() === 'PENDIENTE'"
+              [attr.aria-pressed]="filtro() === 'PENDIENTE'"
+              (click)="setFiltro('PENDIENTE')">Pendientes</button>
+      <button type="button" class="mis-sol__tab"
+              [class.mis-sol__tab--active]="filtro() === 'RESUELTAS'"
+              [attr.aria-pressed]="filtro() === 'RESUELTAS'"
+              (click)="setFiltro('RESUELTAS')">Resueltas</button>
+    </nav>
+  </header>
+
+  @if (loading()) {
+    <p role="status">Cargando…</p>
+  } @else if (error()) {
+    <p role="alert" class="mis-sol__error">{{ error() }}</p>
+  } @else if (visibles().length === 0) {
+    <p class="mis-sol__empty">
+      @if (filtro() === 'PENDIENTE') { No tenés solicitudes pendientes. }
+      @else { No tenés solicitudes resueltas. }
+    </p>
+  } @else {
+    <ul class="mis-sol__list">
+      @for (s of visibles(); track s.id) {
+        <li>
+          <ac-card padding="md">
+            <div class="mis-sol__row">
+              <a [routerLink]="['/hub', s.trabajoId]" class="mis-sol__link">{{ s.trabajoTitulo }}</a>
+              <span class="mis-sol__estado">{{ s.estado }}</span>
+            </div>
+            @if (s.motivo) { <p class="mis-sol__motivo">{{ s.motivo }}</p> }
+            @if (s.respuesta) { <p class="mis-sol__resp">Respuesta: {{ s.respuesta }}</p> }
+            @if (s.estado === 'PENDIENTE') {
+              <div class="mis-sol__actions">
+                <ac-button variant="ghost" [loading]="actionId() === s.id"
+                           [disabled]="actionId() === s.id" (click)="cancelar(s)">Cancelar</ac-button>
+              </div>
+            }
+          </ac-card>
+        </li>
+      }
+    </ul>
+  }
+</section>
