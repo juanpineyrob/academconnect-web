@@ -1,0 +1,27 @@
+<form class="invitar-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  <label class="invitar-form__field">
+    <span class="invitar-form__label">Orientador *</span>
+    @if (loading()) {
+      <span class="invitar-form__hint" role="status">Cargando profesores…</span>
+    } @else {
+      <select formControlName="profesorId" class="invitar-form__select">
+        <option [ngValue]="null">— Seleccionar —</option>
+        @for (p of ranked(); track p.id) {
+          <option [ngValue]="p.id">{{ p.nombre }}</option>
+        }
+      </select>
+    }
+  </label>
+
+  <label class="invitar-form__field">
+    <span class="invitar-form__label">Mensaje (opcional)</span>
+    <textarea formControlName="motivo" rows="3" maxlength="1000"
+              class="invitar-form__textarea"
+              placeholder="Contale a tu posible orientador por qué te interesa trabajar con él/ella."></textarea>
+  </label>
+
+  <div class="invitar-form__actions">
+    <ac-button type="submit" [loading]="submitting()"
+               [disabled]="submitting() || form.invalid">Enviar invitación</ac-button>
+  </div>
+</form>
