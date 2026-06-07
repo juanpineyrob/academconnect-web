@@ -1,0 +1,70 @@
+<section class="detalle">
+  @if (loading()) {
+    <p role="status">Cargando…</p>
+  } @else if (error() && !trabajo()) {
+    <p role="alert" class="detalle__error">{{ error() }}</p>
+  } @else if (trabajo(); as t) {
+    <header class="detalle__header">
+      <a [routerLink]="['/mis-trabajos']" class="detalle__back">← Volver</a>
+      <h1 class="detalle__title">{{ t.titulo }}</h1>
+      <p class="detalle__meta">
+        {{ tipoLabel[t.tipo] }} · {{ estadoLabel[t.estado] }}
+        @if (t.orientadorNombre) { · Orientador: {{ t.orientadorNombre }} }
+      </p>
+    </header>
+
+    @if (t.descripcion) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Descripción</h2>
+        <p class="detalle__desc">{{ t.descripcion }}</p>
+      </ac-card>
+    }
+
+    <ac-card padding="md">
+      <h2 class="detalle__h2">Palabras clave</h2>
+      <ul class="detalle__kw">
+        @for (k of t.keywords; track k) { <li>{{ k }}</li> }
+      </ul>
+    </ac-card>
+
+    @if (actionMessage()) {
+      <p role="status" class="detalle__success">{{ actionMessage() }}</p>
+    }
+    @if (error()) {
+      <p role="alert" class="detalle__error">{{ error() }}</p>
+    }
+
+    @if (puedeInvitar()) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Invitar orientador</h2>
+        <ac-invitar-orientador-form
+          [trabajo]="t"
+          [submitting]="submittingInv()"
+          (enviar)="onInvitar($event)" />
+      </ac-card>
+    } @else if (invitacionPendiente(); as inv) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Esperando respuesta</h2>
+        <p>Invitaste a <strong>{{ inv.profesorNombre }}</strong>.</p>
+        @if (inv.motivo) { <p class="detalle__meta">Mensaje: {{ inv.motivo }}</p> }
+        <div class="detalle__actions">
+          <ac-button variant="ghost" (click)="onCancelar()">Cancelar invitación</ac-button>
+        </div>
+      </ac-card>
+    }
+
+    @if (invitaciones().length > 0) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Historial de invitaciones</h2>
+        <ul class="detalle__history">
+          @for (i of invitaciones(); track i.id) {
+            <li>
+              <strong>{{ i.profesorNombre }}</strong> — {{ i.estado }}
+              @if (i.respuesta) { · {{ i.respuesta }} }
+            </li>
+          }
+        </ul>
+      </ac-card>
+    }
+  }
+</section>
