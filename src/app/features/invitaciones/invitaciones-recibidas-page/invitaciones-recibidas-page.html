@@ -1,0 +1,50 @@
+<section class="recibidas">
+  <header class="recibidas__header">
+    <h1 class="recibidas__title">Invitaciones de orientación</h1>
+    <nav class="recibidas__tabs" aria-label="Filtrar invitaciones">
+      <button type="button" class="recibidas__tab"
+              [class.recibidas__tab--active]="filtro() === 'PENDIENTE'"
+              [attr.aria-pressed]="filtro() === 'PENDIENTE'"
+              (click)="setFiltro('PENDIENTE')">Pendientes</button>
+      <button type="button" class="recibidas__tab"
+              [class.recibidas__tab--active]="filtro() === 'HISTORICO'"
+              [attr.aria-pressed]="filtro() === 'HISTORICO'"
+              (click)="setFiltro('HISTORICO')">Histórico</button>
+    </nav>
+  </header>
+
+  @if (loading()) {
+    <p role="status">Cargando…</p>
+  } @else if (error()) {
+    <p role="alert" class="recibidas__error">{{ error() }}</p>
+  } @else if (visibles().length === 0) {
+    <p class="recibidas__empty">
+      @if (filtro() === 'PENDIENTE') { No tenés invitaciones pendientes. }
+      @else { No hay invitaciones en el histórico. }
+    </p>
+  } @else {
+    <ul class="recibidas__list">
+      @for (i of visibles(); track i.id) {
+        <li>
+          <ac-card padding="md">
+            <div class="recibidas__row">
+              <a [routerLink]="['/repositorio', i.trabajoId]" class="recibidas__link">{{ i.trabajoTitulo }}</a>
+              <span class="recibidas__estado">{{ i.estado }}</span>
+            </div>
+            @if (i.motivo) { <p class="recibidas__motivo">{{ i.motivo }}</p> }
+            @if (i.estado === 'PENDIENTE') {
+              <div class="recibidas__actions">
+                <ac-button variant="primary" [loading]="actionId() === i.id"
+                           [disabled]="actionId() === i.id"
+                           (click)="aceptar(i)">Aceptar</ac-button>
+                <ac-button variant="ghost" [loading]="actionId() === i.id"
+                           [disabled]="actionId() === i.id"
+                           (click)="rechazar(i)">Rechazar</ac-button>
+              </div>
+            }
+          </ac-card>
+        </li>
+      }
+    </ul>
+  }
+</section>
