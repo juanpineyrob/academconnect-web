@@ -1,0 +1,89 @@
+<section class="detalle">
+  @if (loading()) {
+    <p role="status">Cargando…</p>
+  } @else if (error() && !trabajo()) {
+    <p role="alert" class="detalle__error">{{ error() }}</p>
+  } @else if (trabajo(); as t) {
+    <header class="detalle__header">
+      <a [routerLink]="['/mis-publicaciones']" class="detalle__back">← Volver</a>
+      <h1 class="detalle__title">{{ t.titulo }}</h1>
+      <p class="detalle__meta">{{ tipoLabel[t.tipo] }} · {{ estadoLabel[t.estado] }}</p>
+    </header>
+
+    @if (t.descripcion) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Descripción</h2>
+        <p class="detalle__desc">{{ t.descripcion }}</p>
+      </ac-card>
+    }
+
+    <ac-card padding="md">
+      <h2 class="detalle__h2">Palabras clave</h2>
+      <ul class="detalle__kw">@for (k of t.keywords; track k) { <li>{{ k }}</li> }</ul>
+    </ac-card>
+
+    @if (actionMessage()) { <p role="status" class="detalle__success">{{ actionMessage() }}</p> }
+    @if (error()) { <p role="alert" class="detalle__error">{{ error() }}</p> }
+
+    @if (t.estado === 'BORRADOR') {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Publicar</h2>
+        <p>Publicá este BORRADOR como ABIERTO con duración configurable.</p>
+        <ac-button (click)="openPublicar()" [disabled]="publicarOpen()">Publicar…</ac-button>
+        @if (publicarOpen()) {
+          <div class="detalle__modal">
+            <p>Duración:</p>
+            <div class="detalle__chips">
+              @for (d of duraciones; track d) {
+                <button type="button" class="detalle__chip"
+                        [class.detalle__chip--active]="duracion() === d"
+                        [attr.aria-pressed]="duracion() === d"
+                        (click)="setDuracion(d)">{{ d }} días</button>
+              }
+            </div>
+            <div class="detalle__actions">
+              <ac-button (click)="confirmPublicar()" [loading]="publicando()" [disabled]="publicando()">Confirmar publicación</ac-button>
+              <ac-button variant="ghost" (click)="closePublicar()" [disabled]="publicando()">Cancelar</ac-button>
+            </div>
+          </div>
+        }
+      </ac-card>
+    } @else if (t.estado === 'ABIERTO') {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Publicación abierta</h2>
+        @if (t.expiraEn) { <p>Expira el {{ t.expiraEn | date:'mediumDate' }}.</p> }
+        <ac-button variant="ghost" (click)="cerrarTrabajo()" [loading]="cerrando()" [disabled]="cerrando()">Cerrar publicación</ac-button>
+      </ac-card>
+
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Solicitudes recibidas</h2>
+        @if (solicitudes().length === 0) {
+          <p class="detalle__meta">Aún no hay solicitudes.</p>
+        } @else {
+          <ul class="detalle__sol">
+            @for (s of solicitudes(); track s.id) {
+              <li>
+                <div class="detalle__sol-row">
+                  <strong>{{ s.estudianteNombre }}</strong>
+                  <span class="detalle__meta">{{ s.estado }}</span>
+                </div>
+                @if (s.motivo) { <p class="detalle__meta">{{ s.motivo }}</p> }
+                @if (s.estado === 'PENDIENTE') {
+                  <div class="detalle__actions">
+                    <ac-button (click)="aceptar(s)" [loading]="actionSolicitudId() === s.id" [disabled]="actionSolicitudId() === s.id">Aceptar</ac-button>
+                    <ac-button variant="ghost" (click)="rechazar(s)" [loading]="actionSolicitudId() === s.id" [disabled]="actionSolicitudId() === s.id">Rechazar</ac-button>
+                  </div>
+                }
+              </li>
+            }
+          </ul>
+        }
+      </ac-card>
+    } @else if (t.estado === 'EN_DESARROLLO') {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Vinculado a estudiante</h2>
+        <p>Estudiante: <strong>{{ t.estudianteNombre }}</strong>.</p>
+      </ac-card>
+    }
+  }
+</section>
