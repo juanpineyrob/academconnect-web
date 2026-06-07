@@ -21,6 +21,8 @@ const SECTIONS_ESTUDIANTE: NavSection[] = [
     items: [
       { label: 'Mi perfil', route: '/perfil' },
       { label: 'Mis trabajos', route: '/mis-trabajos', exact: false },
+      { label: 'Hub de necesidades', route: '/hub', exact: false },
+      { label: 'Mis solicitudes', route: '/mis-solicitudes' },
       { label: 'Repositorio', route: '/repositorio', exact: false },
     ],
   },
@@ -42,6 +44,7 @@ const SECTIONS_EVALUADOR: NavSection[] = [
       { label: 'Evaluaciones asignadas' },
       { label: 'Bandeja de revisión' },
       { label: 'Invitaciones de orientación', route: '/invitaciones-orientacion' },
+      { label: 'Mis publicaciones', route: '/mis-publicaciones', exact: false },
       { label: 'Repositorio', route: '/repositorio', exact: false },
     ],
   },
