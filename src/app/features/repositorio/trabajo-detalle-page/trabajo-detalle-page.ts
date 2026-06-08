@@ -44,9 +44,9 @@ export class TrabajoDetallePage {
   });
 
   protected readonly archivoHref = computed(() => {
-    const url = this.trabajo()?.archivoUrl;
-    if (!url) return null;
-    return url.startsWith('/') ? `${environment.apiBase}${url}` : url;
+    const t = this.trabajo();
+    if (!t || !t.archivoUrl) return null;
+    return `${environment.apiBase}/api/trabajos/${t.id}/archivo`;
   });
 
   protected readonly archivoFilename = computed(() => {
