@@ -30,7 +30,7 @@
                   @if (t.orientadorNombre) { · Orientador: {{ t.orientadorNombre }} }
                   @if (t.expiraEn) { · Expira: {{ t.expiraEn | date:'mediumDate' }} }
                 </p>
-                @if (t.keywords?.length) {
+                @if (t.keywords.length) {
                   <ul class="hub__t-kw">@for (k of t.keywords; track k) { <li>{{ k }}</li> }</ul>
                 }
               </a>

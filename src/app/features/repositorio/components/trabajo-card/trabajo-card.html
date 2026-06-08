@@ -2,9 +2,6 @@
   <article class="trabajo-card">
     <div class="trabajo-card__meta">
       <ac-badge variant="role">{{ tipoLabel() }}</ac-badge>
-      <ac-badge variant="state" [state]="estadoBadgeState(trabajo().estado)">
-        {{ estadoLabel() }}
-      </ac-badge>
       <span class="trabajo-card__anio t-caption">{{ anio() }}</span>
     </div>
 
