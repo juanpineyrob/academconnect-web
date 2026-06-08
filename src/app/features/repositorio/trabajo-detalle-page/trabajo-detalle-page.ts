@@ -45,13 +45,13 @@ export class TrabajoDetallePage {
 
   protected readonly archivoHref = computed(() => {
     const t = this.trabajo();
-    if (!t || !t.archivoUrl) return null;
+    if (!t || !t.archivoStorageKey) return null;
     return `${environment.apiBase}/api/trabajos/${t.id}/archivo`;
   });
 
   protected readonly archivoFilename = computed(() => {
     const t = this.trabajo();
-    if (!t || !t.archivoUrl) return null;
+    if (!t || !t.archivoStorageKey) return null;
     const slug = t.titulo
       .toLowerCase()
       .normalize('NFD')

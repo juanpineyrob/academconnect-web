@@ -17,5 +17,5 @@ export interface TrabajoAdminImportRequest {
   keywords: string[];
   puntajeAgregado?: number | null;
   evaluadoEn?: string | null;
-  archivoUrl?: string | null;
+  archivoStorageKey?: string | null;
 }

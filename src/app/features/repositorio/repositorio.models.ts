@@ -16,7 +16,7 @@ export interface TrabajoListItem {
   puntajeAgregado: number | null;
   evaluadoEn: string | null;
   expiraEn: string | null;
-  archivoUrl: string | null;
+  archivoStorageKey: string | null;
   createdAt: string;
   updatedAt: string;
 }

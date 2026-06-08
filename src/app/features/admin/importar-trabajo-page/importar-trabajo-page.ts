@@ -67,7 +67,7 @@ export class ImportarTrabajoPage {
     keywords: [[] as string[]],
     puntajeAgregado: [null as number | null],
     evaluadoEn: [''],
-    archivoUrl: [''],
+    archivoStorageKey: [''],
   });
 
   protected readonly keywordInput = this.fb.nonNullable.control('');
@@ -177,7 +177,7 @@ export class ImportarTrabajoPage {
       keywords: v.keywords,
       puntajeAgregado: v.puntajeAgregado ?? null,
       evaluadoEn: v.evaluadoEn ? toInstant(v.evaluadoEn) : null,
-      archivoUrl: v.archivoUrl.trim() || null,
+      archivoStorageKey: v.archivoStorageKey.trim() || null,
     };
 
     this.submitting.set(true);

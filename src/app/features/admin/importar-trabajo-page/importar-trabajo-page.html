@@ -164,15 +164,16 @@
 
       <div class="importar-form__row">
         <label class="importar-form__field importar-form__field--full">
-          <span class="importar-form__label">URL del archivo</span>
+          <span class="importar-form__label">Nombre del archivo</span>
           <input
             type="text"
             class="importar-form__input"
-            formControlName="archivoUrl"
-            placeholder="/storage/trabajos/1.pdf"
+            formControlName="archivoStorageKey"
+            placeholder="1.pdf"
             maxlength="500" />
           <span class="importar-form__hint">
-            Ruta servida por el backend (subí el PDF a <code>./data/trabajos/</code>).
+            Filename relativo a <code>./data/trabajos/</code>. Se sirve por
+            <code>GET /api/trabajos/&lcub;id&rcub;/archivo</code> con check de acceso.
           </span>
         </label>
       </div>
