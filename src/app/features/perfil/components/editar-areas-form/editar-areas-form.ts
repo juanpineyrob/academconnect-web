@@ -59,7 +59,7 @@ export class EditarAreasForm {
   private readonly hydrate = effect(() => {
     const initial = new Map<number, NivelExperticia>();
     for (const a of this.currentAreas()) {
-      initial.set(a.areaId, a.nivelExperticia);
+      initial.set(a.areaId, a.nivelExperticia ?? 'MEDIO');
     }
     this.selection.set(initial);
   });

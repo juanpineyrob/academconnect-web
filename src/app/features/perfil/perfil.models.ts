@@ -16,7 +16,7 @@ export type EstadoTrabajo =
 export interface UsuarioAreaTematica {
   areaId: number;
   areaNombre: string;
-  nivelExperticia: NivelExperticia;
+  nivelExperticia: NivelExperticia | null;
 }
 
 export interface AreaTematica {
@@ -46,6 +46,22 @@ export interface Perfil {
   trabajosPublicados: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PerfilPublico {
+  id: number;
+  nombre: string;
+  rol: Rol;
+  biografia: string | null;
+  ubicacion: string | null;
+  fotoUrl: string | null;
+  titulacion: string | null;
+  cargo: string | null;
+  institucion: string | null;
+  titulo: string | null;
+  areas: UsuarioAreaTematica[];
+  trabajosPublicados: number;
+  createdAt: string;
 }
 
 export interface PerfilUpdateRequest {

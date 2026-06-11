@@ -1,11 +1,12 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { Observable, catchError, of } from 'rxjs';
+import { Observable, catchError, map, of } from 'rxjs';
 
 import { environment } from '@env/environment';
 import {
   AreaTematica,
   Perfil,
+  PerfilPublico,
   PerfilUpdateRequest,
   Reconocimiento,
   StatsEvaluador,
@@ -13,6 +14,11 @@ import {
   UsuarioAreaTematica,
   UsuarioAreasRequest,
 } from './perfil.models';
+
+interface Page<T> {
+  content: T[];
+  totalElements: number;
+}
 
 @Injectable({ providedIn: 'root' })
 export class PerfilService {
@@ -58,5 +64,22 @@ export class PerfilService {
     return this.http
       .get<TrabajoResumen[]>(`${this.api}/estudiante/me/trabajos`)
       .pipe(catchError(() => of(null)));
+  }
+
+  getPerfilPublico(id: number): Observable<PerfilPublico> {
+    return this.http.get<PerfilPublico>(`${this.api}/api/usuarios/${id}/perfil`);
+  }
+
+  getTrabajosAprobados(estudianteId: number, max = 5): Observable<TrabajoResumen[]> {
+    const params = new HttpParams()
+      .set('estudianteId', estudianteId)
+      .set('soloPublicos', true)
+      .set('size', max);
+    return this.http
+      .get<Page<TrabajoResumen>>(`${this.api}/api/trabajos/buscar`, { params })
+      .pipe(
+        map((page) => page.content),
+        catchError(() => of([] as TrabajoResumen[])),
+      );
   }
 }

@@ -25,7 +25,9 @@ import { UsuarioAreaTematica } from '../../perfil.models';
           @for (area of areas(); track area.areaId) {
             <li class="lineas__item">
               <ac-badge variant="area">{{ area.areaNombre }}</ac-badge>
-              <span class="lineas__nivel t-caption">{{ nivelLabel(area.nivelExperticia) }}</span>
+              @if (nivelLabel(area.nivelExperticia); as nivel) {
+                <span class="lineas__nivel t-caption">{{ nivel }}</span>
+              }
             </li>
           }
         </ul>
@@ -38,7 +40,7 @@ export class LineasInvestigacion {
   readonly areas = input.required<UsuarioAreaTematica[]>();
   readonly editClick = output<void>();
 
-  protected nivelLabel(n: UsuarioAreaTematica['nivelExperticia']): string {
+  protected nivelLabel(n: UsuarioAreaTematica['nivelExperticia']): string | null {
     switch (n) {
       case 'BAJO':
         return 'Inicial';
@@ -47,7 +49,7 @@ export class LineasInvestigacion {
       case 'ALTO':
         return 'Experto';
       default:
-        return n;
+        return null;
     }
   }
 
