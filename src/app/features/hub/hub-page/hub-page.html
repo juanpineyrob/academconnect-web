@@ -1,6 +1,11 @@
 <section class="hub">
   <header class="hub__header">
     <h1 class="hub__title">Hub de necesidades</h1>
+    @if (isProfesor()) {
+      <ac-button variant="primary" size="sm" routerLink="/mis-publicaciones/nuevo">
+        Crear necesidad
+      </ac-button>
+    }
   </header>
 
   <div class="hub__layout">

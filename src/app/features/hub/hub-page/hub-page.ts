@@ -9,6 +9,7 @@ import { catchError, of } from 'rxjs';
 
 import { Button } from '@shared/ui/button/button';
 import { Page } from '@core/http/page';
+import { AuthService } from '@core/auth/auth.service';
 import { AreaTematica, Perfil } from '@features/perfil/perfil.models';
 import { PerfilService } from '@features/perfil/perfil.service';
 import { RepositorioService } from '@features/repositorio/repositorio.service';
@@ -31,8 +32,10 @@ export class HubPage {
   private readonly hubService = inject(HubService);
   private readonly perfilService = inject(PerfilService);
   private readonly repo = inject(RepositorioService);
+  private readonly auth = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
+  protected readonly isProfesor = computed(() => this.auth.currentUser()?.rol === 'PROFESOR');
   protected readonly filtros = signal<FiltrosState>({ areaIds: [], tipo: null, anios: [] });
   protected readonly page = signal<number>(0);
   protected readonly results = signal<Page<TrabajoListItem> | null>(null);
