@@ -1,11 +1,12 @@
 import { Routes } from '@angular/router';
 
+import { authGuard } from '@core/auth/auth.guard';
 import { roleGuard } from '@core/auth/role.guard';
 
 export const HUB_ROUTES: Routes = [
   {
     path: 'hub',
-    canActivate: [roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { roles: ['ESTUDIANTE'] },
     loadComponent: () =>
       import('./hub-page/hub-page').then((m) => m.HubPage),
@@ -13,7 +14,7 @@ export const HUB_ROUTES: Routes = [
   },
   {
     path: 'hub/:id',
-    canActivate: [roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { roles: ['ESTUDIANTE'] },
     loadComponent: () =>
       import('./hub-detalle-page/hub-detalle-page').then((m) => m.HubDetallePage),
@@ -21,7 +22,7 @@ export const HUB_ROUTES: Routes = [
   },
   {
     path: 'mis-solicitudes',
-    canActivate: [roleGuard],
+    canActivate: [authGuard, roleGuard],
     data: { roles: ['ESTUDIANTE'] },
     loadComponent: () =>
       import('./mis-solicitudes-page/mis-solicitudes-page').then((m) => m.MisSolicitudesPage),

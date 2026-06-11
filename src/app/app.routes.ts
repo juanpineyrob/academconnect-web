@@ -1,7 +1,6 @@
 import { inject } from '@angular/core';
 import { Routes } from '@angular/router';
 
-import { authGuard } from '@core/auth/auth.guard';
 import { AuthService } from '@core/auth/auth.service';
 import { homeForRole } from '@core/auth/home-for-role';
 import { ADMIN_ROUTES } from '@features/admin/admin.routes';
@@ -13,13 +12,15 @@ import { MIS_TRABAJOS_ROUTES } from '@features/mis-trabajos/mis-trabajos.routes'
 import { PERFIL_ROUTES } from '@features/perfil/perfil.routes';
 import { REPOSITORIO_ROUTES } from '@features/repositorio/repositorio.routes';
 
-const roleAwareHome = () => homeForRole(inject(AuthService).currentUser()?.rol);
+const roleAwareHome = () => {
+  const user = inject(AuthService).currentUser();
+  return user ? homeForRole(user.rol) : '/repositorio';
+};
 
 export const routes: Routes = [
   ...AUTH_ROUTES,
   {
     path: '',
-    canActivate: [authGuard],
     loadComponent: () => import('@app/layout/shell/shell').then((m) => m.Shell),
     children: [
       ...PERFIL_ROUTES,
