@@ -12,4 +12,10 @@ export const PERFIL_ROUTES: Routes = [
       import('./perfil-propio-page/perfil-propio-page').then((m) => m.PerfilPropioPage),
     title: 'Mi perfil · AcademConnect',
   },
+  {
+    path: 'usuarios/:id',
+    loadComponent: () =>
+      import('./perfil-publico-page/perfil-publico-page').then((m) => m.PerfilPublicoPage),
+    title: 'Perfil · AcademConnect',
+  },
 ];

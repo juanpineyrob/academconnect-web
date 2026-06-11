@@ -1,0 +1,31 @@
+<div class="perfil-page">
+  @if (loading()) {
+    <div class="perfil-page__skeleton" aria-busy="true" aria-label="Cargando perfil">
+      <div class="perfil-page__skeleton-header"></div>
+      <div class="perfil-page__skeleton-row"></div>
+      <div class="perfil-page__skeleton-row"></div>
+    </div>
+  } @else if (notFound()) {
+    <div role="alert" class="perfil-page__error">
+      <p class="t-h3">Perfil no encontrado</p>
+      <p class="t-body">El usuario que buscás no existe o no está disponible.</p>
+    </div>
+  } @else if (perfil(); as p) {
+    <ac-perfil-header [perfil]="p" [isOwn]="false" />
+
+    <ac-perfil-stats [perfil]="p" />
+
+    <div class="perfil-page__cols">
+      <div class="perfil-page__col perfil-page__col--main">
+        <ac-bio-academica [biografia]="p.biografia" />
+        @if (isEstudiante()) {
+          <ac-publicaciones-recientes [items]="trabajos()" />
+        }
+        <ac-reconocimientos [items]="reconocimientos()" />
+      </div>
+      <div class="perfil-page__col perfil-page__col--side">
+        <ac-lineas-investigacion [areas]="p.areas" />
+      </div>
+    </div>
+  }
+</div>
