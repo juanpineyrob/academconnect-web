@@ -13,7 +13,9 @@ import { UsuarioAreaTematica } from '../../perfil.models';
     <ac-card padding="md">
       <header class="lineas__header">
         <h2 class="lineas__title">Líneas de investigación</h2>
-        <ac-button variant="link" size="sm" (click)="onEdit()">Editar áreas</ac-button>
+        @if (editable()) {
+          <ac-button variant="link" size="sm" (click)="onEdit()">Editar áreas</ac-button>
+        }
       </header>
 
       @if (areas().length === 0) {
@@ -38,6 +40,7 @@ import { UsuarioAreaTematica } from '../../perfil.models';
 })
 export class LineasInvestigacion {
   readonly areas = input.required<UsuarioAreaTematica[]>();
+  readonly editable = input<boolean>(false);
   readonly editClick = output<void>();
 
   protected nivelLabel(n: UsuarioAreaTematica['nivelExperticia']): string | null {

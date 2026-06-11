@@ -24,7 +24,10 @@
         <ac-reconocimientos [items]="reconocimientos()" />
       </div>
       <div class="perfil-page__col perfil-page__col--side">
-        <ac-lineas-investigacion [areas]="p.areas" (editClick)="openEditAreas()" />
+        <ac-lineas-investigacion
+          [areas]="p.areas"
+          [editable]="!isEstudiante()"
+          (editClick)="openEditAreas()" />
       </div>
     </div>
   }
