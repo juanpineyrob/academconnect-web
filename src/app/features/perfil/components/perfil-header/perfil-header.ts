@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output } from '@an
 import { Avatar } from '@shared/ui/avatar/avatar';
 import { Badge } from '@shared/ui/badge/badge';
 import { Button } from '@shared/ui/button/button';
-import { Perfil } from '../../perfil.models';
+import { Perfil, PerfilPublico } from '../../perfil.models';
 
 const ROL_LABEL: Record<string, string> = {
   ESTUDIANTE: 'Estudiante',
@@ -20,11 +20,21 @@ const ROL_LABEL: Record<string, string> = {
   styleUrl: './perfil-header.scss',
 })
 export class PerfilHeader {
-  readonly perfil = input.required<Perfil>();
+  readonly perfil = input.required<Perfil | PerfilPublico>();
   readonly isOwn = input<boolean>(false);
   readonly editClick = output<void>();
 
   protected readonly rolLabel = computed(() => ROL_LABEL[this.perfil().rol] ?? this.perfil().rol);
+
+  protected readonly avatarVersion = computed(() => {
+    const p = this.perfil() as Partial<Perfil>;
+    return p.updatedAt ?? p.createdAt ?? '';
+  });
+
+  protected readonly esActivo = computed(() => {
+    const p = this.perfil() as Partial<Perfil>;
+    return p.activo ?? true;
+  });
 
   protected readonly afiliacion = computed(() => {
     const p = this.perfil();

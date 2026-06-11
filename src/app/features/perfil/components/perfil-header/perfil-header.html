@@ -7,13 +7,13 @@
         size="xl"
         [name]="perfil().nombre"
         [photoUrl]="perfil().fotoUrl"
-        [version]="perfil().updatedAt" />
+        [version]="avatarVersion()" />
     </div>
 
     <div class="perfil-header__body">
       <div class="perfil-header__chips">
         <ac-badge variant="role">{{ rolLabel() }}</ac-badge>
-        @if (perfil().activo) {
+        @if (esActivo()) {
           <ac-badge variant="state" state="aprobado">Verificado</ac-badge>
         }
       </div>

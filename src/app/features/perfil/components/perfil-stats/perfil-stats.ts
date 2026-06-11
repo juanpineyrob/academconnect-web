@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 import { StatCard } from '@shared/ui/stat-card/stat-card';
-import { Perfil, StatsEvaluador } from '../../perfil.models';
+import { Perfil, PerfilPublico, StatsEvaluador } from '../../perfil.models';
 
 interface Stat {
   label: string;
@@ -23,7 +23,7 @@ interface Stat {
   styleUrl: './perfil-stats.scss',
 })
 export class PerfilStats {
-  readonly perfil = input.required<Perfil>();
+  readonly perfil = input.required<Perfil | PerfilPublico>();
   readonly evaluadorStats = input<StatsEvaluador | null>(null);
 
   protected readonly stats = computed<Stat[]>(() => {
