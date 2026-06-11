@@ -60,12 +60,6 @@ export class PerfilService {
       .pipe(catchError(() => of(null)));
   }
 
-  getMisTrabajos(): Observable<TrabajoResumen[] | null> {
-    return this.http
-      .get<TrabajoResumen[]>(`${this.api}/estudiante/me/trabajos`)
-      .pipe(catchError(() => of(null)));
-  }
-
   getPerfilPublico(id: number): Observable<PerfilPublico> {
     return this.http.get<PerfilPublico>(`${this.api}/api/usuarios/${id}/perfil`);
   }

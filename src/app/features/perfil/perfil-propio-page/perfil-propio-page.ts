@@ -108,7 +108,7 @@ export class PerfilPropioPage {
 
     if (perfil.rol === 'ESTUDIANTE') {
       this.perfilService
-        .getMisTrabajos()
+        .getTrabajosAprobados(perfil.id)
         .pipe(takeUntilDestroyed(this.destroyRef))
         .subscribe((ts) => this.trabajos.set(ts));
     }
