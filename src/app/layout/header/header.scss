@@ -100,6 +100,26 @@
   background: var(--c-surface-muted);
 }
 
+.header__login {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--sp-1) var(--sp-3);
+  border-radius: var(--r-pill);
+  background: var(--c-primary);
+  color: var(--c-primary-contrast);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  text-decoration: none;
+  transition: background var(--t-fast);
+}
+
+.header__login:hover,
+.header__login:focus-visible {
+  background: var(--c-primary-hover, var(--c-primary));
+  outline: none;
+}
+
 .header__user-name {
   font-family: var(--ff-sans);
   font-size: var(--fs-body-sm);

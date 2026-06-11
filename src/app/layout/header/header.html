@@ -65,46 +65,50 @@
     </svg>
   </button>
 
-  <div class="header__user">
-    <button
-      type="button"
-      class="header__user-trigger"
-      [attr.aria-expanded]="menuOpen()"
-      aria-haspopup="menu"
-      aria-label="Abrir menú de usuario"
-      (click)="toggleMenu()">
-      <ac-avatar size="sm" [name]="user()?.nombre ?? '?'" />
-      <span class="header__user-name">{{ user()?.nombre }}</span>
-      <svg
-        class="header__user-chevron"
-        aria-hidden="true"
-        viewBox="0 0 24 24"
-        width="14"
-        height="14"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round">
-        <path d="m6 9 6 6 6-6" />
-      </svg>
-    </button>
+  @if (user(); as u) {
+    <div class="header__user">
+      <button
+        type="button"
+        class="header__user-trigger"
+        [attr.aria-expanded]="menuOpen()"
+        aria-haspopup="menu"
+        aria-label="Abrir menú de usuario"
+        (click)="toggleMenu()">
+        <ac-avatar size="sm" [name]="u.nombre" />
+        <span class="header__user-name">{{ u.nombre }}</span>
+        <svg
+          class="header__user-chevron"
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          width="14"
+          height="14"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </button>
 
-    @if (menuOpen()) {
-      <div role="menu" class="header__menu" aria-label="Menú de usuario">
-        <div class="header__menu-id">
-          <p class="header__menu-name">{{ user()?.nombre }}</p>
-          <p class="header__menu-email">{{ user()?.email }}</p>
+      @if (menuOpen()) {
+        <div role="menu" class="header__menu" aria-label="Menú de usuario">
+          <div class="header__menu-id">
+            <p class="header__menu-name">{{ u.nombre }}</p>
+            <p class="header__menu-email">{{ u.email }}</p>
+          </div>
+          <div class="header__menu-divider" role="separator"></div>
+          <button
+            type="button"
+            role="menuitem"
+            class="header__menu-item"
+            (click)="logout()">
+            Cerrar sesión
+          </button>
         </div>
-        <div class="header__menu-divider" role="separator"></div>
-        <button
-          type="button"
-          role="menuitem"
-          class="header__menu-item"
-          (click)="logout()">
-          Cerrar sesión
-        </button>
-      </div>
-    }
-  </div>
+      }
+    </div>
+  } @else {
+    <a class="header__login" routerLink="/login">Ingresar</a>
+  }
 </div>

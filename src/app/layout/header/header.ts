@@ -8,6 +8,7 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { fromEvent } from 'rxjs';
 
 import { Avatar } from '@shared/ui/avatar/avatar';
@@ -16,7 +17,7 @@ import { AuthService } from '@core/auth/auth.service';
 @Component({
   selector: 'ac-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Avatar],
+  imports: [Avatar, RouterLink],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })

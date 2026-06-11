@@ -86,6 +86,13 @@ export class Sidebar {
   protected readonly sections = computed<NavSection[]>(() => sectionsFor(this.user()?.rol));
 }
 
+const SECTIONS_ANONIMO: NavSection[] = [
+  {
+    title: 'Público',
+    items: [{ label: 'Repositorio', route: '/repositorio', exact: false }],
+  },
+];
+
 function sectionsFor(rol: Rol | undefined): NavSection[] {
   switch (rol) {
     case 'ESTUDIANTE':
@@ -96,6 +103,6 @@ function sectionsFor(rol: Rol | undefined): NavSection[] {
     case 'ADMINISTRADOR':
       return SECTIONS_ADMIN;
     default:
-      return [];
+      return SECTIONS_ANONIMO;
   }
 }
