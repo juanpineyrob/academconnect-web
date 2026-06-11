@@ -60,11 +60,11 @@
     }
 
     @if (keywordsResumen().length > 0) {
-      <p class="trabajo-card__keywords t-caption">
-        @for (kw of keywordsResumen(); track kw; let last = $last) {
-          <span>#{{ kw }}</span>@if (!last) { <span aria-hidden="true"> · </span> }
+      <ul role="list" class="trabajo-card__keywords">
+        @for (kw of keywordsResumen(); track kw) {
+          <li class="trabajo-card__keyword">{{ kw }}</li>
         }
-      </p>
+      </ul>
     }
   </article>
 </ac-card>
