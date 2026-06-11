@@ -17,13 +17,33 @@
       @if (trabajo().estudianteNombre) {
         <div class="trabajo-card__autoria-item">
           <dt class="t-caption">Autor</dt>
-          <dd>{{ trabajo().estudianteNombre }}</dd>
+          <dd>
+            @if (trabajo().estudianteId) {
+              <a
+                class="trabajo-card__persona"
+                [routerLink]="['/usuarios', trabajo().estudianteId]">
+                {{ trabajo().estudianteNombre }}
+              </a>
+            } @else {
+              {{ trabajo().estudianteNombre }}
+            }
+          </dd>
         </div>
       }
       @if (trabajo().orientadorNombre) {
         <div class="trabajo-card__autoria-item">
           <dt class="t-caption">Orientación</dt>
-          <dd>{{ trabajo().orientadorNombre }}</dd>
+          <dd>
+            @if (trabajo().orientadorId) {
+              <a
+                class="trabajo-card__persona"
+                [routerLink]="['/usuarios', trabajo().orientadorId]">
+                {{ trabajo().orientadorNombre }}
+              </a>
+            } @else {
+              {{ trabajo().orientadorNombre }}
+            }
+          </dd>
         </div>
       }
     </dl>
