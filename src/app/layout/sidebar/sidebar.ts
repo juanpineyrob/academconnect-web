@@ -45,6 +45,7 @@ const SECTIONS_EVALUADOR: NavSection[] = [
       { label: 'Bandeja de revisión' },
       { label: 'Invitaciones de orientación', route: '/invitaciones-orientacion' },
       { label: 'Mis publicaciones', route: '/mis-publicaciones', exact: false },
+      { label: 'Hub de necesidades', route: '/hub', exact: false },
       { label: 'Repositorio', route: '/repositorio', exact: false },
     ],
   },
