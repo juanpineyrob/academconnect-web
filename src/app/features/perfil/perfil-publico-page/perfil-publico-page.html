@@ -13,7 +13,7 @@
   } @else if (perfil(); as p) {
     <ac-perfil-header [perfil]="p" [isOwn]="false" />
 
-    <ac-perfil-stats [perfil]="p" />
+    <ac-perfil-stats [perfil]="p" [reconocimientosCount]="reconocimientos().length" />
 
     <div class="perfil-page__cols">
       <div class="perfil-page__col perfil-page__col--main">

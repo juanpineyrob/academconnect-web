@@ -13,7 +13,10 @@
   } @else if (perfil(); as p) {
     <ac-perfil-header [perfil]="p" [isOwn]="true" (editClick)="openEditPerfil()" />
 
-    <ac-perfil-stats [perfil]="p" [evaluadorStats]="evaluadorStats()" />
+    <ac-perfil-stats
+      [perfil]="p"
+      [evaluadorStats]="evaluadorStats()"
+      [reconocimientosCount]="reconocimientos().length" />
 
     <div class="perfil-page__cols">
       <div class="perfil-page__col perfil-page__col--main">

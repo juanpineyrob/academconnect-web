@@ -25,9 +25,12 @@ interface Stat {
 export class PerfilStats {
   readonly perfil = input.required<Perfil | PerfilPublico>();
   readonly evaluadorStats = input<StatsEvaluador | null>(null);
+  readonly reconocimientosCount = input<number>(0);
 
   protected readonly stats = computed<Stat[]>(() => {
     const p = this.perfil();
+    const recs = this.reconocimientosCount();
+
     if (p.rol === 'ESTUDIANTE') {
       return [
         {
@@ -36,22 +39,18 @@ export class PerfilStats {
           sublabel: 'Aportes acreditados',
         },
         {
-          label: 'Áreas de interés',
+          label: 'Líneas activas',
           value: p.areas.length,
-          sublabel: 'Disciplinas declaradas',
+          sublabel: 'Áreas derivadas de sus trabajos',
         },
         {
-          label: 'Trabajos en curso',
-          value: '—',
-          sublabel: 'Sincroniza con el repositorio',
-        },
-        {
-          label: 'Cuenta desde',
-          value: new Date(p.createdAt).getFullYear(),
-          sublabel: 'Antigüedad en la plataforma',
+          label: 'Reconocimientos',
+          value: recs,
+          sublabel: 'Distinciones recibidas',
         },
       ];
     }
+
     const ev = this.evaluadorStats();
     return [
       {
@@ -60,24 +59,15 @@ export class PerfilStats {
         sublabel: 'Histórico personal',
       },
       {
-        label: 'Tiempo medio',
-        value: ev ? `${round1(ev.tiempoMedioRespuestaDias)} d` : '—',
-        sublabel: 'Respuesta promedio',
+        label: 'Trabajos orientados',
+        value: p.trabajosPublicados,
+        sublabel: 'Tutorías aprobadas',
       },
       {
-        label: 'Score medio dado',
-        value: ev ? round1(ev.scoreMedioDado) : '—',
-        sublabel: 'Sobre escala 0–10',
-      },
-      {
-        label: 'Veredictos',
-        value: ev ? `${ev.aprobadosAportados} / ${ev.rechazadosAportados}` : '—',
-        sublabel: 'Aprobados / Rechazados',
+        label: 'Reconocimientos',
+        value: recs,
+        sublabel: 'Distinciones recibidas',
       },
     ];
   });
-}
-
-function round1(n: number): string {
-  return (Math.round(n * 10) / 10).toFixed(1);
 }
