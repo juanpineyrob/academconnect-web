@@ -11,6 +11,7 @@ interface BootstrapResponse {
   email: string;
   nombre: string;
   rol: Rol;
+  fotoUrl: string | null;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -32,6 +33,7 @@ export class AuthService {
             nombre: res.nombre,
             email: res.email,
             rol: res.rol,
+            fotoUrl: res.fotoUrl,
           });
         }),
       );
@@ -61,6 +63,7 @@ export class AuthService {
         nombre: me.nombre,
         email: me.email,
         rol: me.rol,
+        fotoUrl: me.fotoUrl,
       });
     } catch {
       this._currentUser.set(null);
@@ -69,5 +72,12 @@ export class AuthService {
 
   clearSession(): void {
     this._currentUser.set(null);
+  }
+
+  patchCurrentUser(partial: Partial<CurrentUser>): void {
+    const current = this._currentUser();
+    if (current) {
+      this._currentUser.set({ ...current, ...partial });
+    }
   }
 }

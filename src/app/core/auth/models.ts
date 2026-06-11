@@ -12,6 +12,7 @@ export interface AuthResponse {
   nombre: string;
   email: string;
   rol: Rol;
+  fotoUrl: string | null;
 }
 
 export interface CurrentUser {
@@ -19,4 +20,5 @@ export interface CurrentUser {
   nombre: string;
   email: string;
   rol: Rol;
+  fotoUrl: string | null;
 }

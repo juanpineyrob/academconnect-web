@@ -11,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable, of, switchMap } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { AuthService } from '@core/auth/auth.service';
 import { Perfil, UsuarioAreasRequest } from '../perfil.models';
 import { PerfilService } from '../perfil.service';
 import { ProblemDetail, isProblemDetail } from '@core/http/problem-detail';
@@ -45,6 +46,7 @@ import { Reconocimientos } from '../components/reconocimientos/reconocimientos';
 })
 export class PerfilPropioPage {
   private readonly perfilService = inject(PerfilService);
+  private readonly auth = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly perfil = signal<Perfil | null>(null);
@@ -142,6 +144,7 @@ export class PerfilPropioPage {
       .subscribe({
         next: (updated) => {
           this.perfil.set(updated);
+          this.auth.patchCurrentUser({ nombre: updated.nombre, fotoUrl: updated.fotoUrl });
           this.savingPerfil.set(false);
           this.editPerfilOpen.set(false);
         },

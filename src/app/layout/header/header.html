@@ -74,7 +74,7 @@
         aria-haspopup="menu"
         aria-label="Abrir menú de usuario"
         (click)="toggleMenu()">
-        <ac-avatar size="sm" [name]="u.nombre" />
+        <ac-avatar size="sm" [name]="u.nombre" [photoUrl]="u.fotoUrl" />
         <span class="header__user-name">{{ u.nombre }}</span>
         <svg
           class="header__user-chevron"
