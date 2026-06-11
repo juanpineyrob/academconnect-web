@@ -108,10 +108,17 @@
   gap: var(--sp-2);
 }
 
-.trabajo-detalle__keywords li {
+.trabajo-detalle__keyword {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--c-surface-muted);
+  border: 1px solid var(--c-border);
+  color: var(--c-text-muted);
   font-family: var(--ff-sans);
   font-size: var(--fs-caption);
-  color: var(--c-text-muted);
+  line-height: 1.2;
 }
 
 .trabajo-detalle__skeleton {

@@ -67,7 +67,7 @@ export class PerfilService {
   getTrabajosAprobados(estudianteId: number, max = 5): Observable<TrabajoResumen[]> {
     const params = new HttpParams()
       .set('estudianteId', estudianteId)
-      .set('soloPublicos', true)
+      .set('estado', 'APROBADO')
       .set('size', max);
     return this.http
       .get<Page<TrabajoResumen>>(`${this.api}/api/trabajos/buscar`, { params })
