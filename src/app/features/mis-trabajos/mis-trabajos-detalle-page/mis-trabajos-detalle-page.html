@@ -11,6 +11,11 @@
         {{ tipoLabel[t.tipo] }} · {{ estadoLabel[t.estado] }}
         @if (t.orientadorNombre) { · Orientador: {{ t.orientadorNombre }} }
       </p>
+      @if (t.keywords.length > 0) {
+        <ul class="detalle__kw" role="list">
+          @for (k of t.keywords; track k) { <li>{{ k }}</li> }
+        </ul>
+      }
     </header>
 
     @if (t.descripcion) {
@@ -19,13 +24,6 @@
         <p class="detalle__desc">{{ t.descripcion }}</p>
       </ac-card>
     }
-
-    <ac-card padding="md">
-      <h2 class="detalle__h2">Palabras clave</h2>
-      <ul class="detalle__kw">
-        @for (k of t.keywords; track k) { <li>{{ k }}</li> }
-      </ul>
-    </ac-card>
 
     @if (actionMessage()) {
       <p role="status" class="detalle__success">{{ actionMessage() }}</p>
