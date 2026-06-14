@@ -57,8 +57,12 @@
         <ul class="detalle__history">
           @for (i of invitaciones(); track i.id) {
             <li>
-              <strong>{{ i.profesorNombre }}</strong> — {{ i.estado }}
-              @if (i.respuesta) { · {{ i.respuesta }} }
+              <div class="detalle__history-head">
+                <strong>{{ i.profesorNombre }}</strong> — {{ estadoInvLabel[i.estado] }}
+              </div>
+              @if (i.respuesta) {
+                <p class="detalle__history-respuesta">{{ i.respuesta }}</p>
+              }
             </li>
           }
         </ul>

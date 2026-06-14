@@ -30,6 +30,33 @@ export class InvitacionesRecibidasPage {
   protected readonly error = signal<string | null>(null);
   protected readonly actionId = signal<number | null>(null);
   protected readonly filtro = signal<Filtro>('PENDIENTE');
+  protected readonly respuestas = signal<Map<number, string>>(new Map());
+
+  protected respuestaTexto(id: number): string {
+    return this.respuestas().get(id) ?? '';
+  }
+
+  protected onRespuestaInput(id: number, value: string): void {
+    this.respuestas.update((prev) => {
+      const next = new Map(prev);
+      if (value) next.set(id, value); else next.delete(id);
+      return next;
+    });
+  }
+
+  private clearRespuesta(id: number): void {
+    this.respuestas.update((prev) => {
+      if (!prev.has(id)) return prev;
+      const next = new Map(prev);
+      next.delete(id);
+      return next;
+    });
+  }
+
+  private extractRespuesta(id: number): string | null {
+    const raw = this.respuestas().get(id)?.trim();
+    return raw && raw.length > 0 ? raw : null;
+  }
 
   protected readonly visibles = computed(() => {
     const f = this.filtro();
@@ -47,11 +74,13 @@ export class InvitacionesRecibidasPage {
 
   protected aceptar(i: InvitacionOrientacion): void {
     this.actionId.set(i.id);
-    this.service.aceptar(i.id, { respuesta: null })
+    const respuesta = this.extractRespuesta(i.id);
+    this.service.aceptar(i.id, { respuesta })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updated) => {
           this.invitaciones.update((prev) => prev.map((x) => x.id === updated.id ? updated : x));
+          this.clearRespuesta(i.id);
           this.actionId.set(null);
         },
         error: (err: HttpErrorResponse) => { this.actionId.set(null); this.error.set(this.mapError(err)); },
@@ -60,11 +89,13 @@ export class InvitacionesRecibidasPage {
 
   protected rechazar(i: InvitacionOrientacion): void {
     this.actionId.set(i.id);
-    this.service.rechazar(i.id, { respuesta: null })
+    const respuesta = this.extractRespuesta(i.id);
+    this.service.rechazar(i.id, { respuesta })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (updated) => {
           this.invitaciones.update((prev) => prev.map((x) => x.id === updated.id ? updated : x));
+          this.clearRespuesta(i.id);
           this.actionId.set(null);
         },
         error: (err: HttpErrorResponse) => { this.actionId.set(null); this.error.set(this.mapError(err)); },

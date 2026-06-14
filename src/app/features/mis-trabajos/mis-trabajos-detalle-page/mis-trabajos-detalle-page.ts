@@ -41,6 +41,12 @@ export class MisTrabajosDetallePage {
 
   protected readonly tipoLabel = TIPO_LABEL;
   protected readonly estadoLabel = ESTADO_LABEL;
+  protected readonly estadoInvLabel: Record<string, string> = {
+    PENDIENTE: 'Pendiente',
+    ACEPTADA: 'Aceptada',
+    RECHAZADA: 'Rechazada',
+    CANCELADA: 'Cancelada',
+  };
 
   protected readonly invitacionPendiente = computed(() =>
     this.invitaciones().find((i) => i.estado === 'PENDIENTE') ?? null);

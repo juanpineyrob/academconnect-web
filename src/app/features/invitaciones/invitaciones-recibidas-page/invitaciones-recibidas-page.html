@@ -33,6 +33,17 @@
             </div>
             @if (i.motivo) { <p class="recibidas__motivo">{{ i.motivo }}</p> }
             @if (i.estado === 'PENDIENTE') {
+              <label class="recibidas__respuesta">
+                <span class="sr-only">Comentario opcional</span>
+                <textarea
+                  class="recibidas__respuesta-input"
+                  rows="3"
+                  maxlength="500"
+                  placeholder="Comentario opcional (visible para el estudiante)"
+                  [value]="respuestaTexto(i.id)"
+                  [disabled]="actionId() === i.id"
+                  (input)="onRespuestaInput(i.id, $any($event.target).value)"></textarea>
+              </label>
               <div class="recibidas__actions">
                 <ac-button variant="primary" [loading]="actionId() === i.id"
                            [disabled]="actionId() === i.id"
@@ -41,6 +52,8 @@
                            [disabled]="actionId() === i.id"
                            (click)="rechazar(i)">Rechazar</ac-button>
               </div>
+            } @else if (i.respuesta) {
+              <p class="recibidas__respuesta-historico">{{ i.respuesta }}</p>
             }
           </ac-card>
         </li>
