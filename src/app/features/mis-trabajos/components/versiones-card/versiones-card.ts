@@ -57,10 +57,16 @@ export class VersionesCard {
   private readonly fileInputRef = viewChild<ElementRef<HTMLInputElement>>('fileInput');
 
   protected readonly activas = computed(() =>
-    this.versiones().filter((v) => v.deletedAt == null),
+    this.versiones()
+      .filter((v) => v.deletedAt == null)
+      .slice()
+      .sort((a, b) => a.numeroVersion - b.numeroVersion),
   );
   protected readonly historicas = computed(() =>
-    this.versiones().filter((v) => v.deletedAt != null),
+    this.versiones()
+      .filter((v) => v.deletedAt != null)
+      .slice()
+      .sort((a, b) => a.numeroVersion - b.numeroVersion),
   );
   protected readonly puedeAgregar = computed(() => this.activas().length < 10);
 
