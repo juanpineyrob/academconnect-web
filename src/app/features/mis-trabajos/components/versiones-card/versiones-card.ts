@@ -23,6 +23,8 @@ import { VersionamientoService } from '../../versionamiento.service';
 
 type ModalMode = 'crear' | { tipo: 'reemplazar'; versionId: number; numero: number } | null;
 
+let cardUid = 0;
+
 @Component({
   selector: 'ac-versiones-card',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,6 +49,9 @@ export class VersionesCard {
   protected readonly modalError = signal<string | null>(null);
   protected readonly submitting = signal<boolean>(false);
   protected readonly comentario = signal<string>('');
+  protected readonly fileName = signal<string | null>(null);
+
+  protected readonly uid = `versiones-${++cardUid}`;
 
   private readonly modalRef = viewChild<ElementRef<HTMLDialogElement>>('modal');
   private readonly fileInputRef = viewChild<ElementRef<HTMLInputElement>>('fileInput');
@@ -99,6 +104,24 @@ export class VersionesCard {
     this.submitting.set(false);
     this.modalError.set(null);
     this.comentario.set('');
+    this.fileName.set(null);
+  }
+
+  protected onFileChange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    if (!file) {
+      this.fileName.set(null);
+      return;
+    }
+    this.fileName.set(file.name);
+    this.modalError.set(null);
+  }
+
+  protected clearFile(): void {
+    const input = this.fileInputRef()?.nativeElement;
+    if (input) input.value = '';
+    this.fileName.set(null);
   }
 
   protected onSubmit(event: Event): void {
@@ -161,6 +184,7 @@ export class VersionesCard {
     this.modalMode.set(mode);
     this.modalError.set(null);
     this.comentario.set('');
+    this.fileName.set(null);
     queueMicrotask(() => {
       const input = this.fileInputRef()?.nativeElement;
       if (input) input.value = '';
