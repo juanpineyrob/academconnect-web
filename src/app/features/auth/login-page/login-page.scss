@@ -197,3 +197,28 @@
   text-decoration: underline;
   color: var(--c-text-faint);
 }
+
+@media (max-width: 960px) {
+  .login__hero {
+    padding: var(--sp-6) var(--sp-5);
+  }
+
+  .login__panel {
+    padding: var(--sp-6) var(--sp-4);
+  }
+}
+
+@media (max-width: 640px) {
+  .login__hero {
+    padding: var(--sp-5) var(--sp-4);
+  }
+
+  .login__panel {
+    padding: var(--sp-5) var(--sp-4);
+  }
+
+  .login__hero-stats {
+    grid-template-columns: 1fr;
+    gap: var(--sp-3);
+  }
+}
