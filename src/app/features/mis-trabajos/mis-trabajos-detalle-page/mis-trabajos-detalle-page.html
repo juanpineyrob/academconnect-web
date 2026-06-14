@@ -25,6 +25,8 @@
       </ac-card>
     }
 
+    <ac-versiones-card [trabajoId]="t.id" [puedeMutar]="esDueno()" />
+
     @if (actionMessage()) {
       <p role="status" class="detalle__success">{{ actionMessage() }}</p>
     }

@@ -6,6 +6,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { catchError, forkJoin, of } from 'rxjs';
 
+import { AuthService } from '@core/auth/auth.service';
 import { Button } from '@shared/ui/button/button';
 import { Card } from '@shared/ui/card/card';
 import {
@@ -15,6 +16,7 @@ import {
 } from '@features/repositorio/repositorio.models';
 import { isProblemDetail } from '@core/http/problem-detail';
 import { InvitarOrientadorForm } from '../components/invitar-orientador-form/invitar-orientador-form';
+import { VersionesCard } from '../components/versiones-card/versiones-card';
 import { InvitacionOrientacionService } from '../invitacion-orientacion.service';
 import { InvitacionOrientacion } from '../invitacion-orientacion.models';
 import { MisTrabajosService } from '../mis-trabajos.service';
@@ -22,7 +24,7 @@ import { MisTrabajosService } from '../mis-trabajos.service';
 @Component({
   selector: 'ac-mis-trabajos-detalle-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, Button, Card, InvitarOrientadorForm],
+  imports: [RouterLink, Button, Card, InvitarOrientadorForm, VersionesCard],
   templateUrl: './mis-trabajos-detalle-page.html',
   styleUrl: './mis-trabajos-detalle-page.scss',
 })
@@ -30,6 +32,7 @@ export class MisTrabajosDetallePage {
   private readonly route = inject(ActivatedRoute);
   private readonly trabajosService = inject(MisTrabajosService);
   private readonly invitacionService = inject(InvitacionOrientacionService);
+  private readonly auth = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly trabajo = signal<TrabajoListItem | null>(null);
@@ -54,6 +57,12 @@ export class MisTrabajosDetallePage {
   protected readonly puedeInvitar = computed(() => {
     const t = this.trabajo();
     return !!t && t.estado === 'BORRADOR' && t.orientadorId == null && this.invitacionPendiente() == null;
+  });
+
+  protected readonly esDueno = computed(() => {
+    const t = this.trabajo();
+    const u = this.auth.currentUser();
+    return !!t && !!u && t.estudianteId === u.userId;
   });
 
   constructor() {

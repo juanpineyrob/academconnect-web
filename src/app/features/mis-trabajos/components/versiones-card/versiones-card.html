@@ -1,0 +1,137 @@
+<ac-card padding="md">
+  <header class="versiones__head">
+    <h2 class="versiones__title">Versionamiento</h2>
+    <div class="versiones__head-actions">
+      <span class="versiones__count">{{ activas().length }} / 10</span>
+      @if (puedeMutar()) {
+        <ac-button
+          size="sm"
+          [disabled]="!puedeAgregar() || loading()"
+          (click)="abrirModalCrear()">
+          Subir versión
+        </ac-button>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p role="status" class="versiones__loading">Cargando…</p>
+  } @else if (error()) {
+    <p role="alert" class="versiones__error">{{ error() }}</p>
+  } @else if (activas().length === 0 && historicas().length === 0) {
+    <p class="versiones__empty">Aún no subiste ninguna versión.</p>
+  } @else {
+    @if (activas().length > 0) {
+      <ul class="versiones__list" role="list">
+        @for (v of activas(); track v.id) {
+          <li class="versiones__item">
+            <div class="versiones__item-info">
+              <div class="versiones__item-row">
+                <strong>v{{ v.numeroVersion }}</strong>
+                <span class="versiones__item-name">{{ v.documento.nombreOriginal }}</span>
+              </div>
+              <span class="versiones__item-meta">
+                Subido el {{ v.createdAt | date:'mediumDate' }}
+              </span>
+              @if (v.comentario) {
+                <p class="versiones__item-comment">{{ v.comentario }}</p>
+              }
+            </div>
+            <div class="versiones__item-actions">
+              <a class="versiones__link"
+                 [attr.href]="downloadUrl(v.id)"
+                 target="_blank"
+                 rel="noopener">
+                Descargar
+              </a>
+              @if (puedeMutar()) {
+                <ac-button
+                  variant="ghost"
+                  size="sm"
+                  [disabled]="actionId() === v.id"
+                  (click)="abrirModalReemplazar(v)">
+                  Reemplazar
+                </ac-button>
+                <ac-button
+                  variant="ghost"
+                  size="sm"
+                  [disabled]="actionId() === v.id"
+                  (click)="confirmarEliminar(v)">
+                  Eliminar
+                </ac-button>
+              }
+            </div>
+          </li>
+        }
+      </ul>
+    }
+
+    @if (historicas().length > 0) {
+      <button
+        type="button"
+        class="versiones__toggle"
+        (click)="toggleHistorico()">
+        {{ mostrarHistorico() ? 'Ocultar' : 'Ver' }} histórico ({{ historicas().length }})
+      </button>
+
+      @if (mostrarHistorico()) {
+        <ul class="versiones__list versiones__list--historico" role="list">
+          @for (v of historicas(); track v.id) {
+            <li class="versiones__item versiones__item--deleted">
+              <div class="versiones__item-info">
+                <div class="versiones__item-row">
+                  <strong>v{{ v.numeroVersion }}</strong>
+                  <span class="versiones__item-name">{{ v.documento.nombreOriginal }}</span>
+                </div>
+                <span class="versiones__item-meta">
+                  Eliminada el {{ v.deletedAt | date:'mediumDate' }}
+                </span>
+              </div>
+              <div class="versiones__item-actions">
+                <a class="versiones__link"
+                   [attr.href]="downloadUrl(v.id)"
+                   target="_blank"
+                   rel="noopener">
+                  Descargar
+                </a>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    }
+  }
+
+  <dialog #modal class="versiones__modal" (close)="onModalClose()">
+    <form (submit)="onSubmit($event)" class="versiones__modal-form">
+      <h3 class="versiones__modal-title">{{ modalTitulo() }}</h3>
+
+      <label class="versiones__field">
+        <span class="versiones__field-label">Archivo PDF *</span>
+        <input #fileInput type="file" accept="application/pdf" required />
+      </label>
+
+      <label class="versiones__field">
+        <span class="versiones__field-label">Comentario (opcional)</span>
+        <textarea
+          rows="3"
+          maxlength="500"
+          [ngModel]="comentario()"
+          (ngModelChange)="comentario.set($event)"
+          name="comentario"
+          class="versiones__textarea"></textarea>
+      </label>
+
+      @if (modalError()) {
+        <p role="alert" class="versiones__error">{{ modalError() }}</p>
+      }
+
+      <div class="versiones__modal-actions">
+        <ac-button type="button" variant="ghost" (click)="cerrarModal()">Cancelar</ac-button>
+        <ac-button type="submit" [loading]="submitting()" [disabled]="submitting()">
+          {{ submitLabel() }}
+        </ac-button>
+      </div>
+    </form>
+  </dialog>
+</ac-card>
