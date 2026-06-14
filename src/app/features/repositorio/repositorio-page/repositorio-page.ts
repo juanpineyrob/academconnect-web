@@ -35,6 +35,7 @@ import { RepositorioService } from '../repositorio.service';
 
 const PAGE_SIZE = 12;
 const DEFAULT_SORT = 'createdAt,desc';
+const MIN_QUERY_LENGTH = 3;
 
 @Component({
   selector: 'ac-repositorio-page',
@@ -75,6 +76,16 @@ export class RepositorioPage {
   protected readonly currentPage = computed(() => (this.results()?.number ?? this.page()) + 1);
   protected readonly totalPaginas = computed(() => Math.max(1, this.results()?.totalPages ?? 1));
 
+  protected readonly minQueryLength = MIN_QUERY_LENGTH;
+  protected readonly effectiveQuery = computed(() => {
+    const trimmed = this.query().trim();
+    return trimmed.length >= MIN_QUERY_LENGTH ? trimmed : null;
+  });
+  protected readonly shortQueryHint = computed(() => {
+    const trimmed = this.query().trim();
+    return trimmed.length > 0 && trimmed.length < MIN_QUERY_LENGTH;
+  });
+
   private readonly searchInput$ = new Subject<TrabajoSearchParams>();
 
   constructor() {
@@ -90,7 +101,7 @@ export class RepositorioPage {
 
     effect(() => {
       const params: TrabajoSearchParams = {
-        q: this.query() || null,
+        q: this.effectiveQuery(),
         areaId: this.filtros().areaIds,
         anio: this.filtros().anios,
         tipo: this.filtros().tipo,
@@ -105,7 +116,7 @@ export class RepositorioPage {
     this.searchInput$
       .pipe(
         startWith<TrabajoSearchParams>({
-          q: this.query() || null,
+          q: this.effectiveQuery(),
           areaId: this.filtros().areaIds,
           anio: this.filtros().anios,
           tipo: this.filtros().tipo,

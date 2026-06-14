@@ -23,7 +23,9 @@ export class TrabajoCard {
     return new Date(fuente).getFullYear();
   });
 
-  protected readonly resumenAreas = computed(() => this.trabajo().areas.slice(0, 3));
+  protected readonly resumenAreas = computed(() =>
+    [...this.trabajo().areas].sort((a, b) => a.id - b.id).slice(0, 3),
+  );
   protected readonly areasRestantes = computed(() => {
     const total = this.trabajo().areas.length;
     return total > 3 ? total - 3 : 0;

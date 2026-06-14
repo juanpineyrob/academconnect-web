@@ -77,13 +77,18 @@
   font-family: var(--ff-sans);
   font-size: var(--fs-body-sm);
   color: var(--c-text);
-  background: var(--c-surface);
+  background-color: var(--c-surface);
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%2371717a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right var(--sp-3) center;
   border: 1px solid var(--c-border-strong);
   border-radius: var(--r-md);
-  padding: 0 var(--sp-4);
+  padding: 0 calc(var(--sp-3) + 20px + var(--sp-2)) 0 var(--sp-4);
   min-height: 48px;
   cursor: pointer;
   outline: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .repositorio__sort select:focus {
@@ -103,11 +108,17 @@
   flex-direction: column;
   gap: var(--sp-4);
   min-width: 0;
+  min-height: 480px;
 }
 
 .repositorio__count {
   margin: 0;
   color: var(--c-text-muted);
+}
+
+.repositorio__hint {
+  margin: calc(var(--sp-1) * -1) 0 0;
+  color: var(--c-text-faint);
 }
 
 .repositorio__list {

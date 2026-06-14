@@ -62,6 +62,12 @@
         }
       </p>
 
+      @if (shortQueryHint()) {
+        <p class="repositorio__hint t-caption">
+          Escribí al menos {{ minQueryLength }} caracteres para buscar — mientras tanto, mostramos resultados relacionados.
+        </p>
+      }
+
       @if (loading() && !results()) {
         <div class="repositorio__skeletons" aria-busy="true">
           <div class="repositorio__skeleton"></div>
