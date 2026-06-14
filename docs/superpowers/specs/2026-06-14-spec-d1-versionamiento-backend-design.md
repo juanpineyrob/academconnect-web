@@ -26,7 +26,7 @@ El usuario pidió un mecanismo de "entregas" con cargar / reemplazar / eliminar 
 
 ## Migration
 
-Archivo: `src/main/resources/db/migration/V11__versionamiento_soft_delete.sql`
+Archivo: `src/main/resources/db/migration/V16__versionamiento_soft_delete.sql`
 
 ```sql
 ALTER TABLE versionamiento
@@ -167,7 +167,7 @@ VERSION_ELIMINADA
 
 ## Criterios de aceptación
 
-1. Migration V11 corre limpia en una BD con datos previos (las versiones existentes quedan con `deleted_at = NULL`).
+1. Migration V16 corre limpia en una BD con datos previos (las versiones existentes quedan con `deleted_at = NULL`).
 2. `POST` rechaza con 400 cuando hay 10 activas; mensaje "Máximo 10 entregas activas por trabajo".
 3. `PUT` reemplaza correctamente: la respuesta tiene `numero_version` mayor; un `GET` muestra solo la nueva por defecto; con `includeDeleted=true` aparecen ambas.
 4. `DELETE` soft-deletea; `GET` por defecto no la incluye; cuenta de activas decrementa.
