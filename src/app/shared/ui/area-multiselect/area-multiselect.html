@@ -1,0 +1,68 @@
+<div class="ms" (keydown)="onPanelKeydown($event)">
+  <button
+    type="button"
+    class="ms__trigger"
+    role="combobox"
+    [attr.aria-expanded]="open()"
+    [attr.aria-controls]="panelId"
+    aria-haspopup="listbox"
+    [disabled]="disabled()"
+    (click)="toggle()">
+    <span class="ms__trigger-label" [class.ms__trigger-label--placeholder]="value().length === 0">
+      {{ triggerLabel() }}
+    </span>
+    <svg class="ms__chevron" aria-hidden="true" viewBox="0 0 24 24" width="20" height="20" fill="none"
+         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="6 9 12 15 18 9" />
+    </svg>
+  </button>
+
+  @if (open()) {
+    <div class="ms__panel" [id]="panelId">
+      <input
+        #searchInput
+        type="search"
+        class="ms__search"
+        role="searchbox"
+        aria-label="Buscar áreas"
+        placeholder="Buscar…"
+        [value]="searchTerm()"
+        (input)="onSearchInput($event)" />
+
+      @if (filteredAreas().length === 0) {
+        <p class="ms__empty">Sin resultados.</p>
+      } @else {
+        <ul class="ms__list" role="listbox" aria-multiselectable="true">
+          @for (a of filteredAreas(); track a.id) {
+            <li role="option" [attr.aria-selected]="isSelected(a.id)">
+              <label class="ms__option">
+                <input
+                  type="checkbox"
+                  [checked]="isSelected(a.id)"
+                  (change)="toggleOption(a.id)" />
+                <span>{{ a.nombre }}</span>
+              </label>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+  }
+
+  @if (selectedAreas().length > 0) {
+    <ul class="ms__selected" role="list">
+      @for (a of selectedAreas(); track a.id) {
+        <li class="ms__selected-item">
+          <span class="ms__selected-name">{{ a.nombre }}</span>
+          <button
+            type="button"
+            class="ms__selected-remove"
+            [attr.aria-label]="'Quitar ' + a.nombre"
+            (click)="remove(a.id)">
+            ×
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

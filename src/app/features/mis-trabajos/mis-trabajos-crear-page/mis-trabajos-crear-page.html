@@ -26,14 +26,10 @@
 
       <fieldset class="crear-form__field">
         <legend class="crear-form__label">Áreas temáticas</legend>
-        <div class="crear-form__chips">
-          @for (a of areas(); track a.id) {
-            <button type="button" class="crear-form__chip"
-                    [class.crear-form__chip--active]="isAreaSelected(a.id)"
-                    [attr.aria-pressed]="isAreaSelected(a.id)"
-                    (click)="toggleArea(a.id)">{{ a.nombre }}</button>
-          }
-        </div>
+        <ac-area-multiselect
+          [areas]="areas()"
+          [value]="form.controls.areaIds.value"
+          (valueChange)="onAreasChange($event)" />
       </fieldset>
 
       <fieldset class="crear-form__field">

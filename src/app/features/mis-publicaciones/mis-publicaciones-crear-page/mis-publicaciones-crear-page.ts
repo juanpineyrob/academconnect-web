@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { catchError, of } from 'rxjs';
 
 import { environment } from '@env/environment';
+import { AreaMultiselect } from '@shared/ui/area-multiselect/area-multiselect';
 import { Button } from '@shared/ui/button/button';
 import { Card } from '@shared/ui/card/card';
 import { AuthService } from '@core/auth/auth.service';
@@ -21,7 +22,7 @@ const TIPOS: TipoTrabajo[] = ['TCC', 'TESIS', 'PAPER', 'MONOGRAFIA', 'PROYECTO_I
 @Component({
   selector: 'ac-mis-publicaciones-crear-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, Button, Card],
+  imports: [ReactiveFormsModule, AreaMultiselect, Button, Card],
   templateUrl: './mis-publicaciones-crear-page.html',
   styleUrl: './mis-publicaciones-crear-page.scss',
 })
@@ -78,11 +79,8 @@ export class MisPublicacionesCrearPage {
   protected onKeywordKey(e: KeyboardEvent): void {
     if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); this.addKeyword(); }
   }
-  protected isAreaSelected(id: number): boolean { return this.form.controls.areaIds.value.includes(id); }
-  protected toggleArea(id: number): void {
-    const cur = this.form.controls.areaIds.value;
-    const next = cur.includes(id) ? cur.filter((a) => a !== id) : [...cur, id];
-    this.form.controls.areaIds.setValue(next);
+  protected onAreasChange(ids: number[]): void {
+    this.form.controls.areaIds.setValue(ids);
   }
 
   protected get tituloError(): string | null {

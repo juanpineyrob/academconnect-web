@@ -20,7 +20,6 @@
   &:hover { background: var(--c-surface-hover, rgba(0,0,0,0.04)); }
   &:focus-visible { outline: 2px solid var(--c-accent, #4f46e5); outline-offset: 2px; }
 }
-.crear-form__chip--active { background: var(--c-accent, #4f46e5); color: white; border-color: var(--c-accent, #4f46e5); }
 .crear-form__chip--value { background: var(--c-surface-alt, rgba(0,0,0,0.04)); cursor: default; }
 .crear-form__chip-remove { display: inline-flex; align-items: center; justify-content: center; width: 1.25rem; height: 1.25rem; padding: 0;
   border: none; border-radius: 50%; background: transparent; cursor: pointer; font-size: 1rem; line-height: 1; color: var(--c-text-muted);
