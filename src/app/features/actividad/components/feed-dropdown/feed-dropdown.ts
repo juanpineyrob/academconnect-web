@@ -51,7 +51,6 @@ export class FeedDropdown {
       .subscribe((ev) => {
         if (ev.key === 'Escape' && this.open()) this.open.set(false);
       });
-    this.service.refetch();
   }
 
   protected toggle(): void {
@@ -60,7 +59,8 @@ export class FeedDropdown {
       return;
     }
     this.open.set(true);
-    this.service.markAllRead();
+    this.service.refetch();
+    queueMicrotask(() => this.service.markAllRead());
   }
 
   protected onItemClick(a: Actividad): void {

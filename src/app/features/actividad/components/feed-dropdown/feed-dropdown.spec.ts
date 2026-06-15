@@ -44,6 +44,7 @@ describe('FeedDropdown', () => {
 
   it('panel is closed by default', () => {
     const fx = TestBed.createComponent(FeedDropdown);
+    TestBed.tick();
     http.expectOne(`${environment.apiBase}/me/actividad?limit=20`).flush([]);
     fx.detectChanges();
     const panel = fx.nativeElement.querySelector('[role="menu"]');
@@ -54,28 +55,36 @@ describe('FeedDropdown', () => {
 
   it('shows badge when unreadCount > 0', () => {
     const fx = TestBed.createComponent(FeedDropdown);
+    TestBed.tick();
     http.expectOne(`${environment.apiBase}/me/actividad?limit=20`).flush([mkActividad(1)]);
     fx.detectChanges();
     const badge = fx.nativeElement.querySelector('.feed__badge');
     expect(badge?.textContent?.trim()).toBe('1');
   });
 
-  it('toggle opens panel, calls markAllRead, and clears badge', () => {
+  it('toggle opens panel, calls markAllRead, calls refetch, and clears badge', async () => {
     const fx = TestBed.createComponent(FeedDropdown);
+    TestBed.tick();
     http.expectOne(`${environment.apiBase}/me/actividad?limit=20`).flush([mkActividad(1)]);
     fx.detectChanges();
     const svc = TestBed.inject(ActividadService);
-    const spy = vi.spyOn(svc, 'markAllRead');
+    const spyMark = vi.spyOn(svc, 'markAllRead');
+    const spyRefetch = vi.spyOn(svc, 'refetch');
     const bell = fx.nativeElement.querySelector('button.feed__bell') as HTMLButtonElement;
     bell.click();
+    // toggle() calls service.refetch() synchronously; that fires the second HTTP request
     http.expectOne(`${environment.apiBase}/me/actividad?limit=20`).flush([mkActividad(1)]);
+    // queueMicrotask -> markAllRead
+    await Promise.resolve();
     fx.detectChanges();
     expect(fx.nativeElement.querySelector('[role="menu"]')).not.toBeNull();
-    expect(spy).toHaveBeenCalled();
+    expect(spyRefetch).toHaveBeenCalled();
+    expect(spyMark).toHaveBeenCalled();
   });
 
   it('Escape key closes the panel', () => {
     const fx = TestBed.createComponent(FeedDropdown);
+    TestBed.tick();
     http.expectOne(`${environment.apiBase}/me/actividad?limit=20`).flush([]);
     fx.detectChanges();
     (fx.nativeElement.querySelector('button.feed__bell') as HTMLButtonElement).click();
@@ -88,6 +97,7 @@ describe('FeedDropdown', () => {
 
   it('click outside closes the panel', () => {
     const fx = TestBed.createComponent(FeedDropdown);
+    TestBed.tick();
     http.expectOne(`${environment.apiBase}/me/actividad?limit=20`).flush([]);
     fx.detectChanges();
     (fx.nativeElement.querySelector('button.feed__bell') as HTMLButtonElement).click();
@@ -100,6 +110,7 @@ describe('FeedDropdown', () => {
 
   it('click on item with trabajoId navigates and closes panel', () => {
     const fx = TestBed.createComponent(FeedDropdown);
+    TestBed.tick();
     http.expectOne(`${environment.apiBase}/me/actividad?limit=20`).flush([mkActividad(1)]);
     fx.detectChanges();
     (fx.nativeElement.querySelector('button.feed__bell') as HTMLButtonElement).click();
@@ -116,6 +127,7 @@ describe('FeedDropdown', () => {
 
   it('renders empty state when feed is empty', () => {
     const fx = TestBed.createComponent(FeedDropdown);
+    TestBed.tick();
     http.expectOne(`${environment.apiBase}/me/actividad?limit=20`).flush([]);
     fx.detectChanges();
     (fx.nativeElement.querySelector('button.feed__bell') as HTMLButtonElement).click();
