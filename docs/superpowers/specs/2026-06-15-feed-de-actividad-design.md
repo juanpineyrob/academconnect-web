@@ -180,7 +180,7 @@ export const TIPO_CONFIG: Record<TipoActividad, TipoConfig> = {
 function trabajoLink(trabajoId: unknown, rol: Rol): string | null {
   if (typeof trabajoId !== 'number') return null;
   if (rol === 'ESTUDIANTE') return `/mis-trabajos/${trabajoId}`;
-  if (rol === 'EVALUADOR') return `/mis-publicaciones/${trabajoId}`;
+  if (rol === 'PROFESOR') return `/mis-publicaciones/${trabajoId}`;
   return null;
 }
 ```
@@ -356,16 +356,16 @@ Template (resumen):
 
 ## 11. Testing
 
-### Unit (Jasmine/Karma)
+### Unit (Vitest vía `ng test` / `@angular/build:unit-test`)
 
 | Archivo | Casos |
 |---|---|
-| `actividad-config.spec.ts` | Para cada uno de los 23 tipos, payload representativo → `render()` produce texto esperado y no lanza. Tipos con `trabajoId`: `link(payload, 'ESTUDIANTE')` → `/mis-trabajos/N`, `link(payload, 'EVALUADOR')` → `/mis-publicaciones/N`. Tipos sin trabajoId → `link()` retorna `null`. Tipo desconocido → fallback no lanza. |
+| `actividad-config.spec.ts` | Para cada uno de los 23 tipos, payload representativo → `render()` produce texto esperado y no lanza. Tipos con `trabajoId`: `link(payload, 'ESTUDIANTE')` → `/mis-trabajos/N`, `link(payload, 'PROFESOR')` → `/mis-publicaciones/N`. Tipos sin trabajoId → `link()` retorna `null`. Tipo desconocido → fallback no lanza. |
 | `time-ago.pipe.spec.ts` | "ahora" (<60s), "hace X min" (<1h), "hace X h" (<24h), "hace X d" (<7d), "hace X sem" (≥7d). ISO inválido → string vacío sin throw. |
 | `group-by-day.spec.ts` | Dado un array con timestamps fijos y `Date.now()` mockeado, reparte correctamente en hoy/ayer/esta semana/antes. |
 | `actividad.service.spec.ts` | `refetch()` setea loading/error/feed contra `HttpTestingController`. `unreadCount` = 0 cuando lastOpenedAt > todos los createdAt. `markAllRead()` persiste en localStorage con clave `feed:lastOpenedAt:<userId>`. `clear()` vacía el feed sin tocar localStorage. |
 
-### Componente (Jasmine)
+### Componente (Vitest)
 
 | Caso | Verificación |
 |---|---|
