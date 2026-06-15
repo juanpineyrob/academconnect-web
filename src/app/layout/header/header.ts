@@ -13,11 +13,12 @@ import { fromEvent } from 'rxjs';
 
 import { Avatar } from '@shared/ui/avatar/avatar';
 import { AuthService } from '@core/auth/auth.service';
+import { FeedDropdown } from '@app/features/actividad/components/feed-dropdown/feed-dropdown';
 
 @Component({
   selector: 'ac-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [Avatar, RouterLink],
+  imports: [Avatar, RouterLink, FeedDropdown],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
