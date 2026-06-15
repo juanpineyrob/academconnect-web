@@ -1,0 +1,37 @@
+export type TipoActividad =
+  | 'TRABAJO_CREADO'
+  | 'TRABAJO_PUBLICADO'
+  | 'TRABAJO_CERRADO'
+  | 'TRABAJO_EXPIRADO'
+  | 'TRABAJO_APROBADO'
+  | 'TRABAJO_RECHAZADO'
+  | 'SOLICITUD_VINCULACION_ENVIADA'
+  | 'SOLICITUD_VINCULACION_APROBADA'
+  | 'SOLICITUD_VINCULACION_RECHAZADA'
+  | 'SOLICITUD_VINCULACION_CANCELADA'
+  | 'VERSION_SUBIDA'
+  | 'VERSION_REEMPLAZADA'
+  | 'VERSION_ELIMINADA'
+  | 'ASIGNACION_CREADA'
+  | 'EVALUACION_COMPLETADA'
+  | 'INVITACION_ORIENTACION_ENVIADA'
+  | 'INVITACION_ORIENTACION_ACEPTADA'
+  | 'INVITACION_ORIENTACION_RECHAZADA'
+  | 'INVITACION_ORIENTACION_CANCELADA'
+  | 'TEMPLATE_CREADO'
+  | 'SESION_PROGRAMADA'
+  | 'RECONOCIMIENTO_OTORGADO'
+  | 'RECONOCIMIENTO_REVOCADO';
+
+export type VisibilidadActividad = 'PUBLICA' | 'PRIVADA' | 'PARTICIPANTES';
+
+export interface Actividad {
+  id: number;
+  tipo: TipoActividad;
+  actorId: number | null;
+  recursoTipo: string;
+  recursoId: number;
+  payload: string;
+  visibilidad: VisibilidadActividad;
+  createdAt: string;
+}
