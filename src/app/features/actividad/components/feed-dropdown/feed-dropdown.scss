@@ -200,7 +200,7 @@
 
 .feed__item {
   display: grid;
-  grid-template-columns: 32px 1fr;
+  grid-template-columns: 18px 1fr;
   align-items: start;
   gap: var(--sp-3);
   padding: var(--sp-3) var(--sp-4);
@@ -223,18 +223,11 @@
   }
 }
 
-.feed__icon-wrap {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--r-pill);
-  background: var(--c-surface-muted);
-  color: var(--c-text-muted);
+.feed__icon {
+  display: block;
+  color: var(--c-text-faint);
+  margin-top: 2px;
   flex-shrink: 0;
-
-  svg { display: block; }
 }
 
 .feed__body {

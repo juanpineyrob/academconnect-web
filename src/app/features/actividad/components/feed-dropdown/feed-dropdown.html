@@ -58,11 +58,10 @@
                      [attr.tabindex]="hasLink(a) ? 0 : -1"
                      (click)="onItemClick(a)"
                      (keydown.enter)="onItemClick(a)">
-                  <span class="feed__icon-wrap" aria-hidden="true">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
-                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                         [innerHTML]="icon(a)"></svg>
-                  </span>
+                  <svg class="feed__icon" aria-hidden="true"
+                       viewBox="0 0 24 24" width="18" height="18" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       [innerHTML]="icon(a)"></svg>
                   <div class="feed__body">
                     <span class="feed__text">{{ texto(a) }}</span>
                     <span class="feed__time">{{ a.createdAt | timeAgo }}</span>
