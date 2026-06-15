@@ -1,0 +1,61 @@
+<button
+  type="button"
+  class="feed__bell"
+  [attr.aria-label]="bellLabel()"
+  aria-haspopup="menu"
+  [attr.aria-expanded]="open()"
+  (click)="toggle()">
+  <svg aria-hidden="true" viewBox="0 0 24 24" width="18" height="18" fill="none"
+       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+    <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
+  </svg>
+  @if (service.unreadCount() > 0) {
+    <span class="feed__badge" aria-hidden="true">{{ service.unreadCount() }}</span>
+  }
+</button>
+
+@if (open()) {
+  <div class="feed__panel" role="menu">
+    @if (service.loading() && service.feed().length === 0) {
+      <p class="feed__status" role="status">Cargando…</p>
+    } @else if (service.error() && service.feed().length === 0) {
+      <div class="feed__error-block">
+        <p role="alert" class="feed__error">{{ service.error() }}</p>
+        <button type="button" class="feed__retry" (click)="service.refetch()">Reintentar</button>
+      </div>
+    } @else if (service.feed().length === 0) {
+      <p class="feed__empty">Aún no hay actividad.</p>
+    } @else {
+      @if (service.error()) {
+        <p class="feed__error feed__error--inline" role="alert">
+          {{ service.error() }}
+          <button type="button" class="feed__retry feed__retry--inline" (click)="service.refetch()">Reintentar</button>
+        </p>
+      }
+      @for (grupo of grupos(); track grupo.label) {
+        <h3 class="feed__group-title">{{ grupo.label }}</h3>
+        <ul class="feed__list" role="list">
+          @for (a of grupo.items; track a.id) {
+            <li>
+              <div class="feed__item"
+                   [class.feed__item--linked]="hasLink(a)"
+                   role="menuitem"
+                   [attr.tabindex]="hasLink(a) ? 0 : -1"
+                   (click)="onItemClick(a)"
+                   (keydown.enter)="onItemClick(a)">
+                <span class="feed__icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none"
+                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                       [innerHTML]="icon(a)"></svg>
+                </span>
+                <span class="feed__time">{{ a.createdAt | timeAgo }}</span>
+                <span class="feed__text">{{ texto(a) }}</span>
+              </div>
+            </li>
+          }
+        </ul>
+      }
+    }
+  </div>
+}
