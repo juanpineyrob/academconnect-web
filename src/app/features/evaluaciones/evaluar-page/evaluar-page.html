@@ -1,0 +1,61 @@
+@if (loading()) {
+  <p class="eval__estado">Cargando…</p>
+} @else if (error()) {
+  <p class="eval__estado eval__estado--error">
+    {{ error() }} <a routerLink="/evaluaciones">Volver a la cola</a>
+  </p>
+} @else if (asignacion(); as a) {
+  @if (a.estado === 'CANCELADA') {
+    <p class="eval__estado">Esta asignación fue cancelada. <a routerLink="/evaluaciones">Volver</a></p>
+  } @else {
+    <div class="eval">
+      <section class="eval__doc">
+        <ac-documento-viewer [trabajoId]="a.trabajoId" [versionId]="a.versionamientoId" />
+      </section>
+
+      <section class="eval__form">
+        <header class="eval__head">
+          <h1>{{ a.trabajoTitulo }}</h1>
+          <p>v{{ a.versionNumero }}</p>
+          @if (readonly()) { <p class="eval__badge">Evaluación enviada</p> }
+        </header>
+
+        @if (aviso()) { <p class="eval__aviso">{{ aviso() }}</p> }
+
+        @if (form(); as f) {
+          <form [formGroup]="f" (ngSubmit)="abrirConfirmacion()">
+            <div formArrayName="criterios">
+              @for (c of snapshot()!.criterios; track c.codigo; let i = $index) {
+                <ac-criterio-field
+                  [criterio]="c"
+                  [group]="$any(f.controls.criterios.at(i))"
+                  [readonly]="readonly()" />
+              }
+            </div>
+
+            <label class="eval__general">
+              Comentario general
+              <textarea formControlName="comentarioGeneral" rows="3"></textarea>
+            </label>
+
+            @if (!readonly()) {
+              <p class="eval__proyeccion">
+                Proyección: {{ proyeccion() | number: '1.1-2' }} / umbral
+                {{ snapshot()!.umbralAprobacion | number: '1.1-2' }}
+              </p>
+              <button type="submit" class="eval__enviar" [disabled]="submitting()">Enviar evaluación</button>
+            }
+          </form>
+        }
+      </section>
+    </div>
+
+    <ac-confirmar-envio-dialog
+      [open]="confirmOpen()"
+      [proyeccion]="proyeccion()"
+      [umbral]="snapshot()?.umbralAprobacion ?? null"
+      [submitting]="submitting()"
+      (confirmar)="enviar()"
+      (cancelar)="cancelarConfirmacion()" />
+  }
+}
