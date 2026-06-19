@@ -1,0 +1,38 @@
+.cola {
+  &__head {
+    margin-bottom: var(--sp-4);
+  }
+  &__tabs {
+    display: flex;
+    gap: var(--sp-2);
+    margin-top: var(--sp-3);
+
+    button {
+      padding: var(--sp-2) var(--sp-3);
+      border: 1px solid var(--c-border);
+      border-radius: var(--r-md);
+      background: transparent;
+      cursor: pointer;
+
+      &.is-active {
+        border-color: var(--c-accent);
+        color: var(--c-accent);
+        font-weight: 600;
+      }
+    }
+  }
+  &__list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--sp-3);
+  }
+  &__estado {
+    color: var(--c-text-muted);
+
+    &--error {
+      color: var(--c-state-rechazado);
+    }
+  }
+}

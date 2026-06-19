@@ -1,0 +1,28 @@
+<header class="cola__head">
+  <h1>Evaluaciones asignadas</h1>
+  <div class="cola__tabs" role="tablist">
+    <button type="button" role="tab" [attr.aria-selected]="tab() === 'ACTIVA'"
+            [class.is-active]="tab() === 'ACTIVA'" (click)="cambiarTab('ACTIVA')">Activas</button>
+    <button type="button" role="tab" [attr.aria-selected]="tab() === 'COMPLETADA'"
+            [class.is-active]="tab() === 'COMPLETADA'" (click)="cambiarTab('COMPLETADA')">Completadas</button>
+  </div>
+</header>
+
+@if (loading()) {
+  <p class="cola__estado">Cargando…</p>
+} @else if (error()) {
+  <p class="cola__estado cola__estado--error">
+    {{ error() }} <button type="button" (click)="cargar(tab())">Reintentar</button>
+  </p>
+} @else if (asignaciones().length === 0) {
+  <p class="cola__estado">
+    @if (tab() === 'ACTIVA') { No tenés evaluaciones activas. }
+    @else { No tenés evaluaciones completadas. }
+  </p>
+} @else {
+  <ul class="cola__list">
+    @for (a of asignaciones(); track a.id) {
+      <li><ac-asignacion-card [asignacion]="a" /></li>
+    }
+  </ul>
+}
