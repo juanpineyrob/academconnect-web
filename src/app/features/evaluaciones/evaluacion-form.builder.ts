@@ -81,6 +81,8 @@ export function mapPuntaje(criterio: Criterio, value: PuntajeValue): number {
   }
 }
 
+// Promedio ponderado (asume que los pesos de los criterios con peso > 0 suman 1,
+// según el contrato del backend); los criterios de peso 0 (p. ej. TEXTO) no cuentan.
 export function proyeccionNota(snapshot: TemplateSnapshot, form: EvaluacionForm): number {
   return snapshot.criterios.reduce((total, criterio, i) => {
     if (criterio.peso <= 0) return total;

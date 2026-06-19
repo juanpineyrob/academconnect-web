@@ -91,19 +91,25 @@ export class EvaluarPage implements ConfirmaSalida {
       this.service
         .cargarEvaluacion(a.id)
         .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe((ev) => {
-          ev.calificaciones.forEach((cal) => {
-            const i = snap.criterios.findIndex((c) => c.codigo === cal.criterioCodigo);
-            if (i < 0) return;
-            const g = form.controls.criterios.at(i).controls;
-            g.puntaje.setValue(cal.puntaje);
-            g.comentario.setValue(cal.comentario ?? '');
-            g.comentarioPrivado.setValue(cal.comentarioPrivado);
-          });
-          form.controls.comentarioGeneral.setValue(ev.comentarioGeneral ?? '');
-          form.disable();
-          this.form.set(form);
-          this.loading.set(false);
+        .subscribe({
+          next: (ev) => {
+            ev.calificaciones.forEach((cal) => {
+              const i = snap.criterios.findIndex((c) => c.codigo === cal.criterioCodigo);
+              if (i < 0) return;
+              const g = form.controls.criterios.at(i).controls;
+              g.puntaje.setValue(cal.puntaje);
+              g.comentario.setValue(cal.comentario ?? '');
+              g.comentarioPrivado.setValue(cal.comentarioPrivado);
+            });
+            form.controls.comentarioGeneral.setValue(ev.comentarioGeneral ?? '');
+            form.disable();
+            this.form.set(form);
+            this.loading.set(false);
+          },
+          error: () => {
+            this.error.set('No se pudo cargar la evaluación.');
+            this.loading.set(false);
+          },
         });
       return;
     }
