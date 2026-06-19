@@ -1,6 +1,8 @@
 import {
   buildEvaluacionForm,
+  contarCompletos,
   mapPuntaje,
+  proyeccionMax,
   proyeccionNota,
   toEvaluacionRequest,
 } from './evaluacion-form.builder';
@@ -79,5 +81,19 @@ describe('evaluacion-form.builder', () => {
       { criterioCodigo: 'C4', puntaje: 10, comentario: 'ok', comentarioPrivado: true },
       { criterioCodigo: 'C5', puntaje: 0, comentario: '', comentarioPrivado: true },
     ]);
+  });
+
+  it('proyeccionMax es el techo ponderado y excluye los de peso 0', () => {
+    // escala 0.5 * 10 + slider 0.5 * 10 = 10; texto (peso 0) no suma
+    expect(proyeccionMax(snap([escala, slider, texto]))).toBeCloseTo(10, 5);
+  });
+
+  it('contarCompletos cuenta los criterios puntuables con valor válido y excluye TEXTO', () => {
+    const form = buildEvaluacionForm(snap([escala, slider, texto]));
+    expect(contarCompletos(snap([escala, slider, texto]), form)).toEqual({ hechos: 0, total: 2 });
+    form.controls.criterios.at(0).controls.puntaje.setValue(8);
+    expect(contarCompletos(snap([escala, slider, texto]), form)).toEqual({ hechos: 1, total: 2 });
+    form.controls.criterios.at(1).controls.puntaje.setValue(99); // fuera de rango → inválido
+    expect(contarCompletos(snap([escala, slider, texto]), form)).toEqual({ hechos: 1, total: 2 });
   });
 });

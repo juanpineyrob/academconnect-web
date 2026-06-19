@@ -9,41 +9,82 @@
     <p class="eval__estado">Esta asignación fue cancelada. <a routerLink="/evaluaciones">Volver</a></p>
   } @else {
     <div class="eval">
-      <section class="eval__doc">
+      <section class="eval__doc" aria-label="Documento del trabajo">
         <ac-documento-viewer [trabajoId]="a.trabajoId" [versionId]="a.versionamientoId" />
       </section>
 
-      <section class="eval__form">
+      <section class="eval__panel">
         <header class="eval__head">
-          <h1>{{ a.trabajoTitulo }}</h1>
-          <p>v{{ a.versionNumero }}</p>
-          @if (readonly()) { <p class="eval__badge">Evaluación enviada</p> }
+          <p class="eval__overline">Rúbrica de evaluación · v{{ a.versionNumero }}</p>
+          <h1 class="eval__titulo">{{ a.trabajoTitulo }}</h1>
+          @if (readonly()) {
+            <p class="eval__badge">Evaluación enviada</p>
+          }
         </header>
 
         @if (aviso()) { <p class="eval__aviso">{{ aviso() }}</p> }
 
         @if (form(); as f) {
+          @if (!readonly()) {
+            <section class="proy" aria-label="Proyección de la nota">
+              <div class="proy__anillo">
+                <svg viewBox="0 0 120 120" role="img"
+                     [attr.aria-label]="'Proyección ' + (proyeccion() | number: '1.1-2') + ' sobre ' + (proyMax() | number: '1.0-2')">
+                  <circle class="proy__pista" cx="60" cy="60" [attr.r]="RADIO" />
+                  <circle class="proy__valor" cx="60" cy="60" [attr.r]="RADIO"
+                          [style.stroke-dasharray]="circ"
+                          [style.stroke-dashoffset]="anilloOffset()" />
+                </svg>
+                <div class="proy__centro">
+                  <span class="proy__num">{{ proyeccion() | number: '1.1-2' }}</span>
+                  <span class="proy__den">/ {{ proyMax() | number: '1.0-2' }}</span>
+                </div>
+              </div>
+              <div class="proy__detalle">
+                <p class="proy__overline">Proyección</p>
+                <p class="proy__umbral">
+                  Umbral de aprobación · {{ snapshot()!.umbralAprobacion | number: '1.0-2' }}
+                </p>
+                <p class="proy__nota" [class.proy__nota--ok]="alcanzaUmbral()">
+                  {{ alcanzaUmbral() ? 'Tu proyección alcanza el umbral' : 'Tu proyección está por debajo del umbral' }}
+                </p>
+                <p class="proy__avisolegal">El veredicto final lo determina el promedio de todas las evaluaciones.</p>
+              </div>
+            </section>
+
+            <div class="avance">
+              <div class="avance__top">
+                <span class="avance__label">Avance</span>
+                <span class="avance__cuenta">{{ avance().hechos }}/{{ avance().total }} criterios</span>
+              </div>
+              <div class="avance__pista" role="progressbar"
+                   [attr.aria-valuenow]="avance().hechos" aria-valuemin="0" [attr.aria-valuemax]="avance().total">
+                <div class="avance__barra" [style.inline-size.%]="avancePct()"></div>
+              </div>
+            </div>
+          }
+
           <form [formGroup]="f" (ngSubmit)="abrirConfirmacion()">
-            <div formArrayName="criterios">
+            <div class="eval__criterios" formArrayName="criterios">
               @for (c of snapshot()!.criterios; track c.codigo; let i = $index) {
                 <ac-criterio-field
                   [criterio]="c"
                   [group]="$any(f.controls.criterios.at(i))"
+                  [indice]="i + 1"
                   [readonly]="readonly()" />
               }
             </div>
 
             <label class="eval__general">
-              Comentario general
-              <textarea formControlName="comentarioGeneral" rows="3"></textarea>
+              <span class="eval__general-label">Comentario general</span>
+              <textarea formControlName="comentarioGeneral" rows="3"
+                        placeholder="Síntesis para el cierre de la evaluación"></textarea>
             </label>
 
             @if (!readonly()) {
-              <p class="eval__proyeccion">
-                Proyección: {{ proyeccion() | number: '1.1-2' }} / umbral
-                {{ snapshot()!.umbralAprobacion | number: '1.1-2' }}
-              </p>
-              <button type="submit" class="eval__enviar" [disabled]="submitting()">Enviar evaluación</button>
+              <button type="submit" class="eval__enviar" [disabled]="submitting()">
+                Enviar evaluación
+              </button>
             }
           </form>
         }

@@ -17,8 +17,11 @@ import { EvaluacionesService } from '../evaluaciones.service';
 import { EvaluacionDraftStore } from '../evaluacion-draft.store';
 import {
   buildEvaluacionForm,
+  contarCompletos,
+  proyeccionMax,
   proyeccionNota,
   toEvaluacionRequest,
+  type AvanceRubrica,
   type EvaluacionForm,
 } from '../evaluacion-form.builder';
 import type { Asignacion, TemplateSnapshot } from '../evaluaciones.models';
@@ -51,8 +54,28 @@ export class EvaluarPage implements ConfirmaSalida {
   protected readonly confirmOpen = signal<boolean>(false);
   protected readonly enviado = signal<boolean>(false);
   protected readonly proyeccion = signal<number | null>(null);
+  protected readonly proyMax = signal<number>(0);
+  protected readonly avance = signal<AvanceRubrica>({ hechos: 0, total: 0 });
 
   protected readonly readonly = computed(() => this.asignacion()?.estado !== 'ACTIVA');
+
+  // Geometría del anillo de proyección (SVG).
+  protected readonly RADIO = 52;
+  protected readonly circ = 2 * Math.PI * this.RADIO;
+  protected readonly anilloOffset = computed(() => {
+    const max = this.proyMax();
+    const frac = max > 0 ? Math.min(Math.max((this.proyeccion() ?? 0) / max, 0), 1) : 0;
+    return this.circ * (1 - frac);
+  });
+  protected readonly avancePct = computed(() => {
+    const { hechos, total } = this.avance();
+    return total > 0 ? Math.round((hechos / total) * 100) : 0;
+  });
+  protected readonly alcanzaUmbral = computed(() => {
+    const umbral = this.snapshot()?.umbralAprobacion;
+    const proy = this.proyeccion();
+    return umbral != null && proy != null && proy >= umbral;
+  });
 
   private id = 0;
 
@@ -120,10 +143,15 @@ export class EvaluarPage implements ConfirmaSalida {
       form.patchValue(borrador as never);
       this.aviso.set('Borrador restaurado.');
     }
-    this.proyeccion.set(proyeccionNota(snap, form));
+    this.proyMax.set(proyeccionMax(snap));
+    const recalcular = () => {
+      this.proyeccion.set(proyeccionNota(snap, form));
+      this.avance.set(contarCompletos(snap, form));
+    };
+    recalcular();
     form.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.proyeccion.set(proyeccionNota(snap, form)));
+      .subscribe(recalcular);
     form.valueChanges
       .pipe(debounceTime(500), takeUntilDestroyed(this.destroyRef))
       .subscribe((v) => this.draft.save(a.id, v));

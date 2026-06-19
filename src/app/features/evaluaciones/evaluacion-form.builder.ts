@@ -91,6 +91,33 @@ export function proyeccionNota(snapshot: TemplateSnapshot, form: EvaluacionForm)
   }, 0);
 }
 
+// Techo de la proyección ponderada: la mejor nota alcanzable con los pesos del
+// template. Sirve para escalar el anillo de progreso de la pantalla de evaluar.
+export function proyeccionMax(snapshot: TemplateSnapshot): number {
+  return snapshot.criterios.reduce(
+    (total, c) => (c.peso > 0 ? total + c.escalaMax * c.peso : total),
+    0,
+  );
+}
+
+export interface AvanceRubrica {
+  hechos: number;
+  total: number;
+}
+
+// Avance de la rúbrica: cuántos criterios puntuables ya tienen un valor válido.
+// TEXTO es cualitativo (peso 0, sin validador) y queda fuera del recuento.
+export function contarCompletos(snapshot: TemplateSnapshot, form: EvaluacionForm): AvanceRubrica {
+  let hechos = 0;
+  let total = 0;
+  snapshot.criterios.forEach((criterio, i) => {
+    if (criterio.tipo === 'TEXTO') return;
+    total += 1;
+    if (form.controls.criterios.at(i).controls.puntaje.valid) hechos += 1;
+  });
+  return { hechos, total };
+}
+
 export function toEvaluacionRequest(
   asignacionId: number,
   snapshot: TemplateSnapshot,
