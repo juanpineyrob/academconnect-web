@@ -14,8 +14,11 @@ export class DocumentoViewer {
   readonly trabajoId = input.required<number>();
   readonly versionId = input.required<number>();
 
+  // `inline=true` pide al backend `Content-Disposition: inline` para poder
+  // incrustar el PDF en el <object> (sin el flag, el endpoint fuerza descarga).
   protected readonly url = computed(
-    () => `${environment.apiBase}/api/trabajos/${this.trabajoId()}/versiones/${this.versionId()}/documento`,
+    () =>
+      `${environment.apiBase}/api/trabajos/${this.trabajoId()}/versiones/${this.versionId()}/documento?inline=true`,
   );
 
   // `<object data>` is a RESOURCE_URL security context; the URL is our own same-origin
