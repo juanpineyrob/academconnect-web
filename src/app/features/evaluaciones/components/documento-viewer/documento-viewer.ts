@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { environment } from '@env/environment';
 
 @Component({
@@ -8,10 +9,18 @@ import { environment } from '@env/environment';
   styleUrl: './documento-viewer.scss',
 })
 export class DocumentoViewer {
+  private readonly sanitizer = inject(DomSanitizer);
+
   readonly trabajoId = input.required<number>();
   readonly versionId = input.required<number>();
 
   protected readonly url = computed(
     () => `${environment.apiBase}/api/trabajos/${this.trabajoId()}/versiones/${this.versionId()}/documento`,
+  );
+
+  // `<object data>` is a RESOURCE_URL security context; the URL is our own same-origin
+  // API endpoint, so it is safe to trust.
+  protected readonly safeUrl = computed<SafeResourceUrl>(() =>
+    this.sanitizer.bypassSecurityTrustResourceUrl(this.url()),
   );
 }
