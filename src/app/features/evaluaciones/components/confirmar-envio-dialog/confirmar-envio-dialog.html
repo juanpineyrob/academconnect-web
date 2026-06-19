@@ -1,0 +1,15 @@
+<dialog #dialog class="confirm" (cancel)="$event.preventDefault(); cancelar.emit()">
+  <h2 class="confirm__title">Enviar evaluación</h2>
+  <p>Esto es <strong>definitivo</strong>: cierra tu evaluación y no podrás editarla.</p>
+  @if (proyeccion() !== null && umbral() !== null) {
+    <p class="confirm__nota">
+      Proyección: {{ proyeccion() | number: '1.1-2' }} / umbral {{ umbral() | number: '1.1-2' }}
+    </p>
+  }
+  <div class="confirm__actions">
+    <button type="button" (click)="cancelar.emit()" [disabled]="submitting()">Cancelar</button>
+    <button type="button" class="confirm__primary" (click)="confirmar.emit()" [disabled]="submitting()">
+      @if (submitting()) { Enviando… } @else { Enviar }
+    </button>
+  </div>
+</dialog>
