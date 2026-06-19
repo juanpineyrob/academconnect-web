@@ -1,0 +1,36 @@
+.card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-4);
+  transition: border-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--c-accent);
+  }
+
+  &__titulo {
+    margin: 0 0 var(--sp-2);
+    font-size: 1rem;
+  }
+  &__meta {
+    display: flex;
+    gap: var(--sp-3);
+    color: var(--c-text-muted);
+    font-size: 0.8125rem;
+    margin: 0 0 var(--sp-1);
+  }
+  &__venc {
+    font-size: 0.8125rem;
+    color: var(--c-text-faint);
+    margin: 0;
+
+    &--alerta {
+      color: var(--c-accent);
+      font-weight: 600;
+    }
+  }
+}
