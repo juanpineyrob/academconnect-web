@@ -1,6 +1,18 @@
 .cola {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  padding: var(--sp-5) var(--sp-4) var(--sp-7);
+  max-width: 960px;
+  margin: 0 auto;
+
   &__head {
-    margin-bottom: var(--sp-4);
+    margin-bottom: 0;
+  }
+  &__title {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
   }
   &__tabs {
     display: flex;

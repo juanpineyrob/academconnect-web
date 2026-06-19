@@ -1,3 +1,10 @@
+:host {
+  display: block;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--sp-5) var(--sp-4) var(--sp-7);
+}
+
 .eval {
   display: grid;
   grid-template-columns: 1fr 1fr;
