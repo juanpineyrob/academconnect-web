@@ -41,8 +41,7 @@ const SECTIONS_EVALUADOR: NavSection[] = [
     title: 'Trabajo',
     items: [
       { label: 'Mi perfil', route: '/perfil' },
-      { label: 'Evaluaciones asignadas' },
-      { label: 'Bandeja de revisión' },
+      { label: 'Evaluaciones asignadas', route: '/evaluaciones', exact: false },
       { label: 'Invitaciones de orientación', route: '/invitaciones-orientacion' },
       { label: 'Mis publicaciones', route: '/mis-publicaciones', exact: false },
       { label: 'Hub de necesidades', route: '/hub', exact: false },
