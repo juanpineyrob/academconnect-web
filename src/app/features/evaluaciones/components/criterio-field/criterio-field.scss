@@ -1,0 +1,48 @@
+.criterio {
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-3);
+  margin: 0 0 var(--sp-3);
+  display: grid;
+  gap: var(--sp-2);
+
+  &__nombre {
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--sp-2);
+  }
+  &__peso {
+    font-size: 0.75rem;
+    color: var(--c-text-faint);
+    font-weight: 400;
+  }
+  &__valor {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  &__comentario-ro {
+    color: var(--c-text-muted);
+    margin: 0;
+  }
+  &__check {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    font-size: 0.875rem;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

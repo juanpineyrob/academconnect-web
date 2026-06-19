@@ -1,0 +1,56 @@
+@let c = criterio();
+@let g = group();
+<fieldset class="criterio" [formGroup]="g">
+  <legend class="criterio__nombre">
+    {{ c.nombre }}
+    @if (c.peso > 0) {
+      <span class="criterio__peso">peso {{ c.peso * 100 | number: '1.0-0' }}%</span>
+    }
+  </legend>
+
+  @if (readonly()) {
+    <p class="criterio__valor">{{ g.controls.puntaje.value }}</p>
+    @if (g.controls.comentario.value) {
+      <p class="criterio__comentario-ro">{{ g.controls.comentario.value }}</p>
+    }
+  } @else {
+    @switch (c.tipo) {
+      @case ('ESCALA') {
+        <label class="sr-only" [for]="c.codigo">{{ c.nombre }}</label>
+        <input [id]="c.codigo" type="number" formControlName="puntaje"
+               [min]="c.escalaMin" [max]="c.escalaMax" step="1" />
+      }
+      @case ('SLIDER') {
+        <input [id]="c.codigo" type="range" formControlName="puntaje"
+               [min]="c.escalaMin" [max]="c.escalaMax" step="1"
+               [attr.aria-valuetext]="g.controls.puntaje.value" />
+        <output>{{ g.controls.puntaje.value }}</output>
+      }
+      @case ('SELECCION') {
+        <select [id]="c.codigo" formControlName="puntaje" [attr.aria-label]="c.nombre">
+          <option [ngValue]="null" disabled>Elegí una opción</option>
+          @for (op of c.opciones; track op) {
+            <option [ngValue]="op">{{ op }}</option>
+          }
+        </select>
+      }
+      @case ('BOOLEANO') {
+        <label class="criterio__check">
+          <input type="checkbox" formControlName="puntaje" />
+          Cumple
+        </label>
+      }
+      @case ('TEXTO') {
+        <!-- TEXTO solo cualitativo: el comentario es la respuesta -->
+      }
+    }
+
+    <label class="sr-only" [for]="c.codigo + '-com'">Comentario</label>
+    <textarea [id]="c.codigo + '-com'" formControlName="comentario"
+              rows="2" placeholder="Comentario (opcional)"></textarea>
+    <label class="criterio__check">
+      <input type="checkbox" formControlName="comentarioPrivado" />
+      Comentario privado (no visible al estudiante)
+    </label>
+  }
+</fieldset>
