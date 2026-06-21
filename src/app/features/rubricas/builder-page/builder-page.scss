@@ -1,0 +1,120 @@
+:host {
+  display: block;
+}
+
+.builder {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-5);
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: var(--sp-5) var(--sp-4) var(--sp-7);
+}
+
+.builder__preview {
+  position: sticky;
+  top: var(--sp-4);
+  align-self: start;
+}
+
+.campo {
+  display: grid;
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-3);
+  font-size: var(--fs-body-sm);
+}
+
+.campo input,
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: var(--sp-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+}
+
+.campo-fila {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.criterios-head {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-4) 0 var(--sp-2);
+}
+
+.total {
+  font-family: var(--ff-mono);
+  color: var(--c-state-rechazado);
+}
+
+.total--ok {
+  color: var(--c-state-aprobado);
+}
+
+.criterio-edit {
+  display: flex;
+  gap: var(--sp-2);
+  align-items: center;
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+  padding: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+.criterio-edit input,
+.criterio-edit select {
+  padding: var(--sp-1) var(--sp-2);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-sm);
+}
+
+.agregar,
+.guardar {
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--r-md);
+  cursor: pointer;
+}
+
+.guardar {
+  background: var(--c-primary);
+  color: var(--c-text-on-primary);
+  border: none;
+  margin-top: var(--sp-4);
+}
+
+.guardar:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.errores {
+  color: var(--c-state-rechazado);
+  font-size: var(--fs-body-sm);
+}
+
+.volver {
+  display: inline-block;
+  margin-top: var(--sp-3);
+  font-size: var(--fs-body-sm);
+}
+
+.preview-proy {
+  font-family: var(--ff-mono);
+  font-size: var(--fs-caption);
+  color: var(--c-text-faint);
+  margin-bottom: var(--sp-3);
+}
+
+@media (max-width: 900px) {
+  .builder {
+    grid-template-columns: 1fr;
+  }
+
+  .builder__preview {
+    position: static;
+  }
+}

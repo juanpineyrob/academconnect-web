@@ -1,0 +1,80 @@
+<div class="builder">
+  <section class="builder__form">
+    <h1 class="t-h2">{{ soloLectura() ? 'Rúbrica' : 'Editor de rúbrica' }}</h1>
+    <form [formGroup]="form" (ngSubmit)="guardar()">
+      <label class="campo">Nombre <input formControlName="nombre" type="text" /></label>
+      <label class="campo">Descripción <textarea formControlName="descripcion" rows="2"></textarea></label>
+      <div class="campo-fila">
+        <label class="campo">Visibilidad
+          <select formControlName="visibilidad">
+            <option value="PRIVADO">Privada</option>
+            <option value="PUBLICO">Pública</option>
+          </select>
+        </label>
+        <label class="campo">Escala mín <input formControlName="escalaMin" type="number" /></label>
+        <label class="campo">Escala máx <input formControlName="escalaMax" type="number" /></label>
+        <label class="campo">Umbral <input formControlName="umbralAprobacion" type="number" /></label>
+      </div>
+
+      <div class="criterios-head">
+        <span class="t-overline">Criterios</span>
+        <span class="total" [class.total--ok]="puedeGuardar()">Pesos {{ totalPesos() * 100 | number: '1.0-0' }}%</span>
+        @if (!soloLectura()) {
+          <button type="button" (click)="distribuir()">Distribuir</button>
+        }
+      </div>
+
+      <div formArrayName="criterios" class="criterios">
+        @for (g of form.controls.criterios.controls; track $index; let i = $index) {
+          <fieldset class="criterio-edit" [formGroupName]="i">
+            <input formControlName="nombre" placeholder="Nombre del criterio" aria-label="Nombre del criterio" />
+            <select formControlName="tipo" aria-label="Tipo de criterio">
+              @for (t of TIPOS; track t) {
+                <option [value]="t">{{ t }}</option>
+              }
+            </select>
+            @if (g.controls.tipo.value !== 'TEXTO') {
+              <input formControlName="peso" type="number" step="0.05" min="0" max="1" placeholder="peso" aria-label="Peso" />
+            }
+            @if (g.controls.tipo.value === 'SELECCION') {
+              <input formControlName="opciones" placeholder="opciones separadas por coma" aria-label="Opciones" />
+            }
+            @if (!soloLectura()) {
+              <button type="button" (click)="quitarCriterio(i)" aria-label="Quitar criterio">✕</button>
+            }
+          </fieldset>
+        }
+      </div>
+
+      @if (!soloLectura()) {
+        <button type="button" class="agregar" (click)="agregarCriterio()">+ Agregar criterio</button>
+      }
+
+      @if (errores().length) {
+        <ul class="errores">
+          @for (e of errores(); track e) {
+            <li>{{ e }}</li>
+          }
+        </ul>
+      }
+
+      @if (!soloLectura()) {
+        <button type="submit" class="guardar" [disabled]="!puedeGuardar() || enviando()">Guardar rúbrica</button>
+      }
+      <a class="volver" routerLink="/rubricas">Volver a rúbricas</a>
+    </form>
+  </section>
+
+  <aside class="builder__preview" aria-label="Vista previa de la rúbrica">
+    <p class="t-overline">Vista previa (como la ve el evaluador)</p>
+    <div class="preview-proy">Proyección máx {{ previewMax() | number: '1.0-2' }}</div>
+    @for (c of previewSnapshot().criterios; track $index; let i = $index) {
+      <ac-criterio-field
+        [criterio]="c"
+        [group]="previewEval().controls.criterios.at(i)"
+        [indice]="i + 1"
+        [readonly]="false"
+      />
+    }
+  </aside>
+</div>
