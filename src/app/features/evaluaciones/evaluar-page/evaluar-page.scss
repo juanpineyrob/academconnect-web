@@ -29,7 +29,7 @@
 .proy__overline,
 .avance__label,
 .eval__general-label {
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
@@ -55,7 +55,7 @@
 .eval__badge {
   display: inline-block;
   margin: var(--sp-2) 0 0;
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
@@ -130,7 +130,7 @@
 }
 
 .proy__den {
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   color: var(--c-text-faint);
 }
@@ -179,7 +179,7 @@
 }
 
 .avance__cuenta {
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-body-sm);
   color: var(--c-text-muted);
   font-variant-numeric: tabular-nums;

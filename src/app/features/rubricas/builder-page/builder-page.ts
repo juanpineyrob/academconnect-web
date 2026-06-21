@@ -42,6 +42,13 @@ export class BuilderPage implements ConfirmaSalida {
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly TIPOS: CriterioTipo[] = ['ESCALA', 'SLIDER', 'SELECCION', 'BOOLEANO', 'TEXTO'];
+  protected readonly TIPO_LABELS: Record<CriterioTipo, string> = {
+    ESCALA: 'Escala',
+    SLIDER: 'Slider',
+    SELECCION: 'Selección',
+    BOOLEANO: 'Booleano',
+    TEXTO: 'Texto',
+  };
 
   protected readonly form = new FormGroup({
     nombre: new FormControl('', { nonNullable: true }),
@@ -76,7 +83,7 @@ export class BuilderPage implements ConfirmaSalida {
   });
   protected readonly previewMax = computed(() => proyeccionMax(this.previewSnapshot()));
 
-  private editId: number | null = null;
+  protected editId: number | null = null;
 
   constructor() {
     const idParam = this.route.snapshot.paramMap.get('id');

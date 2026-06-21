@@ -49,7 +49,7 @@
 }
 
 .criterio__index {
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-body-sm);
   font-variant-numeric: tabular-nums;
   color: var(--c-text-faint);
@@ -78,7 +78,7 @@
 }
 
 .criterio__badge {
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
@@ -90,7 +90,7 @@
 }
 
 .criterio__peso {
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   color: var(--c-text-faint);
 }
@@ -124,7 +124,7 @@
 .criterio__rango {
   display: flex;
   justify-content: space-between;
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   color: var(--c-text-faint);
 }
@@ -152,7 +152,7 @@
   border-radius: var(--r-sm);
   background: var(--c-surface);
   color: var(--c-text-muted);
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-variant-numeric: tabular-nums;
   font-size: var(--fs-body-sm);
   transition: all var(--t-fast);
@@ -228,7 +228,7 @@
   border-radius: var(--r-sm);
   background: var(--c-primary);
   color: var(--c-text-on-primary);
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-variant-numeric: tabular-nums;
   font-size: var(--fs-body-sm);
 }
@@ -241,7 +241,7 @@
 }
 
 .criterio__com-label {
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;
@@ -297,7 +297,7 @@ textarea {
 }
 
 .criterio__valor-max {
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-body-sm);
   color: var(--c-text-faint);
 }
@@ -312,7 +312,7 @@ textarea {
 .criterio__priv-badge {
   display: inline-block;
   margin-inline-start: var(--sp-2);
-  font-family: var(--ff-mono);
+  font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   letter-spacing: var(--ls-wide);
   text-transform: uppercase;

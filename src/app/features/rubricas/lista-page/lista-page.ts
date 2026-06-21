@@ -73,7 +73,7 @@ import type { Rubrica } from '../rubricas.models';
     .rubcard--inactiva { opacity: 0.6; }
     .rubcard__top { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-2); }
     .rubcard__nombre { font-weight: var(--fw-semibold); }
-    .rubcard__vis { font-family: var(--ff-mono); font-size: var(--fs-caption); color: var(--c-accent); background: var(--c-accent-soft); border-radius: var(--r-sm); padding: 2px var(--sp-2); }
+    .rubcard__vis { font-family: var(--ff-sans); font-size: var(--fs-caption); font-weight: var(--fw-semibold); color: var(--c-accent); background: var(--c-accent-soft); border-radius: var(--r-sm); padding: 2px var(--sp-2); }
     .rubcard__meta { margin: 0; font-size: var(--fs-body-sm); color: var(--c-text-muted); }
     .rubcard__acciones { display: flex; gap: var(--sp-3); font-size: var(--fs-body-sm); }
     .rubcard__acciones button { background: none; border: none; color: var(--c-state-rechazado); cursor: pointer; padding: 0; }
