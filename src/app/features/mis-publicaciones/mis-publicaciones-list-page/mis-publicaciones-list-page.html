@@ -1,64 +1,61 @@
 <section class="mis-pubs">
   <header class="mis-pubs__header">
-    <h1 class="mis-pubs__title">Mis publicaciones</h1>
-    <ac-button [routerLink]="['/mis-publicaciones/nuevo']">Crear publicación</ac-button>
+    <div class="mis-pubs__intro">
+      <h1 class="mis-pubs__title">Mis publicaciones</h1>
+      <p class="mis-pubs__lead">Gestioná los trabajos que publicaste y su estado de orientación.</p>
+    </div>
+    <ac-button size="sm" [routerLink]="['/mis-publicaciones/nuevo']">Crear publicación</ac-button>
   </header>
 
   @if (loading()) {
-    <p role="status">Cargando…</p>
+    <p role="status" class="mis-pubs__estado">Cargando…</p>
   } @else if (error()) {
     <p role="alert" class="mis-pubs__error">{{ error() }}</p>
   } @else if (trabajos().length === 0) {
     <p class="mis-pubs__empty">Aún no creaste publicaciones.</p>
   } @else {
-    @if (borradores().length > 0) {
-      <h2 class="mis-pubs__h2">Borradores</h2>
-      <ul class="mis-pubs__list">
-        @for (t of borradores(); track t.id) {
-          <li><a [routerLink]="['/mis-publicaciones', t.id]" class="mis-pubs__link">{{ t.titulo }}</a></li>
-        }
-      </ul>
-    }
-    @if (abiertos().length > 0) {
-      <h2 class="mis-pubs__h2">Abiertos</h2>
-      <ul class="mis-pubs__list">
-        @for (t of abiertos(); track t.id) {
-          <li>
-            <a [routerLink]="['/mis-publicaciones', t.id]" class="mis-pubs__link">
-              <span>{{ t.titulo }}</span>
-              @if (t.expiraEn) {
-                <span class="mis-pubs__meta">Expira: {{ t.expiraEn | date:'mediumDate' }}</span>
+    <div class="mis-pubs__tabs" role="tablist">
+      @for (t of tabs(); track t.key) {
+        <button type="button" role="tab" class="mis-pubs__tab"
+                [class.mis-pubs__tab--on]="tab() === t.key"
+                [attr.aria-selected]="tab() === t.key"
+                (click)="tab.set(t.key)">
+          {{ t.label }} <span class="mis-pubs__tab-count">{{ t.count }}</span>
+        </button>
+      }
+    </div>
+
+    <ul class="mis-pubs__list">
+      @for (t of visibles(); track t.id) {
+        <li>
+          <a [routerLink]="['/mis-publicaciones', t.id]" class="pub">
+            <div class="pub__top">
+              <span class="pub__tipo">{{ tipoLabel[t.tipo] }}</span>
+              <span class="pub__chip" [class]="'pub__chip--' + tono(t.estado)">{{ estadoLabel[t.estado] }}</span>
+            </div>
+            <h3 class="pub__titulo">{{ t.titulo }}</h3>
+            <p class="pub__meta">
+              <span>Actualizado {{ t.updatedAt | date: 'mediumDate' }}</span>
+              @if (t.estudianteNombre) {
+                <span aria-hidden="true">·</span><span>{{ t.estudianteNombre }}</span>
               }
-            </a>
-          </li>
-        }
-      </ul>
-    }
-    @if (enDesarrollo().length > 0) {
-      <h2 class="mis-pubs__h2">En desarrollo</h2>
-      <ul class="mis-pubs__list">
-        @for (t of enDesarrollo(); track t.id) {
-          <li>
-            <a [routerLink]="['/mis-publicaciones', t.id]" class="mis-pubs__link">
-              <span>{{ t.titulo }}</span>
-              @if (t.estudianteNombre) { <span class="mis-pubs__meta">Estudiante: {{ t.estudianteNombre }}</span> }
-            </a>
-          </li>
-        }
-      </ul>
-    }
-    @if (otros().length > 0) {
-      <h2 class="mis-pubs__h2">Otros</h2>
-      <ul class="mis-pubs__list">
-        @for (t of otros(); track t.id) {
-          <li>
-            <a [routerLink]="['/mis-publicaciones', t.id]" class="mis-pubs__link">
-              <span>{{ t.titulo }}</span>
-              <span class="mis-pubs__meta">{{ estadoLabel[t.estado] }}</span>
-            </a>
-          </li>
-        }
-      </ul>
-    }
+              @if (t.estado === 'ABIERTO' && t.expiraEn) {
+                <span aria-hidden="true">·</span><span>Expira {{ t.expiraEn | date: 'mediumDate' }}</span>
+              }
+              @if (t.puntajeAgregado !== null) {
+                <span aria-hidden="true">·</span><span>Puntaje {{ t.puntajeAgregado | number: '1.0-2' }}</span>
+              }
+            </p>
+            @if (t.keywords.length) {
+              <ul class="pub__keywords">
+                @for (k of t.keywords.slice(0, 4); track k) {
+                  <li class="pub__keyword">{{ k }}</li>
+                }
+              </ul>
+            }
+          </a>
+        </li>
+      }
+    </ul>
   }
 </section>

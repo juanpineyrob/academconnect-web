@@ -48,7 +48,7 @@
         <p>Invitaste a <strong>{{ inv.profesorNombre }}</strong>.</p>
         @if (inv.motivo) { <p class="detalle__meta">Mensaje: {{ inv.motivo }}</p> }
         <div class="detalle__actions">
-          <ac-button variant="ghost" (click)="onCancelar()">Cancelar invitación</ac-button>
+          <ac-button size="sm" variant="ghost" (click)="onCancelar()">Cancelar invitación</ac-button>
         </div>
       </ac-card>
     }

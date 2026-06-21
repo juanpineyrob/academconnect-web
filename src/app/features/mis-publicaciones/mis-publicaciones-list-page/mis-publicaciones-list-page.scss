@@ -1,32 +1,250 @@
 .mis-pubs {
   display: flex;
   flex-direction: column;
-  gap: var(--sp-4);
-  padding: var(--sp-5) var(--sp-4) var(--sp-7);
+  gap: var(--sp-5);
   max-width: 960px;
   margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5) var(--sp-8);
 }
+
 .mis-pubs__header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.mis-pubs__intro {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.mis-pubs__title {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+}
+
+.mis-pubs__lead {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text-muted);
+}
+
+.mis-pubs__estado,
+.mis-pubs__empty {
+  margin: 0;
+  color: var(--c-text-muted);
+}
+
+.mis-pubs__error {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--c-state-rechazado-bg);
+  border: 1px solid rgba(179, 38, 30, 0.2);
+  color: var(--c-state-rechazado);
+}
+
+// ---- Tabs ----
+
+.mis-pubs__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-1);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.mis-pubs__tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--c-text-muted);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast);
+
+  &:hover {
+    color: var(--c-text);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--sh-focus);
+    border-radius: var(--r-sm);
+  }
+
+  &--on {
+    color: var(--c-text);
+    border-bottom-color: var(--c-accent);
+    font-weight: var(--fw-semibold);
+  }
+}
+
+.mis-pubs__tab-count {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-variant-numeric: tabular-nums;
+  color: var(--c-text-muted);
+  background: var(--c-surface-muted);
+  border-radius: var(--r-pill);
+  padding: 0 var(--sp-2);
+  min-inline-size: 1.25rem;
+  text-align: center;
+}
+
+.mis-pubs__tab--on .mis-pubs__tab-count {
+  color: var(--c-accent);
+  background: var(--c-accent-soft);
+}
+
+// ---- Lista de tarjetas ----
+
+.mis-pubs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.pub {
+  display: grid;
+  gap: var(--sp-2);
+  padding: var(--sp-5);
+  text-decoration: none;
+  color: inherit;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-card);
+  transition: border-color var(--t-base), box-shadow var(--t-base), transform var(--t-base);
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--c-accent);
+    box-shadow: var(--sh-elevated);
+    transform: translateY(-2px);
+    outline: none;
+  }
+}
+
+.pub__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-4);
-  flex-wrap: wrap;
+  gap: var(--sp-3);
 }
-.mis-pubs__title { margin: 0; font-size: 1.5rem; font-weight: 600; }
-.mis-pubs__h2 { margin: var(--sp-4) 0 var(--sp-1); font-size: 1rem; font-weight: 600; }
-.mis-pubs__error { color: var(--c-error, #b91c1c); }
-.mis-pubs__empty { color: var(--c-text-muted); }
-.mis-pubs__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-1); }
-.mis-pubs__list li { border: 1px solid var(--c-border); border-radius: var(--r-md); }
-.mis-pubs__link {
+
+.pub__tipo {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--c-text-faint);
+}
+
+.pub__chip {
+  flex-shrink: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  border-radius: var(--r-pill);
+  padding: 2px var(--sp-2);
+  white-space: nowrap;
+  color: var(--c-state-borrador);
+  background: var(--c-state-borrador-bg);
+
+  &--aprobado {
+    color: var(--c-state-aprobado);
+    background: var(--c-state-aprobado-bg);
+  }
+
+  &--rechazado {
+    color: var(--c-state-rechazado);
+    background: var(--c-state-rechazado-bg);
+  }
+
+  &--revision {
+    color: var(--c-state-revision);
+    background: var(--c-state-revision-bg);
+  }
+
+  &--enviado {
+    color: var(--c-state-enviado);
+    background: var(--c-state-enviado-bg);
+  }
+
+  &--borrador {
+    color: var(--c-state-borrador);
+    background: var(--c-state-borrador-bg);
+  }
+}
+
+.pub__titulo {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-snug);
+  color: var(--c-text);
+  transition: color var(--t-fast);
+}
+
+.pub:hover .pub__titulo,
+.pub:focus-visible .pub__titulo {
+  color: var(--c-accent);
+}
+
+.pub__meta {
   display: flex;
-  justify-content: space-between;
-  gap: var(--sp-4);
-  padding: var(--sp-3) var(--sp-4);
-  text-decoration: none;
-  color: inherit;
   flex-wrap: wrap;
-  &:hover { background: var(--c-surface-hover, rgba(0,0,0,0.04)); }
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  color: var(--c-text-muted);
+  font-size: var(--fs-body-sm);
 }
-.mis-pubs__meta { color: var(--c-text-muted); font-size: var(--fs-body-sm); }
+
+.pub__keywords {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin: var(--sp-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pub__keyword {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--sp-2);
+  border-radius: var(--r-pill);
+  background: var(--c-surface-muted);
+  border: 1px solid var(--c-border);
+  color: var(--c-text-muted);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  line-height: 1.3;
+}
+
+@media (max-width: 640px) {
+  .mis-pubs {
+    padding: var(--sp-5) var(--sp-4) var(--sp-7);
+  }
+}

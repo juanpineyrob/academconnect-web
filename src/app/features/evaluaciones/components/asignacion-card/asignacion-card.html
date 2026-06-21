@@ -1,11 +1,16 @@
 @let a = asignacion();
 <a class="card" [routerLink]="['/evaluaciones', a.id]">
-  <h3 class="card__titulo">{{ a.trabajoTitulo }}</h3>
+  <div class="card__top">
+    <h3 class="card__titulo">{{ a.trabajoTitulo }}</h3>
+    <span class="card__chip" [class]="'card__chip--' + chip().tono">{{ chip().label }}</span>
+  </div>
   <p class="card__meta">
-    <span>v{{ a.versionNumero }}</span>
+    <span>Versión {{ a.versionNumero }}</span>
+    <span aria-hidden="true">·</span>
     <span>Asignada {{ a.asignadaEn | date: 'mediumDate' }}</span>
   </p>
   <p class="card__venc" [class.card__venc--alerta]="vencida()">
-    @if (vencida()) { Vencida · } Vence {{ a.vencimientoEn | date: 'mediumDate' }}
+    @if (vencida()) { Venció el } @else { Vence el }
+    {{ a.vencimientoEn | date: 'mediumDate' }}
   </p>
 </a>

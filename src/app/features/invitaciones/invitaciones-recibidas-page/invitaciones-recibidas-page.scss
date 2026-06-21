@@ -1,28 +1,98 @@
-.recibidas { display: flex; flex-direction: column; gap: var(--sp-4); max-width: 760px; margin: 0 auto; padding: var(--sp-5) var(--sp-4) var(--sp-7); }
-.recibidas__header { display: flex; flex-direction: column; gap: var(--sp-3); }
-.recibidas__title { margin: 0; font-size: 1.5rem; font-weight: 600; }
+.recibidas {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5) var(--sp-8);
+}
+
+.recibidas__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.recibidas__intro {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.recibidas__title {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+}
+
+.recibidas__lead {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text-muted);
+}
+
 .recibidas__tabs {
   display: flex;
-  gap: var(--sp-2);
   flex-wrap: wrap;
+  gap: var(--sp-2);
+  border-bottom: 1px solid var(--c-border);
 }
+
 .recibidas__tab {
-  padding: 0.4rem 0.8rem;
-  border: 1px solid var(--c-border);
-  border-radius: 999px;
+  padding: var(--sp-2) var(--sp-3);
+  border: none;
+  border-bottom: 2px solid transparent;
   background: transparent;
-  cursor: pointer;
   color: var(--c-text-muted);
-  font: inherit;
-  min-height: 36px;
-  &:hover { color: var(--c-text); }
-  &:focus-visible { outline: 2px solid var(--c-accent, #4f46e5); outline-offset: 2px; }
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast);
+
+  &:hover {
+    color: var(--c-text);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--sh-focus);
+    border-radius: var(--r-sm);
+  }
 }
-.recibidas__tab--active { background: var(--c-accent, #4f46e5); color: white; border-color: var(--c-accent, #4f46e5); }
-.recibidas__empty { color: var(--c-text-muted); }
-.recibidas__error { margin: 0; padding: var(--sp-2) var(--sp-3); border-radius: var(--r-md);
-  background: var(--c-error-bg, #fee2e2); color: var(--c-error, #b91c1c); }
-.recibidas__list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--sp-3); }
+
+.recibidas__tab--active {
+  color: var(--c-text);
+  border-bottom-color: var(--c-accent);
+  font-weight: var(--fw-semibold);
+}
+
+.recibidas__empty {
+  margin: 0;
+  color: var(--c-text-muted);
+}
+
+.recibidas__error {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--c-state-rechazado-bg);
+  border: 1px solid rgba(179, 38, 30, 0.2);
+  color: var(--c-state-rechazado);
+}
+
+.recibidas__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
 .recibidas__row {
   display: flex;
   align-items: center;
@@ -30,33 +100,107 @@
   gap: var(--sp-3);
   flex-wrap: wrap;
 }
-.recibidas__link { font-weight: 500; color: inherit; text-decoration: none;
-  &:hover { text-decoration: underline; } }
-.recibidas__estado { font-size: var(--fs-body-sm); color: var(--c-text-muted); }
-.recibidas__motivo { margin: var(--sp-2) 0 0 0; color: var(--c-text-muted); }
-.recibidas__respuesta { display: block; margin-top: var(--sp-3); }
+
+.recibidas__link {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  color: var(--c-text);
+  text-decoration: none;
+  min-inline-size: 0;
+  transition: color var(--t-fast);
+
+  &:hover,
+  &:focus-visible {
+    color: var(--c-accent);
+    outline: none;
+  }
+}
+
+.recibidas__estado {
+  flex-shrink: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  border-radius: var(--r-pill);
+  padding: 2px var(--sp-2);
+  white-space: nowrap;
+  color: var(--c-state-borrador);
+  background: var(--c-state-borrador-bg);
+
+  &--pendiente {
+    color: var(--c-state-revision);
+    background: var(--c-state-revision-bg);
+  }
+
+  &--aceptada {
+    color: var(--c-state-aprobado);
+    background: var(--c-state-aprobado-bg);
+  }
+
+  &--rechazada {
+    color: var(--c-state-rechazado);
+    background: var(--c-state-rechazado-bg);
+  }
+}
+
+.recibidas__motivo {
+  margin: var(--sp-3) 0 0;
+  color: var(--c-text-muted);
+  line-height: var(--lh-normal);
+}
+
+.recibidas__respuesta {
+  display: block;
+  margin-top: var(--sp-4);
+}
+
 .recibidas__respuesta-input {
   width: 100%;
-  padding: var(--sp-2) var(--sp-3);
-  border: 1px solid var(--c-border);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--c-border-strong);
   border-radius: var(--r-md);
   background: var(--c-surface);
   color: var(--c-text);
-  font: inherit;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  line-height: var(--lh-normal);
   resize: vertical;
-  min-height: 64px;
-  &:focus { outline: 2px solid var(--c-accent, #4f46e5); outline-offset: 1px; border-color: transparent; }
+  min-height: 72px;
+  outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+
+  &:focus {
+    border-color: var(--c-accent);
+    box-shadow: var(--sh-focus);
+  }
+
+  &::placeholder {
+    color: var(--c-text-faint);
+  }
 }
+
 .recibidas__respuesta-historico {
-  margin: var(--sp-2) 0 0 0;
-  padding: var(--sp-2) var(--sp-3);
-  border-left: 3px solid var(--c-accent, #4f46e5);
-  background: var(--c-surface-alt, rgba(0, 0, 0, 0.03));
+  margin: var(--sp-3) 0 0;
+  padding: var(--sp-2) var(--sp-4);
+  border-left: 3px solid var(--c-border-strong);
+  background: var(--c-surface-muted);
   color: var(--c-text-muted);
   font-style: italic;
   white-space: pre-wrap;
+  line-height: var(--lh-normal);
 }
-.recibidas__actions { display: flex; gap: var(--sp-2); margin-top: var(--sp-3); flex-wrap: wrap; }
+
+.recibidas__actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  flex-wrap: wrap;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -67,4 +211,10 @@
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+@media (max-width: 640px) {
+  .recibidas {
+    padding: var(--sp-5) var(--sp-4) var(--sp-7);
+  }
 }

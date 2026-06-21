@@ -29,7 +29,7 @@
       <ac-card padding="md">
         <h2 class="detalle__h2">Publicar</h2>
         <p>Publicá este BORRADOR como ABIERTO con duración configurable.</p>
-        <ac-button (click)="openPublicar()" [disabled]="publicarOpen()">Publicar…</ac-button>
+        <ac-button size="sm" (click)="openPublicar()" [disabled]="publicarOpen()">Publicar…</ac-button>
         @if (publicarOpen()) {
           <div class="detalle__modal">
             <p>Duración:</p>
@@ -42,8 +42,8 @@
               }
             </div>
             <div class="detalle__actions">
-              <ac-button (click)="confirmPublicar()" [loading]="publicando()" [disabled]="publicando()">Confirmar publicación</ac-button>
-              <ac-button variant="ghost" (click)="closePublicar()" [disabled]="publicando()">Cancelar</ac-button>
+              <ac-button size="sm" (click)="confirmPublicar()" [loading]="publicando()" [disabled]="publicando()">Confirmar publicación</ac-button>
+              <ac-button size="sm" variant="ghost" (click)="closePublicar()" [disabled]="publicando()">Cancelar</ac-button>
             </div>
           </div>
         }
@@ -52,7 +52,7 @@
       <ac-card padding="md">
         <h2 class="detalle__h2">Publicación abierta</h2>
         @if (t.expiraEn) { <p>Expira el {{ t.expiraEn | date:'mediumDate' }}.</p> }
-        <ac-button variant="ghost" (click)="cerrarTrabajo()" [loading]="cerrando()" [disabled]="cerrando()">Cerrar publicación</ac-button>
+        <ac-button size="sm" variant="ghost" (click)="cerrarTrabajo()" [loading]="cerrando()" [disabled]="cerrando()">Cerrar publicación</ac-button>
       </ac-card>
 
       <ac-card padding="md">
@@ -70,8 +70,8 @@
                 @if (s.motivo) { <p class="detalle__meta">{{ s.motivo }}</p> }
                 @if (s.estado === 'PENDIENTE') {
                   <div class="detalle__actions">
-                    <ac-button (click)="aceptar(s)" [loading]="actionSolicitudId() === s.id" [disabled]="actionSolicitudId() === s.id">Aceptar</ac-button>
-                    <ac-button variant="ghost" (click)="rechazar(s)" [loading]="actionSolicitudId() === s.id" [disabled]="actionSolicitudId() === s.id">Rechazar</ac-button>
+                    <ac-button size="sm" (click)="aceptar(s)" [loading]="actionSolicitudId() === s.id" [disabled]="actionSolicitudId() === s.id">Aceptar</ac-button>
+                    <ac-button size="sm" variant="ghost" (click)="rechazar(s)" [loading]="actionSolicitudId() === s.id" [disabled]="actionSolicitudId() === s.id">Rechazar</ac-button>
                   </div>
                 }
               </li>

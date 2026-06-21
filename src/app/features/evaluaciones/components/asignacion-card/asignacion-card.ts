@@ -18,4 +18,10 @@ export class AsignacionCard {
     const a = this.asignacion();
     return a.estado === 'ACTIVA' && new Date(a.vencimientoEn).getTime() < Date.now();
   });
+
+  protected readonly chip = computed<{ label: string; tono: 'aprobado' | 'rechazado' | 'enviado' }>(() => {
+    if (this.vencida()) return { label: 'Vencida', tono: 'rechazado' };
+    if (this.asignacion().estado === 'COMPLETADA') return { label: 'Completada', tono: 'aprobado' };
+    return { label: 'Activa', tono: 'enviado' };
+  });
 }

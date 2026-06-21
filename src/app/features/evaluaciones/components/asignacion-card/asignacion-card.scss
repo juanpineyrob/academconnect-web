@@ -1,36 +1,91 @@
-.card {
+:host {
   display: block;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
   text-decoration: none;
   color: inherit;
+  background: var(--c-surface);
   border: 1px solid var(--c-border);
-  border-radius: var(--r-md);
-  padding: var(--sp-4);
-  transition: border-color 0.15s ease;
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  box-shadow: var(--sh-card);
+  transition: border-color var(--t-base), box-shadow var(--t-base), transform var(--t-base);
 
   &:hover,
   &:focus-visible {
     border-color: var(--c-accent);
+    box-shadow: var(--sh-elevated);
+    outline: none;
+    transform: translateY(-2px);
+  }
+
+  &__top {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--sp-3);
   }
 
   &__titulo {
-    margin: 0 0 var(--sp-2);
-    font-size: 1rem;
+    margin: 0;
+    font-family: var(--ff-serif);
+    font-size: var(--fs-h4);
+    font-weight: var(--fw-regular);
+    letter-spacing: var(--ls-tight);
+    line-height: var(--lh-snug);
+    color: var(--c-text);
+    min-inline-size: 0;
   }
+
+  &__chip {
+    flex-shrink: 0;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-caption);
+    font-weight: var(--fw-semibold);
+    letter-spacing: var(--ls-wide);
+    text-transform: uppercase;
+    border-radius: var(--r-pill);
+    padding: 2px var(--sp-2);
+    white-space: nowrap;
+
+    &--aprobado {
+      color: var(--c-state-aprobado);
+      background: var(--c-state-aprobado-bg);
+    }
+
+    &--rechazado {
+      color: var(--c-state-rechazado);
+      background: var(--c-state-rechazado-bg);
+    }
+
+    &--enviado {
+      color: var(--c-state-enviado);
+      background: var(--c-state-enviado-bg);
+    }
+  }
+
   &__meta {
     display: flex;
-    gap: var(--sp-3);
-    color: var(--c-text-muted);
-    font-size: 0.8125rem;
-    margin: 0 0 var(--sp-1);
-  }
-  &__venc {
-    font-size: 0.8125rem;
-    color: var(--c-text-faint);
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--sp-2);
     margin: 0;
+    color: var(--c-text-muted);
+    font-size: var(--fs-body-sm);
+  }
+
+  &__venc {
+    margin: 0;
+    font-size: var(--fs-body-sm);
+    color: var(--c-text-faint);
 
     &--alerta {
-      color: var(--c-accent);
-      font-weight: 600;
+      color: var(--c-state-rechazado);
+      font-weight: var(--fw-semibold);
     }
   }
 }

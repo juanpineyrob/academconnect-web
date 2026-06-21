@@ -2,37 +2,73 @@
   display: flex;
   flex-direction: column;
   gap: var(--sp-5);
-  padding: var(--sp-5) var(--sp-4) var(--sp-7);
   max-width: 960px;
   margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5) var(--sp-8);
 
   &__head {
-    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-4);
   }
+
+  &__intro {
+    display: grid;
+    gap: var(--sp-2);
+  }
+
   &__title {
     margin: 0;
-    font-size: 1.5rem;
-    font-weight: 600;
+    font-family: var(--ff-serif);
+    font-size: clamp(1.75rem, 3vw, 2.25rem);
+    font-weight: var(--fw-regular);
+    letter-spacing: var(--ls-tight);
+    line-height: var(--lh-tight);
+    color: var(--c-text);
   }
+
+  &__lead {
+    margin: 0;
+    font-family: var(--ff-sans);
+    font-size: var(--fs-body);
+    color: var(--c-text-muted);
+  }
+
   &__tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: var(--sp-2);
-    margin-top: var(--sp-3);
+    border-bottom: 1px solid var(--c-border);
+  }
 
-    button {
-      padding: var(--sp-2) var(--sp-3);
-      border: 1px solid var(--c-border);
-      border-radius: var(--r-md);
-      background: transparent;
-      cursor: pointer;
+  &__tab {
+    padding: var(--sp-2) var(--sp-3);
+    border: none;
+    border-bottom: 2px solid transparent;
+    background: transparent;
+    color: var(--c-text-muted);
+    font-family: var(--ff-sans);
+    font-size: var(--fs-body-sm);
+    cursor: pointer;
+    transition: color var(--t-fast), border-color var(--t-fast);
 
-      &.is-active {
-        border-color: var(--c-accent);
-        color: var(--c-accent);
-        font-weight: 600;
-      }
+    &:hover {
+      color: var(--c-text);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--sh-focus);
+      border-radius: var(--r-sm);
+    }
+
+    &--on {
+      color: var(--c-text);
+      border-bottom-color: var(--c-accent);
+      font-weight: var(--fw-semibold);
     }
   }
+
   &__list {
     list-style: none;
     padding: 0;
@@ -40,11 +76,35 @@
     display: grid;
     gap: var(--sp-3);
   }
+
   &__estado {
+    margin: 0;
     color: var(--c-text-muted);
+
+    button {
+      margin-inline-start: var(--sp-2);
+      padding: var(--sp-1) var(--sp-3);
+      border: 1px solid var(--c-border-strong);
+      border-radius: var(--r-sm);
+      background: var(--c-surface);
+      color: var(--c-text);
+      cursor: pointer;
+      transition: border-color var(--t-fast), color var(--t-fast);
+
+      &:hover {
+        border-color: var(--c-accent);
+        color: var(--c-accent);
+      }
+    }
 
     &--error {
       color: var(--c-state-rechazado);
     }
+  }
+}
+
+@media (max-width: 640px) {
+  .cola {
+    padding: var(--sp-5) var(--sp-4) var(--sp-7);
   }
 }

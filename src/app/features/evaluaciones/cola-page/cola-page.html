@@ -1,11 +1,14 @@
 <section class="cola">
   <header class="cola__head">
-    <h1 class="cola__title">Evaluaciones asignadas</h1>
+    <div class="cola__intro">
+      <h1 class="cola__title">Evaluaciones asignadas</h1>
+      <p class="cola__lead">Revisá los trabajos que te asignaron y registrá tu evaluación.</p>
+    </div>
     <div class="cola__tabs" role="tablist">
-      <button type="button" role="tab" [attr.aria-selected]="tab() === 'ACTIVA'"
-              [class.is-active]="tab() === 'ACTIVA'" (click)="cambiarTab('ACTIVA')">Activas</button>
-      <button type="button" role="tab" [attr.aria-selected]="tab() === 'COMPLETADA'"
-              [class.is-active]="tab() === 'COMPLETADA'" (click)="cambiarTab('COMPLETADA')">Completadas</button>
+      <button type="button" role="tab" class="cola__tab" [attr.aria-selected]="tab() === 'ACTIVA'"
+              [class.cola__tab--on]="tab() === 'ACTIVA'" (click)="cambiarTab('ACTIVA')">Activas</button>
+      <button type="button" role="tab" class="cola__tab" [attr.aria-selected]="tab() === 'COMPLETADA'"
+              [class.cola__tab--on]="tab() === 'COMPLETADA'" (click)="cambiarTab('COMPLETADA')">Completadas</button>
     </div>
   </header>
 

@@ -56,7 +56,7 @@
       @if (serverError()) { <p class="crear-form__server-error" role="alert">{{ serverError() }}</p> }
 
       <div class="crear-form__actions">
-        <ac-button type="submit" [loading]="submitting()" [disabled]="submitting()">Crear borrador</ac-button>
+        <ac-button size="sm" type="submit" [loading]="submitting()" [disabled]="submitting()">Crear borrador</ac-button>
       </div>
     </form>
   </ac-card>
