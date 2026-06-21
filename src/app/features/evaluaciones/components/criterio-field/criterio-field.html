@@ -1,0 +1,128 @@
+@let c = criterio();
+@let g = group();
+<fieldset
+  class="criterio"
+  [class.criterio--done]="completo()"
+  [class.criterio--ro]="readonly()"
+  [formGroup]="g"
+>
+  <legend class="sr-only">{{ c.nombre }}</legend>
+
+  <div class="criterio__head">
+    <span class="criterio__index" aria-hidden="true">{{ etiquetaIndice() }}</span>
+    <div class="criterio__titulo">
+      <span class="criterio__nombre">{{ c.nombre }}</span>
+      <span class="criterio__meta">
+        <span class="criterio__badge">{{ badge() }}</span>
+        @if (c.peso > 0) {
+          <span class="criterio__peso">peso {{ c.peso * 100 | number: '1.0-0' }}%</span>
+        }
+      </span>
+    </div>
+    @if (!readonly() && c.tipo !== 'TEXTO') {
+      <span
+        class="criterio__check"
+        [class.criterio__check--on]="completo()"
+        [attr.aria-label]="completo() ? 'Criterio completado' : 'Criterio pendiente'"
+        role="img"
+      >✓</span>
+    }
+  </div>
+
+  @if (readonly()) {
+    @if (c.tipo !== 'TEXTO') {
+      <p class="criterio__valor">
+        <span class="criterio__valor-num">{{ puntajeNumerico() | number: '1.0-2' }}</span>
+        <span class="criterio__valor-max">/ {{ c.escalaMax }}</span>
+      </p>
+    }
+    @if (g.controls.comentario.value) {
+      <p class="criterio__comentario-ro">
+        {{ g.controls.comentario.value }}
+        @if (g.controls.comentarioPrivado.value) {
+          <span class="criterio__priv-badge">Privado</span>
+        }
+      </p>
+    }
+  } @else {
+    <div class="criterio__control">
+      @switch (c.tipo) {
+        @case ('ESCALA') {
+          <div class="seg" role="radiogroup" [attr.aria-label]="c.nombre">
+            @for (v of escala(); track v) {
+              <label class="seg__opt">
+                <input class="sr-only" type="radio" formControlName="puntaje" [value]="v" />
+                <span class="seg__btn">{{ v }}</span>
+              </label>
+            }
+          </div>
+          <div class="criterio__rango">
+            <span>{{ c.escalaMin }} · mínimo</span>
+            <span>máximo · {{ c.escalaMax }}</span>
+          </div>
+        }
+        @case ('SLIDER') {
+          <div class="slider">
+            <input
+              class="slider__range"
+              [id]="c.codigo"
+              type="range"
+              formControlName="puntaje"
+              [min]="c.escalaMin"
+              [max]="c.escalaMax"
+              step="1"
+              [attr.aria-label]="c.nombre"
+              [attr.aria-valuetext]="g.controls.puntaje.value ?? 'sin valor'"
+            />
+            <output class="slider__out" [htmlFor]="c.codigo">{{ g.controls.puntaje.value ?? '—' }}</output>
+          </div>
+          <div class="criterio__rango">
+            <span>{{ c.escalaMin }}</span>
+            <span>{{ c.escalaMax }}</span>
+          </div>
+        }
+        @case ('SELECCION') {
+          <div class="pills" role="radiogroup" [attr.aria-label]="c.nombre">
+            @for (op of c.opciones; track op) {
+              <label class="pills__opt">
+                <input class="sr-only" type="radio" formControlName="puntaje" [value]="op" />
+                <span class="pills__btn">{{ op }}</span>
+              </label>
+            }
+          </div>
+        }
+        @case ('BOOLEANO') {
+          <div class="pills" role="radiogroup" [attr.aria-label]="c.nombre">
+            <label class="pills__opt">
+              <input class="sr-only" type="radio" formControlName="puntaje" [value]="false" />
+              <span class="pills__btn">No cumple</span>
+            </label>
+            <label class="pills__opt">
+              <input class="sr-only" type="radio" formControlName="puntaje" [value]="true" />
+              <span class="pills__btn">Cumple</span>
+            </label>
+          </div>
+        }
+        @case ('TEXTO') {
+          <!-- TEXTO es cualitativo: la respuesta es el comentario de abajo -->
+        }
+      }
+    </div>
+
+    <div class="criterio__comentario">
+      <label class="criterio__com-label" [for]="c.codigo + '-com'">
+        {{ c.tipo === 'TEXTO' ? 'Respuesta' : 'Comentario' }}
+      </label>
+      <textarea
+        [id]="c.codigo + '-com'"
+        formControlName="comentario"
+        rows="2"
+        [placeholder]="c.tipo === 'TEXTO' ? 'Escribí tu observación' : 'Comentario (opcional)'"
+      ></textarea>
+      <label class="criterio__priv-toggle">
+        <input type="checkbox" formControlName="comentarioPrivado" />
+        <span>Privado · no visible para el estudiante</span>
+      </label>
+    </div>
+  }
+</fieldset>

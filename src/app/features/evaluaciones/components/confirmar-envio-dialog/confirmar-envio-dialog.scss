@@ -1,0 +1,35 @@
+.confirm {
+  border: none;
+  border-radius: var(--r-lg);
+  padding: var(--sp-5);
+  max-width: 28rem;
+
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.4);
+  }
+  &__title {
+    margin: 0 0 var(--sp-3);
+  }
+  &__nota {
+    color: var(--c-text-muted);
+  }
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--sp-2);
+    margin-top: var(--sp-4);
+
+    button {
+      padding: var(--sp-2) var(--sp-4);
+      border-radius: var(--r-md);
+      border: 1px solid var(--c-border);
+      background: transparent;
+      cursor: pointer;
+    }
+  }
+  &__primary {
+    background: var(--c-accent);
+    color: var(--c-text-on-primary);
+    border-color: var(--c-accent);
+  }
+}

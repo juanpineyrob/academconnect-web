@@ -41,8 +41,8 @@ const SECTIONS_EVALUADOR: NavSection[] = [
     title: 'Trabajo',
     items: [
       { label: 'Mi perfil', route: '/perfil' },
-      { label: 'Evaluaciones asignadas' },
-      { label: 'Bandeja de revisión' },
+      { label: 'Evaluaciones asignadas', route: '/evaluaciones', exact: false },
+      { label: 'Rúbricas', route: '/rubricas', exact: false },
       { label: 'Invitaciones de orientación', route: '/invitaciones-orientacion' },
       { label: 'Mis publicaciones', route: '/mis-publicaciones', exact: false },
       { label: 'Hub de necesidades', route: '/hub', exact: false },
@@ -64,6 +64,7 @@ const SECTIONS_ADMIN: NavSection[] = [
     title: 'Sistema',
     items: [
       { label: 'Panel de administración', route: '/admin', exact: true },
+      { label: 'Rúbricas', route: '/rubricas', exact: false },
       { label: 'Repositorio', route: '/repositorio', exact: false },
       { label: 'Importar trabajos', route: '/admin/importar-trabajo' },
       { label: 'Usuarios' },
