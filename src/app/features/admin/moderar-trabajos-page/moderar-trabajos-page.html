@@ -1,0 +1,92 @@
+<section class="moderar">
+  <header class="moderar__header">
+    <a class="moderar__back" routerLink="/admin">← Panel</a>
+    <h1 class="moderar__title">Moderar trabajos</h1>
+    <p class="moderar__lead">
+      Ocultá del repositorio público o eliminá definitivamente trabajos aprobados.
+    </p>
+  </header>
+
+  <div class="moderar__toolbar">
+    <input
+      class="moderar__search"
+      type="search"
+      [formControl]="buscador"
+      placeholder="Buscar por título o palabras clave…"
+      aria-label="Buscar trabajos aprobados"
+    />
+  </div>
+
+  @if (loading()) {
+    <p class="moderar__estado" role="status">Cargando…</p>
+  } @else if (error()) {
+    <p class="moderar__error" role="alert">{{ error() }}</p>
+  } @else if (trabajos().length === 0) {
+    <p class="moderar__estado">
+      @if (buscador.value.trim()) {
+        No se encontraron trabajos para «{{ buscador.value.trim() }}».
+      } @else {
+        No hay trabajos aprobados.
+      }
+    </p>
+  } @else {
+    <ul class="moderar__list">
+      @for (t of trabajos(); track t.id) {
+        <li class="modcard" [class.modcard--oculto]="t.oculto">
+          <div class="modcard__info">
+            <div class="modcard__top">
+              <span class="modcard__chip modcard__chip--aprobado">Aprobado</span>
+              @if (t.oculto) {
+                <span class="modcard__chip modcard__chip--oculto">Oculto</span>
+              }
+            </div>
+            <h2 class="modcard__titulo">{{ t.titulo }}</h2>
+            <p class="modcard__meta">
+              <span>{{ tipoLabel[t.tipo] }}</span>
+              @if (t.estudianteNombre) {
+                <span aria-hidden="true">·</span><span>{{ t.estudianteNombre }}</span>
+              }
+              <span aria-hidden="true">·</span>
+              <span>Actualizado {{ t.updatedAt | date: 'mediumDate' }}</span>
+            </p>
+          </div>
+
+          <div class="modcard__acciones">
+            @if (confirmId() === t.id) {
+              <span class="modcard__confirm">¿Eliminar definitivamente?</span>
+              <ac-button size="sm" variant="ghost"
+                         [disabled]="actionId() === t.id"
+                         (click)="cancelarEliminar()">Cancelar</ac-button>
+              <ac-button size="sm"
+                         [loading]="actionId() === t.id" [disabled]="actionId() === t.id"
+                         (click)="confirmarEliminar(t)">Sí, eliminar</ac-button>
+            } @else {
+              <ac-button size="sm" variant="ghost"
+                         [loading]="actionId() === t.id" [disabled]="actionId() === t.id"
+                         (click)="toggleOculto(t)">{{ t.oculto ? 'Mostrar' : 'Ocultar' }}</ac-button>
+              <ac-button size="sm" variant="ghost"
+                         [disabled]="actionId() === t.id"
+                         (click)="pedirEliminar(t)">Eliminar</ac-button>
+            }
+          </div>
+        </li>
+      }
+    </ul>
+
+    @if (totalPages() > 1) {
+      <nav class="moderar__pager" aria-label="Paginación">
+        <ac-button size="sm" variant="ghost"
+                   [disabled]="first() || loading()"
+                   (click)="paginaAnterior()">← Anterior</ac-button>
+        <span class="moderar__pageinfo">
+          Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }} trabajos
+        </span>
+        <ac-button size="sm" variant="ghost"
+                   [disabled]="last() || loading()"
+                   (click)="paginaSiguiente()">Siguiente →</ac-button>
+      </nav>
+    } @else {
+      <p class="moderar__count">{{ totalElements() }} trabajo(s) aprobado(s)</p>
+    }
+  }
+</section>

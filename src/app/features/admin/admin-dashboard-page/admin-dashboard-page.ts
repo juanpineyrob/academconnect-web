@@ -26,6 +26,12 @@ export class AdminDashboardPage {
       disponible: true,
     },
     {
+      titulo: 'Moderar trabajos',
+      descripcion: 'Ocultar del repositorio público o eliminar definitivamente trabajos aprobados.',
+      route: '/admin/moderar-trabajos',
+      disponible: true,
+    },
+    {
       titulo: 'Usuarios',
       descripcion: 'Alta, baja y modificación de cuentas de estudiantes, profesores, externos y administradores.',
       disponible: false,

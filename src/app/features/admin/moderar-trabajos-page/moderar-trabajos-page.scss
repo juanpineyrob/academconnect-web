@@ -1,0 +1,216 @@
+:host {
+  display: block;
+}
+
+.moderar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5) var(--sp-8);
+}
+
+.moderar__header {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.moderar__back {
+  width: fit-content;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+  text-decoration: none;
+  transition: color var(--t-fast);
+
+  &:hover {
+    color: var(--c-accent);
+  }
+}
+
+.moderar__title {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+}
+
+.moderar__lead {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text-muted);
+}
+
+.moderar__toolbar {
+  display: flex;
+}
+
+.moderar__search {
+  width: 100%;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  min-height: 44px;
+  outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+
+  &:focus {
+    border-color: var(--c-accent);
+    box-shadow: var(--sh-focus);
+  }
+
+  &::placeholder {
+    color: var(--c-text-faint);
+  }
+}
+
+.moderar__estado {
+  margin: 0;
+  color: var(--c-text-muted);
+}
+
+.moderar__error {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--c-state-rechazado-bg);
+  border: 1px solid rgba(179, 38, 30, 0.2);
+  color: var(--c-state-rechazado);
+}
+
+.moderar__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-3);
+}
+
+.modcard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding: var(--sp-4) var(--sp-5);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--sh-card);
+
+  &--oculto {
+    background: var(--c-surface-muted);
+    border-style: dashed;
+  }
+}
+
+.modcard__info {
+  display: grid;
+  gap: var(--sp-2);
+  min-inline-size: 0;
+  flex: 1;
+}
+
+.modcard__top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+}
+
+.modcard__chip {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  border-radius: var(--r-pill);
+  padding: 2px var(--sp-2);
+  white-space: nowrap;
+
+  &--aprobado {
+    color: var(--c-state-aprobado);
+    background: var(--c-state-aprobado-bg);
+  }
+
+  &--oculto {
+    color: var(--c-state-borrador);
+    background: var(--c-state-borrador-bg);
+  }
+}
+
+.modcard__titulo {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-snug);
+  color: var(--c-text);
+}
+
+.modcard__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+  margin: 0;
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+}
+
+.modcard__acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.modcard__confirm {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  color: var(--c-state-rechazado);
+}
+
+.moderar__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding-top: var(--sp-2);
+}
+
+.moderar__pageinfo {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.moderar__count {
+  margin: 0;
+  text-align: center;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-faint);
+}
+
+@media (max-width: 640px) {
+  .moderar {
+    padding: var(--sp-5) var(--sp-4) var(--sp-7);
+  }
+
+  .modcard {
+    align-items: flex-start;
+  }
+}

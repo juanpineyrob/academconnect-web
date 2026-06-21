@@ -20,4 +20,12 @@ export const ADMIN_ROUTES: Routes = [
       import('./importar-trabajo-page/importar-trabajo-page').then((m) => m.ImportarTrabajoPage),
     title: 'Importar trabajo · AcademConnect',
   },
+  {
+    path: 'admin/moderar-trabajos',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
+    loadComponent: () =>
+      import('./moderar-trabajos-page/moderar-trabajos-page').then((m) => m.ModerarTrabajosPage),
+    title: 'Moderar trabajos · AcademConnect',
+  },
 ];
