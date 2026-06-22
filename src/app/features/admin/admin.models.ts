@@ -1,9 +1,16 @@
-import { EstadoTrabajo, TipoTrabajo } from '@features/perfil/perfil.models';
+import { EstadoTrabajo, ThesaurusOrigen, TipoTrabajo } from '@features/perfil/perfil.models';
 
 export interface AdminUsuarioOption {
   id: number;
   nombre: string;
   email: string;
+}
+
+export interface AreaTematicaRequest {
+  nombre: string;
+  codigoExterno?: string | null;
+  thesaurusOrigen: ThesaurusOrigen;
+  parentId?: number | null;
 }
 
 export interface TrabajoAdminImportRequest {

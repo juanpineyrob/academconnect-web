@@ -1,0 +1,54 @@
+<section class="audit">
+  <header class="audit__header">
+    <a class="audit__back" routerLink="/admin">← Panel</a>
+    <h1 class="audit__title">Auditoría</h1>
+    <p class="audit__lead">Bitácora de toda la actividad del sistema.</p>
+  </header>
+
+  <div class="audit__toolbar">
+    <label class="audit__limit">
+      <span class="audit__limit-label">Mostrar</span>
+      <select class="audit__select" [formControl]="limite">
+        @for (n of LIMITES; track n) {
+          <option [value]="n">últimas {{ n }}</option>
+        }
+      </select>
+    </label>
+  </div>
+
+  @if (loading()) {
+    <p class="audit__estado" role="status">Cargando…</p>
+  } @else if (error()) {
+    <p class="audit__error" role="alert">
+      {{ error() }}
+      <button type="button" class="audit__retry" (click)="cargar()">Reintentar</button>
+    </p>
+  } @else if (actividades().length === 0) {
+    <p class="audit__estado">No hay actividad registrada.</p>
+  } @else {
+    @for (grupo of grupos(); track grupo.label) {
+      <h2 class="audit__group-title t-overline">{{ grupo.label }}</h2>
+      <ul class="audit__list">
+        @for (a of grupo.items; track a.id) {
+          <li class="evt">
+            <svg class="evt__icon" aria-hidden="true"
+                 viewBox="0 0 24 24" width="18" height="18" fill="none"
+                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                 [innerHTML]="icono(a)"></svg>
+            <div class="evt__body">
+              <span class="evt__text">{{ texto(a) }}</span>
+              <span class="evt__meta">
+                <span class="evt__tipo">{{ a.tipo }}</span>
+                @if (a.actorId != null) {
+                  <span aria-hidden="true">·</span><span>actor #{{ a.actorId }}</span>
+                }
+                <span aria-hidden="true">·</span>
+                <span [title]="a.createdAt | date: 'medium'">{{ a.createdAt | timeAgo }}</span>
+              </span>
+            </div>
+          </li>
+        }
+      </ul>
+    }
+  }
+</section>

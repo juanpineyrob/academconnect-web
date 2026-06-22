@@ -1,6 +1,7 @@
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { DestroyRef, Injectable, computed, effect, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable } from 'rxjs';
 
 import { AuthService } from '@core/auth/auth.service';
 import { isProblemDetail } from '@core/http/problem-detail';
@@ -57,6 +58,13 @@ export class ActividadService {
           this.error.set(this.mapError(err));
         },
       });
+  }
+
+  /** Bitácora global para administración (one-shot; no toca el feed reactivo del header). */
+  fetchAdmin(limit: number): Observable<Actividad[]> {
+    return this.http.get<Actividad[]>(`${environment.apiBase}/admin/actividad`, {
+      params: new HttpParams().set('limit', limit),
+    });
   }
 
   markAllRead(): void {

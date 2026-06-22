@@ -28,4 +28,20 @@ export const ADMIN_ROUTES: Routes = [
       import('./moderar-trabajos-page/moderar-trabajos-page').then((m) => m.ModerarTrabajosPage),
     title: 'Moderar trabajos · AcademConnect',
   },
+  {
+    path: 'admin/auditoria',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
+    loadComponent: () =>
+      import('./auditoria-page/auditoria-page').then((m) => m.AuditoriaPage),
+    title: 'Auditoría · AcademConnect',
+  },
+  {
+    path: 'admin/areas-tematicas',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
+    loadComponent: () =>
+      import('./areas-tematicas-page/areas-tematicas-page').then((m) => m.AreasTematicasPage),
+    title: 'Áreas temáticas · AcademConnect',
+  },
 ];

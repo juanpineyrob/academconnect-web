@@ -4,8 +4,9 @@ import { Observable, map } from 'rxjs';
 
 import { environment } from '@env/environment';
 import { Page } from '@core/http/page';
+import { AreaTematica } from '@features/perfil/perfil.models';
 import { TrabajoListItem } from '@features/repositorio/repositorio.models';
-import { AdminUsuarioOption, TrabajoAdminImportRequest } from './admin.models';
+import { AdminUsuarioOption, AreaTematicaRequest, TrabajoAdminImportRequest } from './admin.models';
 
 interface ProfesorResponse {
   id: number;
@@ -49,6 +50,29 @@ export class AdminService {
 
   eliminarTrabajo(id: number): Observable<void> {
     return this.http.delete<void>(`${this.api}/api/trabajos/${id}`);
+  }
+
+  // ---- Áreas temáticas ----
+
+  /** Todas las áreas, incluidas las inactivas (admin). */
+  listarAreas(): Observable<AreaTematica[]> {
+    return this.http.get<AreaTematica[]>(`${this.api}/api/areas-tematicas/todas`);
+  }
+
+  crearArea(req: AreaTematicaRequest): Observable<AreaTematica> {
+    return this.http.post<AreaTematica>(`${this.api}/api/areas-tematicas`, req);
+  }
+
+  actualizarArea(id: number, req: AreaTematicaRequest): Observable<AreaTematica> {
+    return this.http.put<AreaTematica>(`${this.api}/api/areas-tematicas/${id}`, req);
+  }
+
+  activarArea(id: number): Observable<AreaTematica> {
+    return this.http.post<AreaTematica>(`${this.api}/api/areas-tematicas/${id}/activar`, {});
+  }
+
+  desactivarArea(id: number): Observable<AreaTematica> {
+    return this.http.post<AreaTematica>(`${this.api}/api/areas-tematicas/${id}/desactivar`, {});
   }
 
   listarProfesores(): Observable<AdminUsuarioOption[]> {

@@ -1,0 +1,95 @@
+<section class="areas">
+  <header class="areas__header">
+    <a class="areas__back" routerLink="/admin">← Panel</a>
+    <h1 class="areas__title">Áreas temáticas</h1>
+    <p class="areas__lead">Gestioná las áreas y subáreas para clasificar trabajos y perfiles.</p>
+  </header>
+
+  <form class="card form" [formGroup]="form" (ngSubmit)="guardar()">
+    <p class="card__overline t-overline">{{ editId() ? 'Editar área' : 'Nueva área' }}</p>
+
+    <div class="field">
+      <label class="field__label" for="ar-nombre">Nombre</label>
+      <input id="ar-nombre" class="field__input" formControlName="nombre" type="text"
+             placeholder="Ej. Inteligencia Artificial" />
+      @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+        <span class="field__error">El nombre es obligatorio.</span>
+      }
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field__label" for="ar-codigo">Código externo</label>
+        <input id="ar-codigo" class="field__input" formControlName="codigoExterno" type="text"
+               placeholder="Opcional" />
+      </div>
+      <div class="field">
+        <label class="field__label" for="ar-thes">Tesauro</label>
+        <select id="ar-thes" class="field__select" formControlName="thesaurusOrigen">
+          @for (t of THESAURUS; track t.value) {
+            <option [value]="t.value">{{ t.label }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="ar-parent">Área padre</label>
+        <select id="ar-parent" class="field__select" formControlName="parentId">
+          <option [ngValue]="null">— Sin padre —</option>
+          @for (a of parentOpciones(); track a.id) {
+            <option [ngValue]="a.id">{{ a.nombre }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="actions">
+      @if (editId()) {
+        <ac-button size="sm" variant="ghost" type="button"
+                   [disabled]="enviando()" (click)="cancelarEdicion()">Cancelar</ac-button>
+      }
+      <ac-button size="sm" type="submit"
+                 [loading]="enviando()" [disabled]="enviando()">
+        {{ editId() ? 'Guardar cambios' : 'Crear área' }}
+      </ac-button>
+    </div>
+  </form>
+
+  <div class="areas__toolbar">
+    <input class="areas__search" type="search" [formControl]="buscador"
+           placeholder="Filtrar por nombre o código…" aria-label="Filtrar áreas" />
+  </div>
+
+  @if (loading()) {
+    <p class="areas__estado" role="status">Cargando…</p>
+  } @else if (error()) {
+    <p class="areas__error" role="alert">{{ error() }}</p>
+  } @else if (visibles().length === 0) {
+    <p class="areas__estado">
+      @if (buscador.value.trim()) { No se encontraron áreas. } @else { No hay áreas cargadas. }
+    </p>
+  } @else {
+    <ul class="areas__list">
+      @for (a of visibles(); track a.id) {
+        <li class="arcard" [class.arcard--inactiva]="!a.activo">
+          <div class="arcard__info">
+            <div class="arcard__top">
+              <span class="arcard__nombre">{{ a.nombre }}</span>
+              <span class="arcard__thes">{{ thesaurusLabel(a.thesaurusOrigen) }}</span>
+              @if (!a.activo) { <span class="arcard__chip">Inactiva</span> }
+            </div>
+            @if (a.codigoExterno) {
+              <span class="arcard__codigo">Código {{ a.codigoExterno }}</span>
+            }
+          </div>
+          <div class="arcard__acciones">
+            <ac-button size="sm" variant="ghost"
+                       [disabled]="actionId() === a.id" (click)="editar(a)">Editar</ac-button>
+            <ac-button size="sm" variant="ghost"
+                       [loading]="actionId() === a.id" [disabled]="actionId() === a.id"
+                       (click)="toggleActivo(a)">{{ a.activo ? 'Desactivar' : 'Activar' }}</ac-button>
+          </div>
+        </li>
+      }
+    </ul>
+  }
+</section>

@@ -39,12 +39,14 @@ export class AdminDashboardPage {
     {
       titulo: 'Áreas temáticas',
       descripcion: 'Gestión de las áreas CNPq y subáreas disponibles para clasificar trabajos y perfiles.',
-      disponible: false,
+      route: '/admin/areas-tematicas',
+      disponible: true,
     },
     {
       titulo: 'Auditoría',
       descripcion: 'Bitácora de actividad del sistema y eventos críticos.',
-      disponible: false,
+      route: '/admin/auditoria',
+      disponible: true,
     },
   ];
 }
