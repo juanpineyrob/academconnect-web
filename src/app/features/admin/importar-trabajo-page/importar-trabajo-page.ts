@@ -24,7 +24,8 @@ import {
 import { RepositorioService } from '@features/repositorio/repositorio.service';
 import { TIPO_LABEL, ESTADO_LABEL } from '@features/repositorio/repositorio.models';
 import { AdminService } from '../admin.service';
-import { AdminUsuarioOption, TrabajoAdminImportRequest } from '../admin.models';
+import { AdminUsuario, TrabajoAdminImportRequest } from '../admin.models';
+import { UsuarioAutocomplete } from '../components/usuario-autocomplete/usuario-autocomplete';
 
 const TIPOS: TipoTrabajo[] = ['TCC', 'TESIS', 'PAPER', 'MONOGRAFIA', 'PROYECTO_INVESTIGACION'];
 const ESTADOS: EstadoTrabajo[] = [
@@ -40,7 +41,7 @@ const ESTADOS: EstadoTrabajo[] = [
 @Component({
   selector: 'ac-importar-trabajo-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, Button, Card],
+  imports: [ReactiveFormsModule, Button, Card, UsuarioAutocomplete],
   templateUrl: './importar-trabajo-page.html',
   styleUrl: './importar-trabajo-page.scss',
 })
@@ -72,8 +73,6 @@ export class ImportarTrabajoPage {
 
   protected readonly keywordInput = this.fb.nonNullable.control('');
 
-  protected readonly profesores = signal<AdminUsuarioOption[]>([]);
-  protected readonly estudiantes = signal<AdminUsuarioOption[]>([]);
   protected readonly areas = signal<AreaTematica[]>([]);
 
   protected readonly loadingOpciones = signal<boolean>(true);
@@ -129,6 +128,14 @@ export class ImportarTrabajoPage {
     const cur = this.form.controls.areaIds.value;
     const next = cur.includes(id) ? cur.filter((a) => a !== id) : [...cur, id];
     this.form.controls.areaIds.setValue(next);
+  }
+
+  protected onOrientador(u: AdminUsuario | null): void {
+    this.form.controls.orientadorId.setValue(u?.id ?? null);
+  }
+
+  protected onEstudiante(u: AdminUsuario | null): void {
+    this.form.controls.estudianteId.setValue(u?.id ?? null);
   }
 
   protected get tituloError(): string | null {
@@ -199,24 +206,7 @@ export class ImportarTrabajoPage {
 
   private loadOpciones(): void {
     this.loadingOpciones.set(true);
-    const empty: AdminUsuarioOption[] = [];
     const emptyAreas: AreaTematica[] = [];
-
-    this.admin
-      .listarProfesores()
-      .pipe(
-        catchError(() => of(empty)),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((profes) => this.profesores.set(profes));
-
-    this.admin
-      .listarEstudiantes()
-      .pipe(
-        catchError(() => of(empty)),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((alumnos) => this.estudiantes.set(alumnos));
 
     this.repo
       .listarAreas()

@@ -1,0 +1,32 @@
+<div class="ac-auto">
+  <input
+    class="ac-auto__input"
+    type="text"
+    [formControl]="query"
+    [placeholder]="placeholder()"
+    autocomplete="off"
+    role="combobox"
+    aria-autocomplete="list"
+    [attr.aria-expanded]="abierto()"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+  />
+
+  @if (seleccionado() || query.value) {
+    <button type="button" class="ac-auto__clear" aria-label="Limpiar selección" (click)="limpiar()">✕</button>
+  }
+
+  @if (abierto() && resultados().length > 0) {
+    <ul class="ac-auto__list" role="listbox">
+      @for (u of resultados(); track u.id) {
+        <li class="ac-auto__opt" role="option" (mousedown)="elegir(u)">
+          <span class="ac-auto__mat">{{ u.matricula ?? '—' }}</span>
+          <span class="ac-auto__sep" aria-hidden="true">·</span>
+          <span class="ac-auto__nombre">{{ u.nombre }}</span>
+        </li>
+      }
+    </ul>
+  } @else if (abierto() && !buscando() && query.value.trim().length >= 2) {
+    <p class="ac-auto__empty">Sin resultados.</p>
+  }
+</div>

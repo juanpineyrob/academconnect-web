@@ -58,28 +58,24 @@
       </div>
 
       <div class="importar-form__row importar-form__row--grid">
-        <label class="importar-form__field">
+        <div class="importar-form__field">
           <span class="importar-form__label">Orientador *</span>
-          <select class="importar-form__select" formControlName="orientadorId">
-            <option [ngValue]="null">— Seleccionar —</option>
-            @for (p of profesores(); track p.id) {
-              <option [ngValue]="p.id">{{ p.nombre }}</option>
-            }
-          </select>
+          <ac-usuario-autocomplete
+            rol="PROFESOR"
+            placeholder="Buscar profesor por nombre o matrícula…"
+            (seleccionar)="onOrientador($event)" />
           @if (orientadorError) {
             <span class="importar-form__error" role="alert">{{ orientadorError }}</span>
           }
-        </label>
+        </div>
 
-        <label class="importar-form__field">
+        <div class="importar-form__field">
           <span class="importar-form__label">Estudiante (opcional)</span>
-          <select class="importar-form__select" formControlName="estudianteId">
-            <option [ngValue]="null">— Sin estudiante —</option>
-            @for (e of estudiantes(); track e.id) {
-              <option [ngValue]="e.id">{{ e.nombre }}</option>
-            }
-          </select>
-        </label>
+          <ac-usuario-autocomplete
+            rol="ESTUDIANTE"
+            placeholder="Buscar estudiante por nombre o matrícula…"
+            (seleccionar)="onEstudiante($event)" />
+        </div>
       </div>
 
       <div class="importar-form__row">

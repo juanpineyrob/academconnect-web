@@ -1,0 +1,115 @@
+:host {
+  display: block;
+}
+
+.ac-auto {
+  position: relative;
+}
+
+.ac-auto__input {
+  inline-size: 100%;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) calc(var(--sp-3) + 20px) var(--sp-2) var(--sp-3);
+  min-block-size: 44px;
+  outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast);
+
+  &:focus {
+    border-color: var(--c-accent);
+    box-shadow: var(--sh-focus);
+  }
+
+  &::placeholder {
+    color: var(--c-text-faint);
+  }
+}
+
+.ac-auto__clear {
+  position: absolute;
+  inset-block-start: 50%;
+  inset-inline-end: var(--sp-2);
+  transform: translateY(-50%);
+  inline-size: 24px;
+  block-size: 24px;
+  display: grid;
+  place-items: center;
+  border: none;
+  border-radius: var(--r-pill);
+  background: transparent;
+  color: var(--c-text-faint);
+  cursor: pointer;
+  transition: color var(--t-fast), background var(--t-fast);
+
+  &:hover {
+    color: var(--c-text);
+    background: var(--c-surface-muted);
+  }
+}
+
+.ac-auto__list {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(100% + 4px);
+  z-index: 20;
+  list-style: none;
+  margin: 0;
+  padding: var(--sp-1);
+  max-block-size: 280px;
+  overflow-y: auto;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-elevated);
+}
+
+.ac-auto__opt {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+
+  &:hover {
+    background: var(--c-accent-soft);
+  }
+}
+
+.ac-auto__mat {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--c-accent);
+}
+
+.ac-auto__sep {
+  color: var(--c-text-faint);
+}
+
+.ac-auto__nombre {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text);
+}
+
+.ac-auto__empty {
+  position: absolute;
+  inset-inline: 0;
+  inset-block-start: calc(100% + 4px);
+  z-index: 20;
+  margin: 0;
+  padding: var(--sp-3);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  box-shadow: var(--sh-elevated);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+}
