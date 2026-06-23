@@ -3,10 +3,18 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
 import { environment } from '@env/environment';
+import { Rol } from '@core/auth/models';
 import { Page } from '@core/http/page';
 import { AreaTematica } from '@features/perfil/perfil.models';
 import { TrabajoListItem } from '@features/repositorio/repositorio.models';
-import { AdminUsuarioOption, AreaTematicaRequest, TrabajoAdminImportRequest } from './admin.models';
+import {
+  AdminUsuario,
+  AdminUsuarioCreateRequest,
+  AdminUsuarioOption,
+  AdminUsuarioUpdateRequest,
+  AreaTematicaRequest,
+  TrabajoAdminImportRequest,
+} from './admin.models';
 
 interface ProfesorResponse {
   id: number;
@@ -54,9 +62,21 @@ export class AdminService {
 
   // ---- Áreas temáticas ----
 
-  /** Todas las áreas, incluidas las inactivas (admin). */
-  listarAreas(): Observable<AreaTematica[]> {
-    return this.http.get<AreaTematica[]>(`${this.api}/api/areas-tematicas/todas`);
+  /** Áreas (incluidas inactivas) paginadas y filtradas por texto (admin). */
+  buscarAreas(opts: { q?: string; page?: number; size?: number }): Observable<Page<AreaTematica>> {
+    let params = new HttpParams();
+    const q = opts.q?.trim();
+    if (q) params = params.set('q', q);
+    params = params.set('page', String(opts.page ?? 0)).set('size', String(opts.size ?? 10));
+    return this.http.get<Page<AreaTematica>>(`${this.api}/api/areas-tematicas/todas`, { params });
+  }
+
+  /** Lista completa (sin paginar) para poblar el selector de área padre. */
+  listarAreasParaPadre(): Observable<AreaTematica[]> {
+    const params = new HttpParams().set('size', '2000');
+    return this.http
+      .get<Page<AreaTematica>>(`${this.api}/api/areas-tematicas/todas`, { params })
+      .pipe(map((p) => p.content));
   }
 
   crearArea(req: AreaTematicaRequest): Observable<AreaTematica> {
@@ -73,6 +93,37 @@ export class AdminService {
 
   desactivarArea(id: number): Observable<AreaTematica> {
     return this.http.post<AreaTematica>(`${this.api}/api/areas-tematicas/${id}/desactivar`, {});
+  }
+
+  // ---- Usuarios ----
+
+  buscarUsuarios(opts: { q?: string; rol?: Rol | ''; page?: number; size?: number }): Observable<Page<AdminUsuario>> {
+    let params = new HttpParams();
+    const q = opts.q?.trim();
+    if (q) params = params.set('q', q);
+    if (opts.rol) params = params.set('rol', opts.rol);
+    params = params.set('page', String(opts.page ?? 0)).set('size', String(opts.size ?? 10));
+    return this.http.get<Page<AdminUsuario>>(`${this.api}/admin/usuarios`, { params });
+  }
+
+  crearUsuario(req: AdminUsuarioCreateRequest): Observable<AdminUsuario> {
+    return this.http.post<AdminUsuario>(`${this.api}/admin/usuarios`, req);
+  }
+
+  actualizarUsuario(id: number, req: AdminUsuarioUpdateRequest): Observable<AdminUsuario> {
+    return this.http.put<AdminUsuario>(`${this.api}/admin/usuarios/${id}`, req);
+  }
+
+  activarUsuario(id: number): Observable<AdminUsuario> {
+    return this.http.post<AdminUsuario>(`${this.api}/admin/usuarios/${id}/activar`, {});
+  }
+
+  desactivarUsuario(id: number): Observable<AdminUsuario> {
+    return this.http.post<AdminUsuario>(`${this.api}/admin/usuarios/${id}/desactivar`, {});
+  }
+
+  resetPasswordUsuario(id: number, password: string): Observable<void> {
+    return this.http.post<void>(`${this.api}/admin/usuarios/${id}/reset-password`, { password });
   }
 
   listarProfesores(): Observable<AdminUsuarioOption[]> {

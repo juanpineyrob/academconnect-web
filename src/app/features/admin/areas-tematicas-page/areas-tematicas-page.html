@@ -63,13 +63,13 @@
     <p class="areas__estado" role="status">Cargando…</p>
   } @else if (error()) {
     <p class="areas__error" role="alert">{{ error() }}</p>
-  } @else if (visibles().length === 0) {
+  } @else if (areas().length === 0) {
     <p class="areas__estado">
       @if (buscador.value.trim()) { No se encontraron áreas. } @else { No hay áreas cargadas. }
     </p>
   } @else {
     <ul class="areas__list">
-      @for (a of visibles(); track a.id) {
+      @for (a of areas(); track a.id) {
         <li class="arcard" [class.arcard--inactiva]="!a.activo">
           <div class="arcard__info">
             <div class="arcard__top">
@@ -91,5 +91,15 @@
         </li>
       }
     </ul>
+
+    @if (totalPages() > 1) {
+      <nav class="areas__pager" aria-label="Paginación">
+        <ac-button size="sm" variant="ghost" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</ac-button>
+        <span class="areas__pageinfo">Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }} áreas</span>
+        <ac-button size="sm" variant="ghost" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</ac-button>
+      </nav>
+    } @else {
+      <p class="areas__count">{{ totalElements() }} área(s)</p>
+    }
   }
 </section>

@@ -5,17 +5,6 @@
     <p class="audit__lead">Bitácora de toda la actividad del sistema.</p>
   </header>
 
-  <div class="audit__toolbar">
-    <label class="audit__limit">
-      <span class="audit__limit-label">Mostrar</span>
-      <select class="audit__select" [formControl]="limite">
-        @for (n of LIMITES; track n) {
-          <option [value]="n">últimas {{ n }}</option>
-        }
-      </select>
-    </label>
-  </div>
-
   @if (loading()) {
     <p class="audit__estado" role="status">Cargando…</p>
   } @else if (error()) {
@@ -49,6 +38,14 @@
           </li>
         }
       </ul>
+    }
+
+    @if (totalPages() > 1) {
+      <nav class="audit__pager" aria-label="Paginación">
+        <ac-button size="sm" variant="ghost" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</ac-button>
+        <span class="audit__pageinfo">Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }} eventos</span>
+        <ac-button size="sm" variant="ghost" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</ac-button>
+      </nav>
     }
   }
 </section>

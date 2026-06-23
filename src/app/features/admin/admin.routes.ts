@@ -44,4 +44,12 @@ export const ADMIN_ROUTES: Routes = [
       import('./areas-tematicas-page/areas-tematicas-page').then((m) => m.AreasTematicasPage),
     title: 'Áreas temáticas · AcademConnect',
   },
+  {
+    path: 'admin/usuarios',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
+    loadComponent: () =>
+      import('./usuarios-page/usuarios-page').then((m) => m.UsuariosPage),
+    title: 'Usuarios · AcademConnect',
+  },
 ];

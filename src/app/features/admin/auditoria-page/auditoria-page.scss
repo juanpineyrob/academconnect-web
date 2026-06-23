@@ -170,6 +170,22 @@
   color: var(--c-text-muted);
 }
 
+.audit__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding-top: var(--sp-3);
+}
+
+.audit__pageinfo {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 640px) {
   .audit {
     padding: var(--sp-5) var(--sp-4) var(--sp-7);

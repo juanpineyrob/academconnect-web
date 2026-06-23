@@ -1,0 +1,184 @@
+<section class="usuarios">
+  <header class="usuarios__header">
+    <a class="usuarios__back" routerLink="/admin">← Panel</a>
+    <h1 class="usuarios__title">Usuarios</h1>
+    <p class="usuarios__lead">Alta, baja y modificación de cuentas del sistema.</p>
+  </header>
+
+  <form class="card form" [formGroup]="form" (ngSubmit)="guardar()">
+    @if (editando(); as e) {
+      <p class="card__overline t-overline">Editando «{{ e.nombre }}» <span class="card__id">#{{ e.id }}</span></p>
+    } @else {
+      <p class="card__overline t-overline">Nuevo usuario</p>
+    }
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field__label" for="us-rol">Rol</label>
+        <select id="us-rol" class="field__select" formControlName="rol">
+          @for (r of ROLES; track r.value) {
+            <option [value]="r.value">{{ r.label }}</option>
+          }
+        </select>
+      </div>
+      <div class="field">
+        <label class="field__label" for="us-nombre">Nombre</label>
+        <input id="us-nombre" class="field__input" formControlName="nombre" type="text" />
+        @if (form.controls.nombre.touched && form.controls.nombre.invalid) {
+          <span class="field__error">El nombre es obligatorio.</span>
+        }
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field__label" for="us-matricula">Matrícula</label>
+        <input id="us-matricula" class="field__input" formControlName="matricula" type="text" autocomplete="off" />
+        @if (form.controls.matricula.touched && form.controls.matricula.invalid) {
+          <span class="field__error">La matrícula es obligatoria.</span>
+        }
+      </div>
+      <div class="field">
+        <label class="field__label" for="us-email">Email</label>
+        <input id="us-email" class="field__input" formControlName="email" type="email" autocomplete="off" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <span class="field__error">Email inválido.</span>
+        }
+      </div>
+      @if (!editId()) {
+        <div class="field">
+          <label class="field__label" for="us-pass">Contraseña inicial</label>
+          <input id="us-pass" class="field__input" formControlName="password" type="password" autocomplete="new-password" />
+          @if (form.controls.password.touched && form.controls.password.invalid) {
+            <span class="field__error">Mínimo 8 caracteres.</span>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label class="field__label" for="us-edad">Edad</label>
+        <input id="us-edad" class="field__input" formControlName="edad" type="number" min="0" />
+      </div>
+      <div class="field">
+        <label class="field__label" for="us-ubic">Ubicación</label>
+        <input id="us-ubic" class="field__input" formControlName="ubicacion" type="text" />
+      </div>
+      @if (editId()) {
+        <div class="field">
+          <label class="field__label" for="us-tope">Tope de asignaciones</label>
+          <input id="us-tope" class="field__input" formControlName="topeAsignaciones" type="number" min="0" />
+        </div>
+      }
+    </div>
+
+    @if (rolForm() === 'PROFESOR') {
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label" for="us-titulacion">Titulación</label>
+          <input id="us-titulacion" class="field__input" formControlName="titulacion" type="text" />
+        </div>
+        <div class="field">
+          <label class="field__label" for="us-cargo">Cargo</label>
+          <input id="us-cargo" class="field__input" formControlName="cargo" type="text" />
+        </div>
+      </div>
+    }
+
+    @if (rolForm() === 'EXTERNO') {
+      <div class="field-row">
+        <div class="field">
+          <label class="field__label" for="us-inst">Institución</label>
+          <input id="us-inst" class="field__input" formControlName="institucion" type="text" />
+          @if (form.controls.institucion.touched && form.controls.institucion.invalid) {
+            <span class="field__error">Obligatoria para externos.</span>
+          }
+        </div>
+        <div class="field">
+          <label class="field__label" for="us-titulo">Título</label>
+          <input id="us-titulo" class="field__input" formControlName="titulo" type="text" />
+          @if (form.controls.titulo.touched && form.controls.titulo.invalid) {
+            <span class="field__error">Obligatorio para externos.</span>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="actions">
+      @if (editId()) {
+        <ac-button size="sm" variant="ghost" type="button" [disabled]="enviando()" (click)="cancelarEdicion()">Cancelar</ac-button>
+      }
+      <ac-button size="sm" type="submit" [loading]="enviando()" [disabled]="enviando()">
+        {{ editId() ? 'Guardar cambios' : 'Crear usuario' }}
+      </ac-button>
+    </div>
+  </form>
+
+  <div class="usuarios__toolbar">
+    <input class="usuarios__search" type="search" [formControl]="buscador"
+           placeholder="Buscar por nombre o email…" aria-label="Buscar usuarios" />
+    <select class="field__select usuarios__filtro" [formControl]="filtroRol" aria-label="Filtrar por rol">
+      <option value="">Todos los roles</option>
+      @for (r of ROLES; track r.value) {
+        <option [value]="r.value">{{ r.label }}</option>
+      }
+    </select>
+  </div>
+
+  @if (error()) {
+    <p class="usuarios__error" role="alert">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="usuarios__estado" role="status">Cargando…</p>
+  } @else if (usuarios().length === 0) {
+    <p class="usuarios__estado">No se encontraron usuarios.</p>
+  } @else {
+    <ul class="usuarios__list">
+      @for (u of usuarios(); track u.id) {
+        <li class="ucard" [class.ucard--inactivo]="!u.activo">
+          <div class="ucard__info">
+            <div class="ucard__top">
+              <span class="ucard__nombre">{{ u.nombre }}</span>
+              <span class="ucard__rol">{{ rolLabel(u.rol) }}</span>
+              @if (!u.activo) { <span class="ucard__chip">Inactivo</span> }
+            </div>
+            <span class="ucard__email">
+              @if (u.matricula) { <span class="ucard__mat">{{ u.matricula }}</span> · }{{ u.email }}
+            </span>
+          </div>
+          <div class="ucard__acciones">
+            <ac-button size="sm" variant="ghost" [disabled]="actionId() === u.id" (click)="editar(u)">Editar</ac-button>
+            <ac-button size="sm" variant="ghost" [disabled]="actionId() === u.id" (click)="pedirReset(u)">Contraseña</ac-button>
+            <ac-button size="sm" variant="ghost"
+                       [loading]="actionId() === u.id" [disabled]="actionId() === u.id"
+                       (click)="toggleActivo(u)">{{ u.activo ? 'Desactivar' : 'Activar' }}</ac-button>
+          </div>
+
+          @if (resetId() === u.id) {
+            <div class="ucard__reset">
+              <input class="field__input" type="password" [formControl]="resetPass"
+                     autocomplete="new-password" placeholder="Nueva contraseña (mín. 8)"
+                     aria-label="Nueva contraseña" />
+              <ac-button size="sm" variant="ghost" type="button" (click)="cancelarReset()">Cancelar</ac-button>
+              <ac-button size="sm" type="button"
+                         [loading]="actionId() === u.id" [disabled]="actionId() === u.id"
+                         (click)="confirmarReset(u)">Guardar contraseña</ac-button>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+
+    @if (totalPages() > 1) {
+      <nav class="usuarios__pager" aria-label="Paginación">
+        <ac-button size="sm" variant="ghost" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</ac-button>
+        <span class="usuarios__pageinfo">Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }} usuarios</span>
+        <ac-button size="sm" variant="ghost" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</ac-button>
+      </nav>
+    } @else {
+      <p class="usuarios__count">{{ totalElements() }} usuario(s)</p>
+    }
+  }
+</section>

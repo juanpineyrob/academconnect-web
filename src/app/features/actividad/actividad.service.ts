@@ -4,6 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Observable } from 'rxjs';
 
 import { AuthService } from '@core/auth/auth.service';
+import { Page } from '@core/http/page';
 import { isProblemDetail } from '@core/http/problem-detail';
 import { environment } from '@env/environment';
 
@@ -60,10 +61,10 @@ export class ActividadService {
       });
   }
 
-  /** Bitácora global para administración (one-shot; no toca el feed reactivo del header). */
-  fetchAdmin(limit: number): Observable<Actividad[]> {
-    return this.http.get<Actividad[]>(`${environment.apiBase}/admin/actividad`, {
-      params: new HttpParams().set('limit', limit),
+  /** Bitácora global para administración, paginada (no toca el feed reactivo del header). */
+  fetchAdmin(page: number, size: number): Observable<Page<Actividad>> {
+    return this.http.get<Page<Actividad>>(`${environment.apiBase}/admin/actividad`, {
+      params: new HttpParams().set('page', page).set('size', size),
     });
   }
 

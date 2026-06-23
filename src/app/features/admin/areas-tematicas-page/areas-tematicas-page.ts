@@ -1,12 +1,15 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 import { Button } from '@shared/ui/button/button';
 import { AreaTematica, ThesaurusOrigen } from '@features/perfil/perfil.models';
 import { AdminService } from '../admin.service';
 import { AreaTematicaRequest } from '../admin.models';
+
+const PAGE_SIZE = 10;
 
 @Component({
   selector: 'ac-areas-tematicas-page',
@@ -26,14 +29,21 @@ export class AreasTematicasPage {
   ];
 
   protected readonly areas = signal<AreaTematica[]>([]);
+  /** Lista completa (sin paginar) para el selector de área padre. */
+  private readonly todasParaPadre = signal<AreaTematica[]>([]);
   protected readonly loading = signal<boolean>(true);
   protected readonly error = signal<string | null>(null);
   protected readonly actionId = signal<number | null>(null);
   protected readonly editId = signal<number | null>(null);
   protected readonly enviando = signal<boolean>(false);
 
+  protected readonly page = signal<number>(0);
+  protected readonly totalPages = signal<number>(0);
+  protected readonly totalElements = signal<number>(0);
+  protected readonly first = signal<boolean>(true);
+  protected readonly last = signal<boolean>(true);
+
   protected readonly buscador = new FormControl('', { nonNullable: true });
-  private readonly filtro = toSignal(this.buscador.valueChanges, { initialValue: '' });
 
   protected readonly form = new FormGroup({
     nombre: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
@@ -42,31 +52,37 @@ export class AreasTematicasPage {
     parentId: new FormControl<number | null>(null),
   });
 
-  protected readonly visibles = computed(() => {
-    const q = this.filtro().trim().toLowerCase();
-    const list = this.areas();
-    if (!q) return list;
-    return list.filter(
-      (a) => a.nombre.toLowerCase().includes(q) || (a.codigoExterno ?? '').toLowerCase().includes(q));
-  });
-
   /** Áreas elegibles como padre: todas menos la que se está editando. */
   protected readonly parentOpciones = computed(() =>
-    this.areas().filter((a) => a.id !== this.editId()));
+    this.todasParaPadre().filter((a) => a.id !== this.editId()));
 
   constructor() {
+    this.buscador.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => { this.page.set(0); this.cargar(); });
     this.cargar();
+    this.cargarParents();
   }
 
   private cargar(): void {
     this.loading.set(true);
     this.error.set(null);
     this.service
-      .listarAreas()
+      .buscarAreas({ q: this.buscador.value, page: this.page(), size: PAGE_SIZE })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (items) => {
-          this.areas.set(items);
+        next: (p) => {
+          if (p.content.length === 0 && p.number > 0) {
+            this.page.set(p.number - 1);
+            this.cargar();
+            return;
+          }
+          this.areas.set(p.content);
+          this.totalPages.set(p.totalPages);
+          this.totalElements.set(p.totalElements);
+          this.first.set(p.first);
+          this.last.set(p.last);
+          this.page.set(p.number);
           this.loading.set(false);
         },
         error: () => {
@@ -74,6 +90,25 @@ export class AreasTematicasPage {
           this.loading.set(false);
         },
       });
+  }
+
+  private cargarParents(): void {
+    this.service
+      .listarAreasParaPadre()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: (items) => this.todasParaPadre.set(items) });
+  }
+
+  protected paginaAnterior(): void {
+    if (this.first() || this.loading()) return;
+    this.page.update((p) => p - 1);
+    this.cargar();
+  }
+
+  protected paginaSiguiente(): void {
+    if (this.last() || this.loading()) return;
+    this.page.update((p) => p + 1);
+    this.cargar();
   }
 
   protected guardar(): void {
@@ -97,6 +132,7 @@ export class AreasTematicasPage {
         this.enviando.set(false);
         this.cancelarEdicion();
         this.cargar();
+        this.cargarParents();
       },
       error: () => {
         this.enviando.set(false);

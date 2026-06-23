@@ -34,7 +34,8 @@ export class AdminDashboardPage {
     {
       titulo: 'Usuarios',
       descripcion: 'Alta, baja y modificación de cuentas de estudiantes, profesores, externos y administradores.',
-      disponible: false,
+      route: '/admin/usuarios',
+      disponible: true,
     },
     {
       titulo: 'Áreas temáticas',

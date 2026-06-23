@@ -2,21 +2,21 @@
   display: block;
 }
 
-.areas {
+.usuarios {
   display: flex;
   flex-direction: column;
   gap: var(--sp-4);
-  max-width: 880px;
+  max-width: 920px;
   margin: 0 auto;
   padding: var(--sp-6) var(--sp-5) var(--sp-8);
 }
 
-.areas__header {
+.usuarios__header {
   display: grid;
   gap: var(--sp-2);
 }
 
-.areas__back {
+.usuarios__back {
   width: fit-content;
   font-family: var(--ff-sans);
   font-size: var(--fs-body-sm);
@@ -29,7 +29,7 @@
   }
 }
 
-.areas__title {
+.usuarios__title {
   margin: 0;
   font-family: var(--ff-serif);
   font-size: clamp(1.75rem, 3vw, 2.25rem);
@@ -39,7 +39,7 @@
   color: var(--c-text);
 }
 
-.areas__lead {
+.usuarios__lead {
   margin: 0;
   font-family: var(--ff-sans);
   font-size: var(--fs-body);
@@ -63,6 +63,11 @@
 
 .card__overline {
   margin: 0;
+}
+
+.card__id {
+  font-variant-numeric: tabular-nums;
+  color: var(--c-accent);
 }
 
 .field {
@@ -100,6 +105,12 @@
   &::placeholder {
     color: var(--c-text-faint);
   }
+
+  &:disabled {
+    background: var(--c-surface-muted);
+    color: var(--c-text-muted);
+    cursor: not-allowed;
+  }
 }
 
 .field__select {
@@ -120,7 +131,7 @@
 
 .field-row {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--sp-3);
 }
 
@@ -130,14 +141,17 @@
   gap: var(--sp-2);
 }
 
-// ---- Buscador ----
+// ---- Toolbar ----
 
-.areas__toolbar {
+.usuarios__toolbar {
   display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
 }
 
-.areas__search {
-  width: 100%;
+.usuarios__search {
+  flex: 1;
+  min-inline-size: 200px;
   font-family: var(--ff-sans);
   font-size: var(--fs-body-sm);
   color: var(--c-text);
@@ -159,12 +173,17 @@
   }
 }
 
-.areas__estado {
+.usuarios__filtro {
+  inline-size: auto;
+  min-height: 44px;
+}
+
+.usuarios__estado {
   margin: 0;
   color: var(--c-text-muted);
 }
 
-.areas__error {
+.usuarios__error {
   margin: 0;
   padding: var(--sp-3) var(--sp-4);
   border-radius: var(--r-md);
@@ -175,7 +194,7 @@
 
 // ---- Lista ----
 
-.areas__list {
+.usuarios__list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -183,7 +202,7 @@
   gap: var(--sp-2);
 }
 
-.arcard {
+.ucard {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -194,33 +213,33 @@
   border: 1px solid var(--c-border);
   border-radius: var(--r-md);
 
-  &--inactiva {
+  &--inactivo {
     background: var(--c-surface-muted);
     border-style: dashed;
   }
 }
 
-.arcard__info {
+.ucard__info {
   display: grid;
   gap: 2px;
   min-inline-size: 0;
 }
 
-.arcard__top {
+.ucard__top {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--sp-2);
 }
 
-.arcard__nombre {
+.ucard__nombre {
   font-family: var(--ff-sans);
   font-size: var(--fs-body);
   font-weight: var(--fw-medium);
   color: var(--c-text);
 }
 
-.arcard__thes {
+.ucard__rol {
   font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   font-weight: var(--fw-semibold);
@@ -232,7 +251,7 @@
   padding: 2px var(--sp-2);
 }
 
-.arcard__chip {
+.ucard__chip {
   font-family: var(--ff-sans);
   font-size: var(--fs-caption);
   font-weight: var(--fw-semibold);
@@ -244,20 +263,42 @@
   padding: 2px var(--sp-2);
 }
 
-.arcard__codigo {
+.ucard__email {
   font-family: var(--ff-sans);
-  font-size: var(--fs-caption);
-  color: var(--c-text-faint);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
 }
 
-.arcard__acciones {
+.ucard__mat {
+  font-variant-numeric: tabular-nums;
+  color: var(--c-text);
+  font-weight: var(--fw-medium);
+}
+
+.ucard__acciones {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
   flex-wrap: wrap;
 }
 
-.areas__pager {
+.ucard__reset {
+  flex-basis: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+  padding-top: var(--sp-3);
+  margin-top: var(--sp-1);
+  border-top: 1px solid var(--c-border);
+
+  .field__input {
+    flex: 1;
+    min-inline-size: 200px;
+  }
+}
+
+.usuarios__pager {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -266,14 +307,14 @@
   padding-top: var(--sp-2);
 }
 
-.areas__pageinfo {
+.usuarios__pageinfo {
   font-family: var(--ff-sans);
   font-size: var(--fs-body-sm);
   color: var(--c-text-muted);
   font-variant-numeric: tabular-nums;
 }
 
-.areas__count {
+.usuarios__count {
   margin: 0;
   text-align: center;
   font-family: var(--ff-sans);
@@ -282,7 +323,7 @@
 }
 
 @media (max-width: 640px) {
-  .areas {
+  .usuarios {
     padding: var(--sp-5) var(--sp-4) var(--sp-7);
   }
 
