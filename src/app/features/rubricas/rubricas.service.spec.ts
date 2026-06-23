@@ -20,18 +20,23 @@ describe('RubricasService', () => {
 
   afterEach(() => http.verify());
 
-  it('listar parsea criterios de cada rúbrica', () => {
+  it('buscar parsea criterios de cada rúbrica de la página', () => {
     let result: number[] = [];
-    service.listar().subscribe((rs) => (result = rs.map((r) => r.criterios.length)));
-    const req = http.expectOne(`${api}/api/templates`);
+    service.buscar('MIAS', 0, 12).subscribe((p) => (result = p.content.map((r) => r.criterios.length)));
+    const req = http.expectOne((r) => r.url === `${api}/api/templates`);
     expect(req.request.method).toBe('GET');
-    req.flush([
-      {
-        id: 1, nombre: 'R', descripcion: null, visibilidad: 'PUBLICO', autorId: 7, autorNombre: 'A',
-        criterios: '[{"codigo":"c1","nombre":"X","tipo":"ESCALA","peso":1,"escalaMin":0,"escalaMax":10}]',
-        activo: true, umbralAprobacion: 6,
-      },
-    ]);
+    expect(req.request.params.get('scope')).toBe('MIAS');
+    req.flush({
+      content: [
+        {
+          id: 1, nombre: 'R', descripcion: null, visibilidad: 'PUBLICO', autorId: 7, autorNombre: 'A',
+          criterios: '[{"codigo":"c1","nombre":"X","tipo":"ESCALA","peso":1,"escalaMin":0,"escalaMax":10}]',
+          activo: true, umbralAprobacion: 6,
+        },
+      ],
+      totalElements: 1, totalPages: 1, number: 0, size: 12, first: true, last: true,
+      numberOfElements: 1, empty: false,
+    });
     expect(result).toEqual([1]);
   });
 

@@ -33,22 +33,34 @@ describe('ColaPage', () => {
 
   afterEach(() => http.verify());
 
+  function pageOf(content: Asignacion[]) {
+    return {
+      content, totalElements: content.length, totalPages: 1, number: 0, size: 10,
+      first: true, last: true, numberOfElements: content.length, empty: content.length === 0,
+    };
+  }
+
+  function expectAsignaciones(estado: string) {
+    const req = http.expectOne(
+      (r) => r.url === `${api}/evaluador/me/asignaciones` && r.params.get('estado') === estado);
+    return req;
+  }
+
   it('carga ACTIVA al iniciar', () => {
     const fixture = create();
-    const req = http.expectOne(`${api}/evaluador/me/asignaciones?estado=ACTIVA`);
-    req.flush([mk(1)]);
+    expectAsignaciones('ACTIVA').flush(pageOf([mk(1)]));
     fixture.detectChanges();
     expect((fixture.nativeElement as HTMLElement).querySelectorAll('ac-asignacion-card').length).toBe(1);
   });
 
   it('cambiar de tab refetch con estado COMPLETADA', () => {
     const fixture = create();
-    http.expectOne(`${api}/evaluador/me/asignaciones?estado=ACTIVA`).flush([mk(1)]);
+    expectAsignaciones('ACTIVA').flush(pageOf([mk(1)]));
     fixture.detectChanges();
     const tabs = (fixture.nativeElement as HTMLElement).querySelectorAll('[role="tab"]');
     (tabs[1] as HTMLButtonElement).click();
     fixture.detectChanges();
-    http.expectOne(`${api}/evaluador/me/asignaciones?estado=COMPLETADA`).flush([mk(2, 'COMPLETADA')]);
+    expectAsignaciones('COMPLETADA').flush(pageOf([mk(2, 'COMPLETADA')]));
     fixture.detectChanges();
     expect((fixture.nativeElement as HTMLElement).textContent).toContain('T2');
   });

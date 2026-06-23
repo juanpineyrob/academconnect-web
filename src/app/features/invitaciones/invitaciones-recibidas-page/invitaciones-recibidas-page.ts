@@ -1,10 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import {
-  ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal,
+  ChangeDetectionStrategy, Component, DestroyRef, inject, signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
-import { catchError, of } from 'rxjs';
 
 import { Button } from '@shared/ui/button/button';
 import { Card } from '@shared/ui/card/card';
@@ -13,6 +12,8 @@ import { InvitacionOrientacionService } from '@features/mis-trabajos/invitacion-
 import { InvitacionOrientacion } from '@features/mis-trabajos/invitacion-orientacion.models';
 
 type Filtro = 'PENDIENTE' | 'HISTORICO';
+
+const PAGE_SIZE = 10;
 
 @Component({
   selector: 'ac-invitaciones-recibidas-page',
@@ -31,6 +32,12 @@ export class InvitacionesRecibidasPage {
   protected readonly actionId = signal<number | null>(null);
   protected readonly filtro = signal<Filtro>('PENDIENTE');
   protected readonly respuestas = signal<Map<number, string>>(new Map());
+
+  protected readonly page = signal<number>(0);
+  protected readonly totalPages = signal<number>(0);
+  protected readonly totalElements = signal<number>(0);
+  protected readonly first = signal<boolean>(true);
+  protected readonly last = signal<boolean>(true);
 
   protected respuestaTexto(id: number): string {
     return this.respuestas().get(id) ?? '';
@@ -58,18 +65,27 @@ export class InvitacionesRecibidasPage {
     return raw && raw.length > 0 ? raw : null;
   }
 
-  protected readonly visibles = computed(() => {
-    const f = this.filtro();
-    return this.invitaciones().filter((i) =>
-      f === 'PENDIENTE' ? i.estado === 'PENDIENTE' : i.estado !== 'PENDIENTE');
-  });
-
   constructor() {
     this.cargar();
   }
 
   protected setFiltro(f: Filtro): void {
+    if (this.filtro() === f) return;
     this.filtro.set(f);
+    this.page.set(0);
+    this.cargar();
+  }
+
+  protected paginaAnterior(): void {
+    if (this.first() || this.loading()) return;
+    this.page.update((p) => p - 1);
+    this.cargar();
+  }
+
+  protected paginaSiguiente(): void {
+    if (this.last() || this.loading()) return;
+    this.page.update((p) => p + 1);
+    this.cargar();
   }
 
   protected aceptar(i: InvitacionOrientacion): void {
@@ -78,10 +94,10 @@ export class InvitacionesRecibidasPage {
     this.service.aceptar(i.id, { respuesta })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (updated) => {
-          this.invitaciones.update((prev) => prev.map((x) => x.id === updated.id ? updated : x));
+        next: () => {
           this.clearRespuesta(i.id);
           this.actionId.set(null);
+          this.cargar();
         },
         error: (err: HttpErrorResponse) => { this.actionId.set(null); this.error.set(this.mapError(err)); },
       });
@@ -93,22 +109,38 @@ export class InvitacionesRecibidasPage {
     this.service.rechazar(i.id, { respuesta })
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: (updated) => {
-          this.invitaciones.update((prev) => prev.map((x) => x.id === updated.id ? updated : x));
+        next: () => {
           this.clearRespuesta(i.id);
           this.actionId.set(null);
+          this.cargar();
         },
         error: (err: HttpErrorResponse) => { this.actionId.set(null); this.error.set(this.mapError(err)); },
       });
   }
 
   private cargar(): void {
-    this.service.listarRecibidas()
-      .pipe(
-        catchError((err: HttpErrorResponse) => { this.error.set(this.mapError(err)); return of<InvitacionOrientacion[]>([]); }),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((items) => { this.invitaciones.set(items); this.loading.set(false); });
+    this.loading.set(true);
+    this.error.set(null);
+    const estado = this.filtro() === 'PENDIENTE' ? 'PENDIENTE' : undefined;
+    this.service.listarRecibidas(estado, this.page(), PAGE_SIZE)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (p) => {
+          if (p.content.length === 0 && p.number > 0) {
+            this.page.set(p.number - 1);
+            this.cargar();
+            return;
+          }
+          this.invitaciones.set(p.content);
+          this.totalPages.set(p.totalPages);
+          this.totalElements.set(p.totalElements);
+          this.first.set(p.first);
+          this.last.set(p.last);
+          this.page.set(p.number);
+          this.loading.set(false);
+        },
+        error: (err: HttpErrorResponse) => { this.error.set(this.mapError(err)); this.loading.set(false); },
+      });
   }
 
   private mapError(err: HttpErrorResponse): string {

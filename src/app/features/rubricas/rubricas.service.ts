@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, map } from 'rxjs';
 
 import { environment } from '@env/environment';
+import { Page } from '@core/http/page';
 import type { Criterio } from '../evaluaciones/evaluaciones.models';
 import type { Rubrica, RubricaRequest, RubricaResponse } from './rubricas.models';
 
@@ -11,10 +12,12 @@ export class RubricasService {
   private readonly http = inject(HttpClient);
   private readonly api = environment.apiBase;
 
-  listar(): Observable<Rubrica[]> {
+  /** Rúbricas paginadas por scope: 'MIAS' (propias) o 'PUBLICAS' (públicas de otros). */
+  buscar(scope: 'MIAS' | 'PUBLICAS', page: number, size: number): Observable<Page<Rubrica>> {
+    const params = new HttpParams().set('scope', scope).set('page', page).set('size', size);
     return this.http
-      .get<RubricaResponse[]>(`${this.api}/api/templates`)
-      .pipe(map((rs) => rs.map((r) => this.toRubrica(r))));
+      .get<Page<RubricaResponse>>(`${this.api}/api/templates`, { params })
+      .pipe(map((p) => ({ ...p, content: p.content.map((r) => this.toRubrica(r)) })));
   }
 
   obtener(id: number): Observable<Rubrica> {

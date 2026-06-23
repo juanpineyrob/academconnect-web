@@ -30,3 +30,19 @@
 }
 .mis-trabajos__t-title { font-weight: 500; }
 .mis-trabajos__t-meta { color: var(--c-text-muted); font-size: var(--fs-body-sm); }
+
+.mis-trabajos__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  margin-top: var(--sp-4);
+}
+
+.mis-trabajos__pageinfo {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+  font-variant-numeric: tabular-nums;
+}

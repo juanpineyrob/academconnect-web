@@ -1,8 +1,9 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
+import { Page } from '@core/http/page';
 import { TrabajoListItem } from '@features/repositorio/repositorio.models';
 import { TrabajoEstudianteRequest } from './mis-trabajos.models';
 
@@ -11,8 +12,9 @@ export class MisTrabajosService {
   private readonly http = inject(HttpClient);
   private readonly api = environment.apiBase;
 
-  listar(): Observable<TrabajoListItem[]> {
-    return this.http.get<TrabajoListItem[]>(`${this.api}/api/me/trabajos`);
+  listar(page: number, size: number): Observable<Page<TrabajoListItem>> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<Page<TrabajoListItem>>(`${this.api}/api/me/trabajos`, { params });
   }
 
   getById(id: number): Observable<TrabajoListItem> {

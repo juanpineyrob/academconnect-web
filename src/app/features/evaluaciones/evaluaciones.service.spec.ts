@@ -31,18 +31,17 @@ describe('EvaluacionesService', () => {
 
   afterEach(() => http.verify());
 
-  it('listarAsignaciones manda estado como query param', () => {
-    service.listarAsignaciones('ACTIVA').subscribe();
-    const req = http.expectOne(`${api}/evaluador/me/asignaciones?estado=ACTIVA`);
+  it('listarAsignaciones manda estado, page y size como query params', () => {
+    service.listarAsignaciones('ACTIVA', 0, 10).subscribe();
+    const req = http.expectOne((r) => r.url === `${api}/evaluador/me/asignaciones`);
     expect(req.request.method).toBe('GET');
-    req.flush([mkAsignacion(1)]);
-  });
-
-  it('listarAsignaciones sin estado no agrega query param', () => {
-    service.listarAsignaciones().subscribe();
-    const req = http.expectOne(`${api}/evaluador/me/asignaciones`);
-    expect(req.request.method).toBe('GET');
-    req.flush([]);
+    expect(req.request.params.get('estado')).toBe('ACTIVA');
+    expect(req.request.params.get('page')).toBe('0');
+    expect(req.request.params.get('size')).toBe('10');
+    req.flush({
+      content: [mkAsignacion(1)], totalElements: 1, totalPages: 1, number: 0, size: 10,
+      first: true, last: true, numberOfElements: 1, empty: false,
+    });
   });
 
   it('obtenerAsignacion pega a /api/asignaciones/{id}', () => {

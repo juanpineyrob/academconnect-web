@@ -12,11 +12,15 @@ export class MisPublicacionesService {
   private readonly http = inject(HttpClient);
   private readonly api = environment.apiBase;
 
-  listarPorOrientador(orientadorId: number): Observable<Page<TrabajoListItem>> {
-    const params = new HttpParams()
+  listarPorOrientador(
+    orientadorId: number, estado: string | undefined, page: number, size: number,
+  ): Observable<Page<TrabajoListItem>> {
+    let params = new HttpParams()
       .set('orientadorId', String(orientadorId))
-      .set('size', '100')
-      .set('sort', 'createdAt,desc');
+      .set('page', String(page))
+      .set('size', String(size))
+      .set('sort', 'updatedAt,desc');
+    if (estado) params = params.set('estado', estado);
     return this.http.get<Page<TrabajoListItem>>(`${this.api}/api/trabajos/buscar`, { params });
   }
 

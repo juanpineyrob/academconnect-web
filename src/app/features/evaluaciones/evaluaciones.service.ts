@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
+import { Page } from '@core/http/page';
 import type {
   Asignacion,
   EstadoAsignacion,
@@ -16,10 +17,9 @@ export class EvaluacionesService {
   private readonly http = inject(HttpClient);
   private readonly api = environment.apiBase;
 
-  listarAsignaciones(estado?: EstadoAsignacion): Observable<Asignacion[]> {
-    let params = new HttpParams();
-    if (estado) params = params.set('estado', estado);
-    return this.http.get<Asignacion[]>(`${this.api}/evaluador/me/asignaciones`, { params });
+  listarAsignaciones(estado: EstadoAsignacion, page: number, size: number): Observable<Page<Asignacion>> {
+    const params = new HttpParams().set('estado', estado).set('page', page).set('size', size);
+    return this.http.get<Page<Asignacion>>(`${this.api}/evaluador/me/asignaciones`, { params });
   }
 
   obtenerAsignacion(id: number): Observable<Asignacion> {

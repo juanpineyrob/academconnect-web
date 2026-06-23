@@ -1,16 +1,19 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { DecimalPipe } from '@angular/common';
 
 import { AuthService } from '@core/auth/auth.service';
+import { Button } from '@shared/ui/button/button';
 import { RubricasService } from '../rubricas.service';
 import type { Rubrica } from '../rubricas.models';
+
+const PAGE_SIZE = 12;
 
 @Component({
   selector: 'ac-rubricas-lista',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, DecimalPipe],
+  imports: [RouterLink, DecimalPipe, Button],
   template: `
     <section class="lista">
       <header class="lista__head">
@@ -20,24 +23,22 @@ import type { Rubrica } from '../rubricas.models';
 
       <div class="lista__tabs" role="tablist">
         <button type="button" role="tab" [attr.aria-selected]="tab() === 'mias'"
-                class="lista__tab" [class.lista__tab--on]="tab() === 'mias'" (click)="tab.set('mias')">
-          Mías ({{ mias().length }})
+                class="lista__tab" [class.lista__tab--on]="tab() === 'mias'" (click)="cambiarTab('mias')">
+          Mías
         </button>
         <button type="button" role="tab" [attr.aria-selected]="tab() === 'publicas'"
-                class="lista__tab" [class.lista__tab--on]="tab() === 'publicas'" (click)="tab.set('publicas')">
-          Públicas ({{ publicas().length }})
+                class="lista__tab" [class.lista__tab--on]="tab() === 'publicas'" (click)="cambiarTab('publicas')">
+          Públicas
         </button>
       </div>
 
       @if (loading()) {
         <p>Cargando…</p>
+      } @else if (rubricas().length === 0) {
+        <p class="lista__vacio">No hay rúbricas en esta vista.</p>
       } @else {
-        @let visibles = tab() === 'mias' ? mias() : publicas();
-        @if (visibles.length === 0) {
-          <p class="lista__vacio">No hay rúbricas en esta vista.</p>
-        }
         <ul class="lista__grid">
-          @for (r of visibles; track r.id) {
+          @for (r of rubricas(); track r.id) {
             <li class="rubcard" [class.rubcard--inactiva]="!r.activo">
               <div class="rubcard__top">
                 <span class="rubcard__nombre">{{ r.nombre }}</span>
@@ -58,6 +59,14 @@ import type { Rubrica } from '../rubricas.models';
             </li>
           }
         </ul>
+
+        @if (totalPages() > 1) {
+          <nav class="lista__pager" aria-label="Paginación">
+            <ac-button size="sm" variant="ghost" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</ac-button>
+            <span class="lista__pageinfo">Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }} rúbricas</span>
+            <ac-button size="sm" variant="ghost" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</ac-button>
+          </nav>
+        }
       }
     </section>
   `,
@@ -77,6 +86,8 @@ import type { Rubrica } from '../rubricas.models';
     .rubcard__meta { margin: 0; font-size: var(--fs-body-sm); color: var(--c-text-muted); }
     .rubcard__acciones { display: flex; gap: var(--sp-3); font-size: var(--fs-body-sm); }
     .rubcard__acciones button { background: none; border: none; color: var(--c-state-rechazado); cursor: pointer; padding: 0; }
+    .lista__pager { display: flex; align-items: center; justify-content: center; gap: var(--sp-4); flex-wrap: wrap; margin-top: var(--sp-4); }
+    .lista__pageinfo { font-family: var(--ff-sans); font-size: var(--fs-body-sm); color: var(--c-text-muted); font-variant-numeric: tabular-nums; }
   `],
 })
 export class ListaPage {
@@ -86,10 +97,13 @@ export class ListaPage {
 
   protected readonly tab = signal<'mias' | 'publicas'>('mias');
   protected readonly loading = signal(true);
-  private readonly rubricas = signal<Rubrica[]>([]);
+  protected readonly rubricas = signal<Rubrica[]>([]);
 
-  protected readonly mias = computed(() => this.rubricas().filter((r) => this.esMia(r)));
-  protected readonly publicas = computed(() => this.rubricas().filter((r) => !this.esMia(r)));
+  protected readonly page = signal(0);
+  protected readonly totalPages = signal(0);
+  protected readonly totalElements = signal(0);
+  protected readonly first = signal(true);
+  protected readonly last = signal(true);
 
   constructor() {
     this.cargar();
@@ -99,10 +113,43 @@ export class ListaPage {
     return r.autorId === this.auth.currentUser()?.userId;
   }
 
+  protected cambiarTab(t: 'mias' | 'publicas'): void {
+    if (this.tab() === t) return;
+    this.tab.set(t);
+    this.page.set(0);
+    this.cargar();
+  }
+
+  protected paginaAnterior(): void {
+    if (this.first() || this.loading()) return;
+    this.page.update((p) => p - 1);
+    this.cargar();
+  }
+
+  protected paginaSiguiente(): void {
+    if (this.last() || this.loading()) return;
+    this.page.update((p) => p + 1);
+    this.cargar();
+  }
+
   private cargar(): void {
     this.loading.set(true);
-    this.service.listar().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (rs) => { this.rubricas.set(rs); this.loading.set(false); },
+    const scope = this.tab() === 'mias' ? 'MIAS' : 'PUBLICAS';
+    this.service.buscar(scope, this.page(), PAGE_SIZE).pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (p) => {
+        if (p.content.length === 0 && p.number > 0) {
+          this.page.set(p.number - 1);
+          this.cargar();
+          return;
+        }
+        this.rubricas.set(p.content);
+        this.totalPages.set(p.totalPages);
+        this.totalElements.set(p.totalElements);
+        this.first.set(p.first);
+        this.last.set(p.last);
+        this.page.set(p.number);
+        this.loading.set(false);
+      },
       error: () => this.loading.set(false),
     });
   }

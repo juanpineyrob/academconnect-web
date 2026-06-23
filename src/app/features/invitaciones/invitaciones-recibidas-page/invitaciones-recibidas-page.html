@@ -20,14 +20,14 @@
     <p role="status">Cargando…</p>
   } @else if (error()) {
     <p role="alert" class="recibidas__error">{{ error() }}</p>
-  } @else if (visibles().length === 0) {
+  } @else if (invitaciones().length === 0) {
     <p class="recibidas__empty">
       @if (filtro() === 'PENDIENTE') { No tenés invitaciones pendientes. }
       @else { No hay invitaciones en el histórico. }
     </p>
   } @else {
     <ul class="recibidas__list">
-      @for (i of visibles(); track i.id) {
+      @for (i of invitaciones(); track i.id) {
         <li>
           <ac-card padding="md">
             <div class="recibidas__row">
@@ -62,5 +62,13 @@
         </li>
       }
     </ul>
+
+    @if (totalPages() > 1) {
+      <nav class="recibidas__pager" aria-label="Paginación">
+        <ac-button size="sm" variant="ghost" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</ac-button>
+        <span class="recibidas__pageinfo">Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }}</span>
+        <ac-button size="sm" variant="ghost" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</ac-button>
+      </nav>
+    }
   }
 </section>

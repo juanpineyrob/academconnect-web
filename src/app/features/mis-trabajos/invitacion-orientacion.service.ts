@@ -3,6 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { environment } from '@env/environment';
+import { Page } from '@core/http/page';
 import {
   EstadoInvitacion,
   InvitacionOrientacion,
@@ -38,10 +39,12 @@ export class InvitacionOrientacionService {
       `${this.api}/api/invitaciones-orientacion/${id}/cancelar`, {});
   }
 
-  listarRecibidas(estado?: EstadoInvitacion): Observable<InvitacionOrientacion[]> {
-    let params = new HttpParams();
+  listarRecibidas(
+    estado: EstadoInvitacion | undefined, page: number, size: number,
+  ): Observable<Page<InvitacionOrientacion>> {
+    let params = new HttpParams().set('page', page).set('size', size);
     if (estado) params = params.set('estado', estado);
-    return this.http.get<InvitacionOrientacion[]>(
+    return this.http.get<Page<InvitacionOrientacion>>(
       `${this.api}/api/invitaciones-orientacion`, { params });
   }
 

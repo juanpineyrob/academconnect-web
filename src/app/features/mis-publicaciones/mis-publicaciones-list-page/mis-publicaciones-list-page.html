@@ -7,26 +7,27 @@
     <ac-button size="sm" [routerLink]="['/mis-publicaciones/nuevo']">Crear publicación</ac-button>
   </header>
 
-  @if (loading()) {
-    <p role="status" class="mis-pubs__estado">Cargando…</p>
-  } @else if (error()) {
+  @if (error()) {
     <p role="alert" class="mis-pubs__error">{{ error() }}</p>
-  } @else if (trabajos().length === 0) {
-    <p class="mis-pubs__empty">Aún no creaste publicaciones.</p>
   } @else {
     <div class="mis-pubs__tabs" role="tablist">
-      @for (t of tabs(); track t.key) {
+      @for (t of TABS; track t.key) {
         <button type="button" role="tab" class="mis-pubs__tab"
                 [class.mis-pubs__tab--on]="tab() === t.key"
                 [attr.aria-selected]="tab() === t.key"
-                (click)="tab.set(t.key)">
-          {{ t.label }} <span class="mis-pubs__tab-count">{{ t.count }}</span>
+                (click)="cambiarTab(t.key)">
+          {{ t.label }}
         </button>
       }
     </div>
 
+    @if (loading()) {
+      <p role="status" class="mis-pubs__estado">Cargando…</p>
+    } @else if (trabajos().length === 0) {
+      <p class="mis-pubs__empty">No hay publicaciones en esta vista.</p>
+    } @else {
     <ul class="mis-pubs__list">
-      @for (t of visibles(); track t.id) {
+      @for (t of trabajos(); track t.id) {
         <li>
           <a [routerLink]="['/mis-publicaciones', t.id]" class="pub">
             <div class="pub__top">
@@ -57,5 +58,14 @@
         </li>
       }
     </ul>
+
+      @if (totalPages() > 1) {
+        <nav class="mis-pubs__pager" aria-label="Paginación">
+          <ac-button size="sm" variant="ghost" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</ac-button>
+          <span class="mis-pubs__pageinfo">Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }}</span>
+          <ac-button size="sm" variant="ghost" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</ac-button>
+        </nav>
+      }
+    }
   }
 </section>

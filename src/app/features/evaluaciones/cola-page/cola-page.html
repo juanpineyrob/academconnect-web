@@ -16,7 +16,7 @@
     <p class="cola__estado">Cargando…</p>
   } @else if (error()) {
     <p class="cola__estado cola__estado--error">
-      {{ error() }} <button type="button" (click)="cargar(tab())">Reintentar</button>
+      {{ error() }} <button type="button" (click)="cargar()">Reintentar</button>
     </p>
   } @else if (asignaciones().length === 0) {
     <p class="cola__estado">
@@ -29,5 +29,13 @@
         <li><ac-asignacion-card [asignacion]="a" /></li>
       }
     </ul>
+
+    @if (totalPages() > 1) {
+      <nav class="cola__pager" aria-label="Paginación">
+        <button type="button" class="cola__pgbtn" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</button>
+        <span class="cola__pageinfo">Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }}</span>
+        <button type="button" class="cola__pgbtn" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</button>
+      </nav>
+    }
   }
 </section>

@@ -22,16 +22,35 @@ describe('ListaPage (rubricas)', () => {
     return { fixture, http };
   }
 
-  it('separa mías y públicas según el autor', () => {
+  function page(content: unknown[]) {
+    return {
+      content, totalElements: content.length, totalPages: 1, number: 0, size: 12,
+      first: true, last: true, numberOfElements: content.length, empty: content.length === 0,
+    };
+  }
+
+  it('carga la pestaña "mías" con scope=MIAS al iniciar', () => {
     const { fixture, http } = create();
-    http.expectOne(`${api}/api/templates`).flush([
+    const req = http.expectOne((r) => r.url === `${api}/api/templates`);
+    expect(req.request.params.get('scope')).toBe('MIAS');
+    req.flush(page([
       { id: 1, nombre: 'Mía', descripcion: null, visibilidad: 'PRIVADO', autorId: 7, autorNombre: 'Yo', criterios: '[]', activo: true, umbralAprobacion: 6 },
-      { id: 2, nombre: 'Ajena pública', descripcion: null, visibilidad: 'PUBLICO', autorId: 8, autorNombre: 'Otro', criterios: '[]', activo: true, umbralAprobacion: 6 },
-    ]);
+    ]));
     fixture.detectChanges();
     const cmp = fixture.componentInstance;
-    expect(cmp['mias']().length).toBe(1);
-    expect(cmp['publicas']().length).toBe(1);
+    expect(cmp['rubricas']().length).toBe(1);
+    expect(cmp['esMia'](cmp['rubricas']()[0])).toBe(true);
+    http.verify();
+  });
+
+  it('al cambiar a "públicas" pide scope=PUBLICAS', () => {
+    const { fixture, http } = create();
+    http.expectOne((r) => r.url === `${api}/api/templates`).flush(page([]));
+    fixture.detectChanges();
+    fixture.componentInstance['cambiarTab']('publicas');
+    const req = http.expectOne((r) => r.url === `${api}/api/templates`);
+    expect(req.request.params.get('scope')).toBe('PUBLICAS');
+    req.flush(page([]));
     http.verify();
   });
 });
