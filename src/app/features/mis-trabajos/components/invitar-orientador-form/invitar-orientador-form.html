@@ -4,15 +4,15 @@
   } @else {
     @if (recomendados().length > 0) {
       <fieldset class="invitar-form__field">
-        <legend class="invitar-form__label">★ Recomendados</legend>
-        <ul class="invitar-form__recos" role="radiogroup" aria-label="Orientadores recomendados">
+        <legend class="invitar-form__label"><span aria-hidden="true">★</span> Recomendados</legend>
+        <ul class="invitar-form__recos">
           @for (p of recomendados(); track p.id) {
             <li class="invitar-form__reco">
               <label class="invitar-form__reco-label">
                 <input type="radio" formControlName="profesorId" [value]="p.id" (change)="seleccionar(p.id)" />
                 <span class="invitar-form__reco-nombre">{{ p.nombre }}</span>
                 <span class="invitar-form__reco-areas">{{ p.areasNombres.join(', ') }} · {{ p.cargaActiva }} trabajos activos</span>
-                <span class="invitar-form__afinidad"
+                <span class="invitar-form__afinidad" role="img"
                       [style.--afinidad]="p.afinidad"
                       [attr.aria-label]="'Afinidad ' + (p.afinidad * 100).toFixed(0) + '%'"></span>
               </label>
@@ -27,7 +27,7 @@
       <input type="search" class="invitar-form__search" placeholder="Buscar por nombre…"
              aria-label="Buscar profesor por nombre"
              [value]="query()" (input)="onQuery($any($event.target).value)" />
-      <ul class="invitar-form__todos" role="radiogroup" aria-label="Todos los profesores">
+      <ul class="invitar-form__todos">
         @for (p of todos(); track p.id) {
           <li class="invitar-form__todos-item">
             <label class="invitar-form__todos-label">

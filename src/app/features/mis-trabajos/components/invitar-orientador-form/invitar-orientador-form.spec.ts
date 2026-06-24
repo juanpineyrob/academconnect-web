@@ -28,10 +28,10 @@ describe('InvitarOrientadorForm', () => {
       imports: [InvitarOrientadorForm],
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
+    http = TestBed.inject(HttpTestingController);
     fixture = TestBed.createComponent(InvitarOrientadorForm);
     fixture.componentRef.setInput('trabajo', trabajo());
     fixture.detectChanges();
-    http = TestBed.inject(HttpTestingController);
     http.expectOne(`${api}/api/me/trabajos/7/sugerir-orientadores`).flush(SUGERENCIAS);
     fixture.detectChanges();
   });
