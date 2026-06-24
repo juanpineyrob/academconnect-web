@@ -12,6 +12,14 @@ import { ImportPreview, ResultadoFila } from '../admin.models';
 const MAX_BYTES = 5 * 1024 * 1024;
 const MIME_OK = new Set(['text/csv', 'application/vnd.ms-excel', '']);
 
+/** Plantilla de ejemplo: encabezado exacto + filas guía (la 3ª muestra cómo escapar una coma). */
+const PLANTILLA_CSV = [
+  'email,matricula,nombre',
+  'ana.perez@alu.institucion.edu,20240001,Ana Pérez',
+  'juan.gomez@alu.institucion.edu,20240002,Juan Gómez',
+  'maria.lopez@alu.institucion.edu,20240003,"López, María"',
+].join('\r\n') + '\r\n';
+
 const RESULTADO_LABEL: Record<ResultadoFila, string> = {
   NUEVO: 'Nuevo',
   EXISTE_ACTIVA: 'Ya activa',
@@ -44,6 +52,17 @@ export class ImportarUsuariosPage {
   protected readonly reenviarInvitadas = new FormControl<boolean>(false, { nonNullable: true });
 
   protected readonly nombreArchivo = computed(() => this.archivo()?.name ?? null);
+
+  /** Descarga una plantilla CSV de ejemplo (encabezado email,matricula,nombre) para el admin. */
+  protected descargarPlantilla(): void {
+    const blob = new Blob([PLANTILLA_CSV], { type: 'text/csv;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'plantilla-importacion-usuarios.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  }
 
   protected onArchivo(event: Event): void {
     const input = event.target as HTMLInputElement;

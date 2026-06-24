@@ -14,6 +14,9 @@
 
   <div class="card importar__picker">
     <label class="field__label" for="imp-file">Archivo (CSV)</label>
+    <p class="importar__hint">
+      Formato: encabezado <code>email,matricula,nombre</code> (UTF-8, separado por comas). Una fila por estudiante.
+    </p>
     <input
       id="imp-file"
       class="field__input"
@@ -24,6 +27,11 @@
       <p class="importar__filename">Seleccionado: {{ nombreArchivo() }}</p>
     }
     <div class="importar__actions">
+      <ac-button
+        size="sm"
+        variant="ghost"
+        type="button"
+        (click)="descargarPlantilla()">Descargar plantilla CSV</ac-button>
       <ac-button
         size="sm"
         type="button"

@@ -91,6 +91,20 @@
   color: var(--c-text-muted);
 }
 
+.importar__hint {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+
+  code {
+    font-family: var(--ff-mono, monospace);
+    background: var(--c-surface-muted);
+    border-radius: var(--r-sm);
+    padding: 1px 4px;
+  }
+}
+
 .importar__actions {
   display: flex;
   justify-content: flex-end;

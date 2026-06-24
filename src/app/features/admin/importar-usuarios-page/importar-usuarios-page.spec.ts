@@ -95,4 +95,33 @@ describe('ImportarUsuariosPage', () => {
     expect(cmp['preview']()?.nuevos).toBe(1);
     http.verify();
   });
+
+  it('descargarPlantilla genera un CSV con el encabezado correcto', () => {
+    const { fixture } = create();
+    const cmp = fixture.componentInstance;
+
+    let blob: Blob | null = null;
+    const createUrl = vi
+      .spyOn(URL, 'createObjectURL')
+      .mockImplementation((b: Blob | MediaSource) => {
+        blob = b as Blob;
+        return 'blob:stub';
+      });
+    const revokeUrl = vi.spyOn(URL, 'revokeObjectURL').mockImplementation(() => undefined);
+    const anchor = { href: '', download: '', click: vi.fn() } as unknown as HTMLAnchorElement;
+    const createEl = vi.spyOn(document, 'createElement').mockReturnValue(anchor);
+
+    cmp['descargarPlantilla']();
+
+    expect(anchor.download).toBe('plantilla-importacion-usuarios.csv');
+    expect(anchor.click).toHaveBeenCalledTimes(1);
+    expect(createUrl).toHaveBeenCalledTimes(1);
+    expect(revokeUrl).toHaveBeenCalledWith('blob:stub');
+    expect(blob).not.toBeNull();
+    expect(blob!.type).toContain('text/csv');
+
+    createEl.mockRestore();
+    createUrl.mockRestore();
+    revokeUrl.mockRestore();
+  });
 });
