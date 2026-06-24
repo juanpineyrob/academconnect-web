@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
 import { Page } from '@core/http/page';
 import { TrabajoListItem } from '@features/repositorio/repositorio.models';
-import { TrabajoEstudianteRequest } from './mis-trabajos.models';
+import { OrientadorSugerido, TrabajoEstudianteRequest } from './mis-trabajos.models';
 
 @Injectable({ providedIn: 'root' })
 export class MisTrabajosService {
@@ -27,5 +27,10 @@ export class MisTrabajosService {
 
   actualizar(id: number, payload: TrabajoEstudianteRequest): Observable<TrabajoListItem> {
     return this.http.put<TrabajoListItem>(`${this.api}/api/me/trabajos/${id}`, payload);
+  }
+
+  sugerirOrientadores(trabajoId: number): Observable<OrientadorSugerido[]> {
+    return this.http.get<OrientadorSugerido[]>(
+      `${this.api}/api/me/trabajos/${trabajoId}/sugerir-orientadores`);
   }
 }

@@ -7,3 +7,13 @@ export interface TrabajoEstudianteRequest {
   areaIds?: number[];
   keywords: string[];
 }
+
+export interface OrientadorSugerido {
+  id: number;
+  nombre: string;
+  email: string;
+  areasNombres: string[];
+  cargaActiva: number;
+  afinidad: number;
+  score: number;
+}
