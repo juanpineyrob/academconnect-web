@@ -125,8 +125,8 @@ export class AdminService {
     return this.http.post<AdminUsuario>(`${this.api}/admin/usuarios/${id}/desactivar`, {});
   }
 
-  resetPasswordUsuario(id: number, password: string): Observable<void> {
-    return this.http.post<void>(`${this.api}/admin/usuarios/${id}/reset-password`, { password });
+  enviarEnlacePassword(id: number): Observable<void> {
+    return this.http.post<void>(`${this.api}/admin/usuarios/${id}/enviar-enlace-password`, {});
   }
 
   // ---- Solicitudes de cuenta ----

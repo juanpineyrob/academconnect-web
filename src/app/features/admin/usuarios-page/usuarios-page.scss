@@ -282,20 +282,19 @@
   flex-wrap: wrap;
 }
 
-.ucard__reset {
-  flex-basis: 100%;
-  display: flex;
-  align-items: center;
-  gap: var(--sp-2);
-  flex-wrap: wrap;
-  padding-top: var(--sp-3);
-  margin-top: var(--sp-1);
-  border-top: 1px solid var(--c-border);
+.usuarios__ok {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--c-state-aprobado-bg);
+  border: 1px solid rgba(46, 125, 50, 0.2);
+  color: var(--c-state-aprobado);
+}
 
-  .field__input {
-    flex: 1;
-    min-inline-size: 200px;
-  }
+.form__note {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--c-text-muted);
 }
 
 .usuarios__pager {

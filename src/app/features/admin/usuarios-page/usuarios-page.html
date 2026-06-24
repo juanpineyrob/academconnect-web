@@ -45,16 +45,13 @@
           <span class="field__error">Email inválido.</span>
         }
       </div>
-      @if (!editId()) {
-        <div class="field">
-          <label class="field__label" for="us-pass">Contraseña inicial</label>
-          <input id="us-pass" class="field__input" formControlName="password" type="password" autocomplete="new-password" />
-          @if (form.controls.password.touched && form.controls.password.invalid) {
-            <span class="field__error">Mínimo 8 caracteres.</span>
-          }
-        </div>
-      }
     </div>
+
+    @if (!editId()) {
+      <p class="form__note">
+        La cuenta se creará en estado <strong>invitada</strong> y se enviará un enlace de activación al correo indicado.
+      </p>
+    }
 
     <div class="field-row">
       <div class="field">
@@ -130,6 +127,10 @@
     <p class="usuarios__error" role="alert">{{ error() }}</p>
   }
 
+  @if (enlaceOk()) {
+    <p class="usuarios__ok" role="status">{{ enlaceOk() }}</p>
+  }
+
   @if (loading()) {
     <p class="usuarios__estado" role="status">Cargando…</p>
   } @else if (usuarios().length === 0) {
@@ -150,23 +151,13 @@
           </div>
           <div class="ucard__acciones">
             <ac-button size="sm" variant="ghost" [disabled]="actionId() === u.id" (click)="editar(u)">Editar</ac-button>
-            <ac-button size="sm" variant="ghost" [disabled]="actionId() === u.id" (click)="pedirReset(u)">Contraseña</ac-button>
+            <ac-button size="sm" variant="ghost"
+                       [loading]="actionId() === u.id" [disabled]="actionId() === u.id"
+                       (click)="enviarEnlace(u.id)">Enviar enlace de contraseña</ac-button>
             <ac-button size="sm" variant="ghost"
                        [loading]="actionId() === u.id" [disabled]="actionId() === u.id"
                        (click)="toggleActivo(u)">{{ u.activo ? 'Desactivar' : 'Activar' }}</ac-button>
           </div>
-
-          @if (resetId() === u.id) {
-            <div class="ucard__reset">
-              <input class="field__input" type="password" [formControl]="resetPass"
-                     autocomplete="new-password" placeholder="Nueva contraseña (mín. 8)"
-                     aria-label="Nueva contraseña" />
-              <ac-button size="sm" variant="ghost" type="button" (click)="cancelarReset()">Cancelar</ac-button>
-              <ac-button size="sm" type="button"
-                         [loading]="actionId() === u.id" [disabled]="actionId() === u.id"
-                         (click)="confirmarReset(u)">Guardar contraseña</ac-button>
-            </div>
-          }
         </li>
       }
     </ul>

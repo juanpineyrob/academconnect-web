@@ -27,7 +27,6 @@ export interface AdminUsuarioCreateRequest {
   rol: Rol;
   email: string;
   matricula: string;
-  password: string;
   nombre: string;
   edad?: number | null;
   ubicacion?: string | null;

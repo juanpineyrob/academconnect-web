@@ -38,8 +38,8 @@ export class UsuariosPage {
   protected readonly error = signal<string | null>(null);
   protected readonly actionId = signal<number | null>(null);
   protected readonly editId = signal<number | null>(null);
-  protected readonly resetId = signal<number | null>(null);
   protected readonly enviando = signal<boolean>(false);
+  protected readonly enlaceOk = signal<string | null>(null);
 
   protected readonly page = signal<number>(0);
   protected readonly totalPages = signal<number>(0);
@@ -50,16 +50,10 @@ export class UsuariosPage {
   protected readonly buscador = new FormControl('', { nonNullable: true });
   protected readonly filtroRol = new FormControl<Rol | ''>('', { nonNullable: true });
 
-  protected readonly resetPass = new FormControl('', {
-    nonNullable: true,
-    validators: [Validators.required, Validators.minLength(8)],
-  });
-
   protected readonly form = new FormGroup({
     rol: new FormControl<Rol>('ESTUDIANTE', { nonNullable: true }),
     email: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.email] }),
     matricula: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(30)] }),
-    password: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(8)] }),
     nombre: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     edad: new FormControl<number | null>(null),
     ubicacion: new FormControl('', { nonNullable: true }),
@@ -95,7 +89,6 @@ export class UsuariosPage {
   private cargar(): void {
     this.loading.set(true);
     this.error.set(null);
-    this.resetId.set(null);
     this.service
       .buscarUsuarios({ q: this.buscador.value, rol: this.filtroRol.value, page: this.page(), size: PAGE_SIZE })
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -177,7 +170,6 @@ export class UsuariosPage {
           rol: v.rol,
           email: v.email.trim(),
           matricula: v.matricula.trim(),
-          password: v.password,
           nombre: v.nombre.trim(),
           edad: v.edad,
           ubicacion: v.ubicacion.trim() || null,
@@ -204,7 +196,6 @@ export class UsuariosPage {
     this.editId.set(u.id);
     this.rolForm.set(u.rol);
     this.form.controls.rol.disable();
-    this.form.controls.password.disable();
     this.form.patchValue({
       rol: u.rol,
       email: u.email,
@@ -224,9 +215,8 @@ export class UsuariosPage {
   protected cancelarEdicion(): void {
     this.editId.set(null);
     this.form.controls.rol.enable();
-    this.form.controls.password.enable();
     this.form.reset({
-      rol: 'ESTUDIANTE', email: '', matricula: '', password: '', nombre: '', edad: null, ubicacion: '',
+      rol: 'ESTUDIANTE', email: '', matricula: '', nombre: '', edad: null, ubicacion: '',
       topeAsignaciones: 5, titulacion: '', cargo: '', institucion: '', titulo: '',
     });
     this.rolForm.set('ESTUDIANTE');
@@ -235,6 +225,7 @@ export class UsuariosPage {
   protected toggleActivo(u: AdminUsuario): void {
     this.actionId.set(u.id);
     this.error.set(null);
+    this.enlaceOk.set(null);
     const obs = u.activo ? this.service.desactivarUsuario(u.id) : this.service.activarUsuario(u.id);
     obs.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (updated) => {
@@ -248,31 +239,20 @@ export class UsuariosPage {
     });
   }
 
-  protected pedirReset(u: AdminUsuario): void {
-    this.resetId.set(u.id);
-    this.resetPass.reset('');
-  }
-
-  protected cancelarReset(): void {
-    this.resetId.set(null);
-  }
-
-  protected confirmarReset(u: AdminUsuario): void {
-    if (this.resetPass.invalid) {
-      this.resetPass.markAsTouched();
-      return;
-    }
-    this.actionId.set(u.id);
+  protected enviarEnlace(id: number): void {
+    this.actionId.set(id);
+    this.error.set(null);
+    this.enlaceOk.set(null);
     this.service
-      .resetPasswordUsuario(u.id, this.resetPass.value)
+      .enviarEnlacePassword(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: () => {
-          this.resetId.set(null);
+          this.enlaceOk.set('Enlace de contraseña enviado al correo del usuario.');
           this.actionId.set(null);
         },
         error: () => {
-          this.error.set('No se pudo resetear la contraseña.');
+          this.error.set('No se pudo enviar el enlace de contraseña.');
           this.actionId.set(null);
         },
       });
