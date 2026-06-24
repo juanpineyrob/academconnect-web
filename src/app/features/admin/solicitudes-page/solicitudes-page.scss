@@ -1,0 +1,247 @@
+:host {
+  display: block;
+}
+
+.solicitudes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  max-width: 920px;
+  margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5) var(--sp-8);
+}
+
+.solicitudes__header {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.solicitudes__back {
+  width: fit-content;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+  text-decoration: none;
+  transition: color var(--t-fast);
+
+  &:hover {
+    color: var(--c-accent);
+  }
+}
+
+.solicitudes__title {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+}
+
+.solicitudes__lead {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text-muted);
+}
+
+.field__label {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-medium);
+  color: var(--c-text-muted);
+}
+
+.field__input,
+.field__select,
+.solicitudes__search {
+  inline-size: 100%;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  padding: var(--sp-2) var(--sp-3);
+  min-block-size: 42px;
+  outline: none;
+
+  &:focus {
+    border-color: var(--c-accent);
+    box-shadow: var(--sh-focus);
+  }
+}
+
+.field__select {
+  cursor: pointer;
+}
+
+.solicitudes__toolbar {
+  display: flex;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.solicitudes__search {
+  flex: 1;
+  min-inline-size: 200px;
+  min-height: 44px;
+}
+
+.solicitudes__filtro {
+  inline-size: auto;
+  min-height: 44px;
+}
+
+.solicitudes__estado {
+  margin: 0;
+  color: var(--c-text-muted);
+}
+
+.solicitudes__error {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--c-state-rechazado-bg);
+  border: 1px solid rgba(179, 38, 30, 0.2);
+  color: var(--c-state-rechazado);
+}
+
+.solicitudes__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.scard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--c-surface);
+  border: 1px solid var(--c-border);
+  border-radius: var(--r-md);
+}
+
+.scard__info {
+  display: grid;
+  gap: 2px;
+  min-inline-size: 0;
+}
+
+.scard__top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.scard__nombre {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-medium);
+  color: var(--c-text);
+}
+
+.scard__estado {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  border-radius: var(--r-pill);
+  padding: 2px var(--sp-2);
+  color: var(--c-state-borrador);
+  background: var(--c-state-borrador-bg);
+
+  &[data-estado='APROBADA'] {
+    color: var(--c-state-aprobado);
+    background: var(--c-state-aprobado-bg);
+  }
+
+  &[data-estado='RECHAZADA'] {
+    color: var(--c-state-rechazado);
+    background: var(--c-state-rechazado-bg);
+  }
+}
+
+.scard__meta {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+}
+
+.scard__mat {
+  font-variant-numeric: tabular-nums;
+  color: var(--c-text);
+  font-weight: var(--fw-medium);
+}
+
+.scard__motivo {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  color: var(--c-text-muted);
+  font-style: italic;
+}
+
+.scard__acciones {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  flex-wrap: wrap;
+}
+
+.scard__rechazo {
+  flex-basis: 100%;
+  display: grid;
+  gap: var(--sp-2);
+  padding-top: var(--sp-3);
+  margin-top: var(--sp-1);
+  border-top: 1px solid var(--c-border);
+}
+
+.scard__motivo-input {
+  resize: vertical;
+  min-block-size: 60px;
+}
+
+.scard__rechazo-acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--sp-2);
+}
+
+.solicitudes__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding-top: var(--sp-2);
+}
+
+.solicitudes__pageinfo {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.solicitudes__count {
+  margin: 0;
+  text-align: center;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-faint);
+}
+
+@media (max-width: 640px) {
+  .solicitudes {
+    padding: var(--sp-5) var(--sp-4) var(--sp-7);
+  }
+}

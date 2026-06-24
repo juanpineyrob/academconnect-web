@@ -13,6 +13,9 @@ import {
   AdminUsuarioOption,
   AdminUsuarioUpdateRequest,
   AreaTematicaRequest,
+  EstadoSolicitud,
+  ImportPreview,
+  SolicitudCuenta,
   TrabajoAdminImportRequest,
 } from './admin.models';
 
@@ -124,6 +127,47 @@ export class AdminService {
 
   resetPasswordUsuario(id: number, password: string): Observable<void> {
     return this.http.post<void>(`${this.api}/admin/usuarios/${id}/reset-password`, { password });
+  }
+
+  // ---- Solicitudes de cuenta ----
+
+  buscarSolicitudes(opts: {
+    estado?: EstadoSolicitud | '';
+    q?: string;
+    page?: number;
+    size?: number;
+  }): Observable<Page<SolicitudCuenta>> {
+    let params = new HttpParams();
+    if (opts.estado) params = params.set('estado', opts.estado);
+    const q = opts.q?.trim();
+    if (q) params = params.set('q', q);
+    params = params.set('page', String(opts.page ?? 0)).set('size', String(opts.size ?? 10));
+    return this.http.get<Page<SolicitudCuenta>>(`${this.api}/admin/solicitudes`, { params });
+  }
+
+  aprobarSolicitud(id: number): Observable<SolicitudCuenta> {
+    return this.http.post<SolicitudCuenta>(`${this.api}/admin/solicitudes/${id}/aprobar`, {});
+  }
+
+  rechazarSolicitud(id: number, motivo: string): Observable<SolicitudCuenta> {
+    return this.http.post<SolicitudCuenta>(`${this.api}/admin/solicitudes/${id}/rechazar`, {
+      motivo,
+    });
+  }
+
+  // ---- Importación masiva de usuarios ----
+
+  previewImportacion(file: File): Observable<ImportPreview> {
+    const data = new FormData();
+    data.append('file', file);
+    return this.http.post<ImportPreview>(`${this.api}/admin/importaciones/preview`, data);
+  }
+
+  confirmarImportacion(loteId: number, reenviarInvitadas: boolean): Observable<ImportPreview> {
+    return this.http.post<ImportPreview>(
+      `${this.api}/admin/importaciones/${loteId}/confirmar`,
+      { reenviarInvitadas },
+    );
   }
 
   listarProfesores(): Observable<AdminUsuarioOption[]> {

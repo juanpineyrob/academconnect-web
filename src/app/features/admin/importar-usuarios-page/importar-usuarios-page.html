@@ -1,0 +1,103 @@
+<section class="importar">
+  <header class="importar__header">
+    <a class="importar__back" routerLink="/admin">← Panel</a>
+    <h1 class="importar__title">Importar usuarios</h1>
+    <p class="importar__lead">
+      Subí un archivo con matrícula, email y nombre. Previsualizá el resultado antes de confirmar.
+      Las cuentas nuevas se crean como invitadas y reciben un enlace de activación al correo.
+    </p>
+  </header>
+
+  @if (error()) {
+    <p class="importar__error" role="alert">{{ error() }}</p>
+  }
+
+  <div class="card importar__picker">
+    <label class="field__label" for="imp-file">Archivo (CSV)</label>
+    <input
+      id="imp-file"
+      class="field__input"
+      type="file"
+      accept=".csv,text/csv"
+      (change)="onArchivo($event)" />
+    @if (nombreArchivo()) {
+      <p class="importar__filename">Seleccionado: {{ nombreArchivo() }}</p>
+    }
+    <div class="importar__actions">
+      <ac-button
+        size="sm"
+        type="button"
+        [loading]="subiendo()"
+        [disabled]="!archivo() || subiendo()"
+        (click)="previsualizar()">Previsualizar</ac-button>
+    </div>
+  </div>
+
+  @if (preview(); as p) {
+    <div class="card importar__resumen">
+      <p class="card__overline t-overline">Resumen del lote #{{ p.loteId }}</p>
+      <p class="importar__counts" role="status">
+        <span class="importar__count importar__count--nuevo">{{ p.nuevos }} nuevos</span> ·
+        <span class="importar__count">{{ p.existentes }} existen</span> ·
+        <span class="importar__count importar__count--error">{{ p.errores }} errores</span>
+        <span class="importar__total">({{ p.total }} filas)</span>
+      </p>
+
+      @if (confirmado()) {
+        <p class="importar__success" role="status">
+          Importación confirmada. Las cuentas nuevas recibirán su enlace de activación.
+        </p>
+        <div class="importar__actions">
+          <ac-button size="sm" type="button" (click)="reiniciar()">Importar otro archivo</ac-button>
+        </div>
+      } @else {
+        <label class="importar__check">
+          <input type="checkbox" [formControl]="reenviarInvitadas" />
+          <span>Reenviar enlace a cuentas ya invitadas</span>
+        </label>
+        <div class="importar__actions">
+          <ac-button
+            size="sm"
+            type="button"
+            [loading]="confirmando()"
+            [disabled]="confirmando()"
+            (click)="confirmar()">Confirmar importación</ac-button>
+        </div>
+      }
+    </div>
+
+    @if (p.items.length > 0) {
+      <div class="card importar__tabla">
+        <table class="importar__table">
+          <caption class="importar__caption">Detalle por fila</caption>
+          <thead>
+            <tr>
+              <th scope="col">Línea</th>
+              <th scope="col">Matrícula</th>
+              <th scope="col">Email</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Resultado</th>
+              <th scope="col">Detalle</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (it of p.items; track it.linea) {
+              <tr>
+                <td class="importar__num">{{ it.linea }}</td>
+                <td>{{ it.matricula }}</td>
+                <td>{{ it.email }}</td>
+                <td>{{ it.nombre }}</td>
+                <td>
+                  <span class="importar__badge" [attr.data-resultado]="it.resultado">
+                    {{ resultadoLabel[it.resultado] }}
+                  </span>
+                </td>
+                <td class="importar__detalle">{{ it.detalle ?? '—' }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+  }
+</section>

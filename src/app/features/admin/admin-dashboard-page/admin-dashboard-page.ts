@@ -38,6 +38,18 @@ export class AdminDashboardPage {
       disponible: true,
     },
     {
+      titulo: 'Solicitudes de cuenta',
+      descripcion: 'Revisar, aprobar o rechazar las solicitudes de alta enviadas por usuarios.',
+      route: '/admin/solicitudes',
+      disponible: true,
+    },
+    {
+      titulo: 'Importar usuarios',
+      descripcion: 'Alta masiva de cuentas desde un archivo CSV con previsualización y envío de invitaciones.',
+      route: '/admin/importar-usuarios',
+      disponible: true,
+    },
+    {
       titulo: 'Áreas temáticas',
       descripcion: 'Gestión de las áreas CNPq y subáreas disponibles para clasificar trabajos y perfiles.',
       route: '/admin/areas-tematicas',

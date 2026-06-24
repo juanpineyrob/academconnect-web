@@ -57,6 +57,48 @@ export interface AreaTematicaRequest {
   parentId?: number | null;
 }
 
+// ---- Solicitudes de cuenta ----
+
+export type EstadoSolicitud = 'PENDIENTE' | 'APROBADA' | 'RECHAZADA';
+
+export interface SolicitudCuenta {
+  id: number;
+  matricula: string;
+  email: string;
+  nombre: string;
+  estado: EstadoSolicitud;
+  motivoRechazo: string | null;
+  createdAt: string;
+}
+
+// ---- Importación masiva de usuarios ----
+
+export type ResultadoFila =
+  | 'NUEVO'
+  | 'EXISTE_ACTIVA'
+  | 'EXISTE_INVITADA'
+  | 'COLISION_EMAIL'
+  | 'COLISION_MATRICULA'
+  | 'ERROR_FORMATO';
+
+export interface ImportItem {
+  linea: number;
+  matricula: string;
+  email: string;
+  nombre: string;
+  resultado: ResultadoFila;
+  detalle: string | null;
+}
+
+export interface ImportPreview {
+  loteId: number;
+  total: number;
+  nuevos: number;
+  existentes: number;
+  errores: number;
+  items: ImportItem[];
+}
+
 export interface TrabajoAdminImportRequest {
   titulo: string;
   descripcion?: string | null;

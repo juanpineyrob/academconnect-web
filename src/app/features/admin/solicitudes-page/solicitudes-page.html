@@ -1,0 +1,97 @@
+<section class="solicitudes">
+  <header class="solicitudes__header">
+    <a class="solicitudes__back" routerLink="/admin">← Panel</a>
+    <h1 class="solicitudes__title">Solicitudes de cuenta</h1>
+    <p class="solicitudes__lead">Revisá y resolvé las solicitudes de alta enviadas por usuarios.</p>
+  </header>
+
+  <div class="solicitudes__toolbar">
+    <input
+      class="solicitudes__search"
+      type="search"
+      [formControl]="buscador"
+      placeholder="Buscar por matrícula, nombre o email…"
+      aria-label="Buscar solicitudes" />
+    <select class="field__select solicitudes__filtro" [formControl]="filtroEstado" aria-label="Filtrar por estado">
+      <option value="">Todos los estados</option>
+      @for (e of ESTADOS; track e.value) {
+        <option [value]="e.value">{{ e.label }}</option>
+      }
+    </select>
+  </div>
+
+  @if (error()) {
+    <p class="solicitudes__error" role="alert">{{ error() }}</p>
+  }
+
+  @if (loading()) {
+    <p class="solicitudes__estado" role="status">Cargando…</p>
+  } @else if (solicitudes().length === 0) {
+    <p class="solicitudes__estado">No se encontraron solicitudes.</p>
+  } @else {
+    <ul class="solicitudes__list">
+      @for (s of solicitudes(); track s.id) {
+        <li class="scard">
+          <div class="scard__info">
+            <div class="scard__top">
+              <span class="scard__nombre">{{ s.nombre }}</span>
+              <span class="scard__estado" [attr.data-estado]="s.estado">{{ estadoLabel(s.estado) }}</span>
+            </div>
+            <span class="scard__meta">
+              <span class="scard__mat">{{ s.matricula }}</span> · {{ s.email }}
+            </span>
+            @if (s.motivoRechazo) {
+              <span class="scard__motivo">Motivo: {{ s.motivoRechazo }}</span>
+            }
+          </div>
+
+          @if (s.estado === 'PENDIENTE') {
+            <div class="scard__acciones">
+              <ac-button
+                size="sm"
+                variant="ghost"
+                [disabled]="actionId() === s.id"
+                (click)="pedirRechazo(s)">Rechazar</ac-button>
+              <ac-button
+                size="sm"
+                [loading]="actionId() === s.id"
+                [disabled]="actionId() === s.id || rechazoId() === s.id"
+                (click)="aprobar(s)">Aprobar</ac-button>
+            </div>
+          }
+
+          @if (rechazoId() === s.id) {
+            <div class="scard__rechazo">
+              <label class="field__label" [attr.for]="'motivo-' + s.id">Motivo del rechazo (opcional)</label>
+              <textarea
+                [id]="'motivo-' + s.id"
+                class="field__input scard__motivo-input"
+                [formControl]="motivo"
+                rows="2"
+                placeholder="Ej.: la matrícula no figura en el padrón."></textarea>
+              <div class="scard__rechazo-acciones">
+                <ac-button size="sm" variant="ghost" type="button" (click)="cancelarRechazo()">Cancelar</ac-button>
+                <ac-button
+                  size="sm"
+                  type="button"
+                  [loading]="actionId() === s.id"
+                  [disabled]="actionId() === s.id"
+                  (click)="confirmarRechazo(s)">Confirmar rechazo</ac-button>
+              </div>
+            </div>
+          }
+        </li>
+      }
+    </ul>
+
+    @if (totalPages() > 1) {
+      <nav class="solicitudes__pager" aria-label="Paginación">
+        <ac-button size="sm" variant="ghost" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</ac-button>
+        <span class="solicitudes__pageinfo">Página {{ page() + 1 }} de {{ totalPages() }} · {{ totalElements() }} solicitudes</span>
+        <ac-button size="sm" variant="ghost" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</ac-button>
+      </nav>
+    } @else {
+      <p class="solicitudes__count">{{ totalElements() }} solicitud(es)</p>
+    }
+  }
+</section>

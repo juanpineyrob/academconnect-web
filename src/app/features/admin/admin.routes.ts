@@ -52,4 +52,20 @@ export const ADMIN_ROUTES: Routes = [
       import('./usuarios-page/usuarios-page').then((m) => m.UsuariosPage),
     title: 'Usuarios · AcademConnect',
   },
+  {
+    path: 'admin/solicitudes',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
+    loadComponent: () =>
+      import('./solicitudes-page/solicitudes-page').then((m) => m.SolicitudesPage),
+    title: 'Solicitudes de cuenta · AcademConnect',
+  },
+  {
+    path: 'admin/importar-usuarios',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
+    loadComponent: () =>
+      import('./importar-usuarios-page/importar-usuarios-page').then((m) => m.ImportarUsuariosPage),
+    title: 'Importar usuarios · AcademConnect',
+  },
 ];
