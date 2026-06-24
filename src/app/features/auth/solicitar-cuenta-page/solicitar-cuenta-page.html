@@ -1,0 +1,69 @@
+<main class="onb">
+  <section class="onb__panel">
+    <ac-card padding="lg" class="onb__card">
+      <p class="onb__brand t-overline">AcademConnect</p>
+
+      @if (enviado()) {
+        <h1 class="onb__heading">Solicitud recibida</h1>
+        <p class="onb__sub t-body" role="status">
+          Si tu matrícula y correo corresponden a la institución, te enviaremos un enlace para activar
+          tu cuenta. Revisá tu bandeja de entrada (y la carpeta de spam).
+        </p>
+        <p class="onb__footer">
+          <a routerLink="/login" class="onb__link">← Volver a iniciar sesión</a>
+        </p>
+      } @else {
+        <h1 class="onb__heading">Solicitar cuenta</h1>
+        <p class="onb__sub t-body">
+          Completá tus datos institucionales. Un administrador revisará la solicitud y, si corresponde,
+          recibirás un enlace al correo para activar tu cuenta.
+        </p>
+
+        <form
+          [formGroup]="form"
+          (ngSubmit)="onSubmit()"
+          class="onb__form"
+          novalidate
+          aria-label="Formulario de solicitud de cuenta">
+          <ac-input
+            label="Matrícula"
+            type="text"
+            autocomplete="off"
+            [invalid]="matriculaError() !== null"
+            [errorMessage]="matriculaError()"
+            formControlName="matricula" />
+
+          <ac-input
+            label="Nombre completo"
+            type="text"
+            autocomplete="name"
+            [invalid]="nombreError() !== null"
+            [errorMessage]="nombreError()"
+            formControlName="nombre" />
+
+          <ac-input
+            label="Correo institucional"
+            type="email"
+            autocomplete="email"
+            [invalid]="emailError() !== null"
+            [errorMessage]="emailError()"
+            formControlName="email" />
+
+          <ac-button
+            type="submit"
+            variant="primary"
+            [fullWidth]="true"
+            [disabled]="submitting()"
+            [loading]="submitting()">
+            {{ submitting() ? 'Enviando…' : 'Enviar solicitud' }}
+          </ac-button>
+        </form>
+
+        <p class="onb__footer">
+          ¿Ya tenés cuenta?
+          <a routerLink="/login" class="onb__link">Iniciar sesión</a>
+        </p>
+      }
+    </ac-card>
+  </section>
+</main>

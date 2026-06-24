@@ -88,13 +88,14 @@
 
       <p class="login__footer">
         ¿Primer ingreso?
-        <a
-          href="#"
-          class="login__footer-link"
-          aria-disabled="true"
-          title="Contactá a tu administrador institucional"
-          (click)="$event.preventDefault()">
+        <a routerLink="/solicitar-cuenta" class="login__footer-link login__footer-link--active">
           Solicitar cuenta
+        </a>
+      </p>
+
+      <p class="login__footer">
+        <a routerLink="/recuperar-password" class="login__footer-link login__footer-link--active">
+          Olvidé mi contraseña
         </a>
       </p>
     </ac-card>

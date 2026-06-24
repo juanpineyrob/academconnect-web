@@ -198,6 +198,17 @@
   color: var(--c-text-faint);
 }
 
+.login__footer-link--active {
+  color: var(--c-accent);
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration-style: solid;
+}
+
+.login__footer-link--active:hover {
+  color: var(--c-accent);
+}
+
 @media (max-width: 960px) {
   .login__hero {
     padding: var(--sp-6) var(--sp-5);

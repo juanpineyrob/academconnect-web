@@ -9,7 +9,7 @@ import {
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { HttpErrorResponse } from '@angular/common/http';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { Button } from '@shared/ui/button/button';
 import { Card } from '@shared/ui/card/card';
@@ -21,7 +21,7 @@ import { ProblemDetail, isProblemDetail } from '@core/http/problem-detail';
 @Component({
   selector: 'ac-login-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, Button, Card, AcInput],
+  imports: [ReactiveFormsModule, RouterLink, Button, Card, AcInput],
   templateUrl: './login-page.html',
   styleUrl: './login-page.scss',
 })

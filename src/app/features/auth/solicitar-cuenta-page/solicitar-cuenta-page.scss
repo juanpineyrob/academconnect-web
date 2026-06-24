@@ -1,0 +1,82 @@
+:host {
+  display: block;
+  min-height: 100vh;
+  background: var(--c-bg);
+}
+
+.onb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--sp-7) var(--sp-5);
+}
+
+.onb__panel {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.onb__card {
+  width: 100%;
+  max-width: 440px;
+}
+
+.onb__brand {
+  color: var(--c-text-muted);
+  margin: 0 0 var(--sp-4);
+}
+
+.onb__heading {
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h1);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+  margin: 0 0 var(--sp-2);
+}
+
+.onb__sub {
+  color: var(--c-text-muted);
+  margin: 0 0 var(--sp-6);
+}
+
+.onb__form {
+  display: grid;
+  gap: var(--sp-4);
+}
+
+.onb__server-error {
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-state-rechazado);
+  background: var(--c-state-rechazado-bg);
+  border: 1px solid rgba(179, 38, 30, 0.2);
+  border-radius: var(--r-md);
+  padding: var(--sp-3) var(--sp-4);
+  margin: 0;
+}
+
+.onb__footer {
+  margin: var(--sp-6) 0 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+  text-align: center;
+}
+
+.onb__link {
+  color: var(--c-accent);
+  text-decoration: underline;
+}
+
+.onb__link:hover {
+  color: var(--c-accent);
+}
+
+@media (max-width: 640px) {
+  .onb {
+    padding: var(--sp-5) var(--sp-4);
+  }
+}
