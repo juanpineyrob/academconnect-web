@@ -41,16 +41,16 @@ export class MisTrabajosCrearPage {
     descripcion: [''],
     tipo: ['TCC' as TipoTrabajo, Validators.required],
     areaIds: [[] as number[]],
-    keywords: [[] as string[]],
   });
 
   protected readonly keywordInput = this.fb.nonNullable.control('');
+  protected readonly keywordsList = signal<string[]>([]);
   protected readonly areas = signal<AreaTematica[]>([]);
   protected readonly submitting = signal(false);
   protected readonly submitAttempted = signal(false);
   protected readonly serverError = signal<string | null>(null);
 
-  protected readonly keywordsCount = computed(() => this.form.controls.keywords.value.length);
+  protected readonly keywordsCount = computed(() => this.keywordsList().length);
   protected readonly keywordsValid = computed(() => {
     const n = this.keywordsCount();
     return n >= 3 && n <= 8;
@@ -62,7 +62,7 @@ export class MisTrabajosCrearPage {
       .subscribe((as) => this.areas.set(as));
   }
 
-  protected keywords(): string[] { return this.form.controls.keywords.value; }
+  protected keywords(): string[] { return this.keywordsList(); }
 
   protected addKeyword(): void {
     const raw = this.keywordInput.value.trim();
@@ -70,11 +70,11 @@ export class MisTrabajosCrearPage {
     const k = raw.toLowerCase();
     const cur = this.keywords();
     if (cur.includes(k) || cur.length >= 8) { this.keywordInput.setValue(''); return; }
-    this.form.controls.keywords.setValue([...cur, k]);
+    this.keywordsList.set([...cur, k]);
     this.keywordInput.setValue('');
   }
   protected removeKeyword(k: string): void {
-    this.form.controls.keywords.setValue(this.keywords().filter((x) => x !== k));
+    this.keywordsList.set(this.keywords().filter((x) => x !== k));
   }
   protected onKeywordKey(e: KeyboardEvent): void {
     if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); this.addKeyword(); }
@@ -109,7 +109,7 @@ export class MisTrabajosCrearPage {
       descripcion: v.descripcion.trim() || null,
       tipo: v.tipo,
       areaIds: v.areaIds,
-      keywords: v.keywords,
+      keywords: this.keywordsList(),
     };
     this.submitting.set(true);
     this.service.crear(payload)
