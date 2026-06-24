@@ -9,3 +9,16 @@
 }
 .invitar-form__textarea { resize: vertical; min-height: 80px; }
 .invitar-form__actions { display: flex; justify-content: flex-end; }
+.invitar-form__recos,
+.invitar-form__todos { list-style: none; margin: 0; padding: 0; }
+.invitar-form__todos { max-height: 240px; overflow-y: auto; }
+.invitar-form__afinidad {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(
+    to right,
+    var(--color-primary, #3b82f6) calc(var(--afinidad, 0) * 100%),
+    var(--color-border, #e5e7eb) 0
+  );
+}

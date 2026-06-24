@@ -1,18 +1,16 @@
 import {
-  ChangeDetectionStrategy, Component, DestroyRef, computed, inject, input, output, signal,
+  ChangeDetectionStrategy, Component, DestroyRef, OnInit, computed, inject, input, output, signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { catchError, of } from 'rxjs';
 
 import { Button } from '@shared/ui/button/button';
-import { AdminService } from '@features/admin/admin.service';
-import { AdminUsuarioOption } from '@features/admin/admin.models';
 import { TrabajoListItem } from '@features/repositorio/repositorio.models';
+import { MisTrabajosService } from '../../mis-trabajos.service';
+import { OrientadorSugerido } from '../../mis-trabajos.models';
 
-interface ProfesorRanked extends AdminUsuarioOption {
-  score: number;
-}
+const TOP_RECOMENDADOS = 3;
 
 @Component({
   selector: 'ac-invitar-orientador-form',
@@ -21,37 +19,43 @@ interface ProfesorRanked extends AdminUsuarioOption {
   templateUrl: './invitar-orientador-form.html',
   styleUrl: './invitar-orientador-form.scss',
 })
-export class InvitarOrientadorForm {
+export class InvitarOrientadorForm implements OnInit {
   private readonly fb = inject(FormBuilder);
-  private readonly admin = inject(AdminService);
+  private readonly service = inject(MisTrabajosService);
   private readonly destroyRef = inject(DestroyRef);
 
   readonly trabajo = input.required<TrabajoListItem>();
   readonly submitting = input<boolean>(false);
   readonly enviar = output<{ profesorId: number; motivo: string | null }>();
 
-  protected readonly profesores = signal<AdminUsuarioOption[]>([]);
+  protected readonly sugerencias = signal<OrientadorSugerido[]>([]);
   protected readonly loading = signal<boolean>(true);
+  protected readonly query = signal<string>('');
 
   protected readonly form = this.fb.nonNullable.group({
     profesorId: [null as number | null, Validators.required],
     motivo: [''],
   });
 
-  protected readonly ranked = computed<ProfesorRanked[]>(() => {
-    const t = this.trabajo();
-    const profes = this.profesores();
-    const trabajoAreaIds = new Set((t.areas ?? []).map((a) => a.id));
-    const kw = (t.keywords ?? []).map((k) => k.toLowerCase());
-    return profes
-      .map((p) => ({ ...p, score: scoreProfesor(p, trabajoAreaIds, kw) }))
-      .sort((a, b) => b.score - a.score || a.nombre.localeCompare(b.nombre));
+  protected readonly recomendados = computed(() => this.sugerencias().slice(0, TOP_RECOMENDADOS));
+  protected readonly todos = computed(() => {
+    const q = this.query().trim().toLowerCase();
+    const base = this.sugerencias();
+    return q ? base.filter((s) => s.nombre.toLowerCase().includes(q)) : base;
   });
 
-  constructor() {
-    this.admin.listarProfesores()
-      .pipe(catchError(() => of<AdminUsuarioOption[]>([])), takeUntilDestroyed(this.destroyRef))
-      .subscribe((ps) => { this.profesores.set(ps); this.loading.set(false); });
+  ngOnInit(): void {
+    this.service.sugerirOrientadores(this.trabajo().id)
+      .pipe(catchError(() => of<OrientadorSugerido[]>([])), takeUntilDestroyed(this.destroyRef))
+      .subscribe((ss) => { this.sugerencias.set(ss); this.loading.set(false); });
+  }
+
+  protected seleccionar(id: number): void {
+    this.form.controls.profesorId.setValue(id);
+  }
+
+  protected onQuery(value: string): void {
+    this.query.set(value);
   }
 
   protected onSubmit(): void {
@@ -59,14 +63,4 @@ export class InvitarOrientadorForm {
     const v = this.form.getRawValue();
     this.enviar.emit({ profesorId: v.profesorId!, motivo: v.motivo.trim() || null });
   }
-}
-
-function scoreProfesor(
-  _p: AdminUsuarioOption,
-  _trabajoAreaIds: Set<number>,
-  _trabajoKeywords: string[],
-): number {
-  // AdminService.listarProfesores no expone áreas, así que el score queda 0 (orden alfabético).
-  // Cuando el endpoint exponga áreas se puede completar con intersección + match léxico.
-  return 0;
 }
