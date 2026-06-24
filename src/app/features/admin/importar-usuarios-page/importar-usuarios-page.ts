@@ -9,6 +9,9 @@ import { isProblemDetail } from '@core/http/problem-detail';
 import { AdminService } from '../admin.service';
 import { ImportPreview, ResultadoFila } from '../admin.models';
 
+const MAX_BYTES = 5 * 1024 * 1024;
+const MIME_OK = new Set(['text/csv', 'application/vnd.ms-excel', '']);
+
 const RESULTADO_LABEL: Record<ResultadoFila, string> = {
   NUEVO: 'Nuevo',
   EXISTE_ACTIVA: 'Ya activa',
@@ -45,6 +48,16 @@ export class ImportarUsuariosPage {
   protected onArchivo(event: Event): void {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0] ?? null;
+
+    if (file && (!file.name.toLowerCase().endsWith('.csv') || !MIME_OK.has(file.type))) {
+      this.error.set('El archivo debe ser un CSV.');
+      return;
+    }
+    if (file && file.size > MAX_BYTES) {
+      this.error.set('El archivo supera el tamaño máximo (5 MB).');
+      return;
+    }
+
     this.archivo.set(file);
     this.preview.set(null);
     this.confirmado.set(false);

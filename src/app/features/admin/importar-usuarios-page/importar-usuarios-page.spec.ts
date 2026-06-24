@@ -67,4 +67,32 @@ describe('ImportarUsuariosPage', () => {
     fixture.componentInstance['previsualizar']();
     http.expectNone(`${api}/admin/importaciones/preview`);
   });
+
+  function changeEvent(file: File): Event {
+    const input = { files: [file] } as unknown as HTMLInputElement;
+    return { target: input } as unknown as Event;
+  }
+
+  it('rechaza un archivo que no es CSV y no previsualiza', () => {
+    const { fixture, http } = create();
+    const cmp = fixture.componentInstance;
+    const noCsv = new File(['x'], 'usuarios.txt', { type: 'text/plain' });
+    cmp['onArchivo'](changeEvent(noCsv));
+    expect(cmp['error']()).toBe('El archivo debe ser un CSV.');
+    expect(cmp['archivo']()).toBeNull();
+    cmp['previsualizar']();
+    http.expectNone(`${api}/admin/importaciones/preview`);
+  });
+
+  it('acepta un archivo CSV válido y permite previsualizar', () => {
+    const { fixture, http } = create();
+    const cmp = fixture.componentInstance;
+    cmp['onArchivo'](changeEvent(fakeFile()));
+    expect(cmp['error']()).toBeNull();
+    expect(cmp['archivo']()?.name).toBe('usuarios.csv');
+    cmp['previsualizar']();
+    http.expectOne(`${api}/admin/importaciones/preview`).flush(preview);
+    expect(cmp['preview']()?.nuevos).toBe(1);
+    http.verify();
+  });
 });

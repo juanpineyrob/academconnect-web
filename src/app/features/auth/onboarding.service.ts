@@ -8,6 +8,7 @@ import {
   EstablecerPasswordRequest,
   MensajeResponse,
   SolicitarCuentaRequest,
+  VerificarTokenRequest,
   VerificarTokenResponse,
 } from './onboarding.models';
 
@@ -23,7 +24,9 @@ export class OnboardingService {
 
   /** Verifica un token sin consumirlo. */
   verificarToken(token: string): Observable<VerificarTokenResponse> {
-    return this.http.post<VerificarTokenResponse>(`${this.api}/auth/token/verificar`, { token });
+    return this.http.post<VerificarTokenResponse>(`${this.api}/auth/token/verificar`, {
+      token,
+    } satisfies VerificarTokenRequest);
   }
 
   /** Consume el token (activación o reset) y fija la contraseña. 204 ok. */
