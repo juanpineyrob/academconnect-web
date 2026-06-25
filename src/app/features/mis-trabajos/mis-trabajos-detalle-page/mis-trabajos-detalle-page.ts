@@ -93,10 +93,13 @@ export class MisTrabajosDetallePage {
     this.solicitudesEvaluacion().filter((s) => s.estado === 'ACEPTADA').length);
   protected readonly evalPendientes = computed(() =>
     this.solicitudesEvaluacion().filter((s) => s.estado === 'PENDIENTE').length);
-  protected readonly bancaExcluidos = computed(() =>
-    this.solicitudesEvaluacion()
+  protected readonly bancaExcluidos = computed(() => {
+    const ids = this.solicitudesEvaluacion()
       .filter((s) => s.estado === 'PENDIENTE' || s.estado === 'ACEPTADA')
-      .map((s) => s.invitadoId));
+      .map((s) => s.invitadoId);
+    const co = this.coorientadorAsignado();
+    return co ? [...ids, co.invitadoId] : ids;
+  });
   protected readonly puedeSolicitarEvaluadores = computed(() => {
     const t = this.trabajo();
     if (!t || t.orientadorId == null) return false;
@@ -188,6 +191,16 @@ export class MisTrabajosDetallePage {
       .subscribe({
         next: (s) => { this.submittingEval.set(false); this.solicitudesEvaluacion.update((p) => [s, ...p]); },
         error: () => { this.submittingEval.set(false); },
+      });
+  }
+
+  protected cancelarEvaluacion(s: SolicitudEvaluacion): void {
+    this.evaluacionService.cancelar(s.id)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (updated) => this.solicitudesEvaluacion.update((p) =>
+          p.map((x) => (x.id === updated.id ? updated : x))),
+        error: () => { /* noop: el estado queda como estaba */ },
       });
   }
 

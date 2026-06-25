@@ -89,6 +89,18 @@
         } @else {
           <p class="detalle__hint">Banca completa.</p>
         }
+        @if (solicitudesEvaluacion().length > 0) {
+          <ul class="detalle__solicitudes">
+            @for (s of solicitudesEvaluacion(); track s.id) {
+              <li class="detalle__solicitud">
+                <span>{{ s.invitadoNombre }} — {{ estadoInvLabel[s.estado] }}</span>
+                @if (s.estado === 'PENDIENTE') {
+                  <ac-button size="sm" variant="ghost" (click)="cancelarEvaluacion(s)">Cancelar</ac-button>
+                }
+              </li>
+            }
+          </ul>
+        }
       </ac-card>
     }
 
