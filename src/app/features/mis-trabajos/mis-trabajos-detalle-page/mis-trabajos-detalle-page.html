@@ -101,6 +101,17 @@
             }
           </ul>
         }
+        @if (instancias().length > 0) {
+          <ul class="detalle__instancias">
+            @for (ie of instancias(); track ie.id) {
+              <li class="detalle__instancia">
+                <span>{{ ie.nombre }} (intento {{ ie.intento }})</span>
+                <span class="detalle__instancia-estado">{{ ie.estado }}</span>
+                @if (ie.puntajeAgregado != null) { <span>· {{ ie.puntajeAgregado }}</span> }
+              </li>
+            }
+          </ul>
+        }
       </ac-card>
     }
 

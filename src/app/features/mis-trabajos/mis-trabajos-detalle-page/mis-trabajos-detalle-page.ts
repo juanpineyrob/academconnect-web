@@ -26,6 +26,7 @@ import { SolicitudCoorientacionService } from '../solicitud-coorientacion.servic
 import { SolicitudCoorientacion } from '../solicitud-coorientacion.models';
 import { SolicitudEvaluacionService } from '../solicitud-evaluacion.service';
 import { SolicitudEvaluacion } from '../solicitud-evaluacion.models';
+import { InstanciaEvaluacion } from '../instancia-evaluacion.models';
 
 @Component({
   selector: 'ac-mis-trabajos-detalle-page',
@@ -47,6 +48,7 @@ export class MisTrabajosDetallePage {
   protected readonly invitaciones = signal<InvitacionOrientacion[]>([]);
   protected readonly solicitudesCoorientacion = signal<SolicitudCoorientacion[]>([]);
   protected readonly solicitudesEvaluacion = signal<SolicitudEvaluacion[]>([]);
+  protected readonly instancias = signal<InstanciaEvaluacion[]>([]);
   protected readonly evaluadoresRequeridos = signal<number>(0);
   protected readonly loading = signal<boolean>(true);
   protected readonly error = signal<string | null>(null);
@@ -66,6 +68,9 @@ export class MisTrabajosDetallePage {
 
   protected readonly invitacionPendiente = computed(() =>
     this.invitaciones().find((i) => i.estado === 'PENDIENTE') ?? null);
+
+  protected readonly instanciaActiva = computed(() =>
+    this.instancias().find((i) => i.estado === 'PENDIENTE' || i.estado === 'EN_CURSO') ?? null);
 
   protected readonly puedeInvitar = computed(() => {
     const t = this.trabajo();
@@ -119,12 +124,15 @@ export class MisTrabajosDetallePage {
         catchError(() => of<SolicitudCoorientacion[]>([]))),
       evaluaciones: this.evaluacionService.listarPorTrabajo(id).pipe(
         catchError(() => of<SolicitudEvaluacion[]>([]))),
+      instancias: this.evaluacionService.listarInstancias(id).pipe(
+        catchError(() => of<InstanciaEvaluacion[]>([]))),
     }).pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(({ trabajo, invitaciones, coorientaciones, evaluaciones }) => {
+      .subscribe(({ trabajo, invitaciones, coorientaciones, evaluaciones, instancias }) => {
         this.trabajo.set(trabajo);
         this.invitaciones.set(invitaciones);
         this.solicitudesCoorientacion.set(coorientaciones);
         this.solicitudesEvaluacion.set(evaluaciones);
+        this.instancias.set(instancias);
         this.loading.set(false);
         if (trabajo?.orientadorId != null) {
           this.evaluacionService.sugerirEvaluadores(id)
