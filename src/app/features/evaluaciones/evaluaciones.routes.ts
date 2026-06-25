@@ -20,4 +20,13 @@ export const EVALUACIONES_ROUTES: Routes = [
     loadComponent: () => import('./evaluar-page/evaluar-page').then((m) => m.EvaluarPage),
     title: 'Evaluar · AcademConnect',
   },
+  {
+    path: 'solicitudes-evaluacion',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['PROFESOR', 'EXTERNO'] },
+    loadComponent: () =>
+      import('./solicitudes-evaluacion-page/solicitudes-evaluacion-page')
+        .then((m) => m.SolicitudesEvaluacionPage),
+    title: 'Solicitudes de evaluación · AcademConnect',
+  },
 ];
