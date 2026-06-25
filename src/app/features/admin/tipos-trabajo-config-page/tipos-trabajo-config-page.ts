@@ -35,6 +35,7 @@ export class TiposTrabajoConfigPage {
   protected readonly form = this.fb.nonNullable.group({
     modoEvaluacion: ['SINCRONO' as ModoEvaluacion, Validators.required],
     evaluadoresDefault: [3, [Validators.required, Validators.min(1)]],
+    secuencial: [true],
     instancias: this.fb.array<FormGroup>([]),
   });
 
@@ -42,10 +43,11 @@ export class TiposTrabajoConfigPage {
     return this.form.controls.instancias;
   }
 
-  protected nuevaInstancia(nombre = '', evaluadores = 2): FormGroup {
+  protected nuevaInstancia(nombre = '', evaluadores = 2, maxIntentos = 1): FormGroup {
     return this.fb.nonNullable.group({
       nombre: [nombre, [Validators.required, Validators.maxLength(200)]],
       evaluadoresRequeridos: [evaluadores, [Validators.required, Validators.min(1)]],
+      maxIntentos: [maxIntentos, [Validators.required, Validators.min(1)]],
     });
   }
 
@@ -60,9 +62,10 @@ export class TiposTrabajoConfigPage {
         next: (cfg) => {
           this.form.controls.modoEvaluacion.setValue(cfg.modoEvaluacion);
           this.form.controls.evaluadoresDefault.setValue(cfg.evaluadoresDefault);
+          this.form.controls.secuencial.setValue(cfg.secuencial);
           this.instancias.clear();
           for (const i of cfg.instancias) {
-            this.instancias.push(this.nuevaInstancia(i.nombre, i.evaluadoresRequeridos));
+            this.instancias.push(this.nuevaInstancia(i.nombre, i.evaluadoresRequeridos, i.maxIntentos));
           }
           this.loading.set(false);
         },
@@ -70,6 +73,7 @@ export class TiposTrabajoConfigPage {
           // tipo sin config aún: form en defaults, lista vacía
           this.form.controls.modoEvaluacion.setValue('SINCRONO');
           this.form.controls.evaluadoresDefault.setValue(3);
+          this.form.controls.secuencial.setValue(true);
           this.instancias.clear();
           this.loading.set(false);
         },
@@ -107,9 +111,11 @@ export class TiposTrabajoConfigPage {
     this.service.guardar(tipo, {
       modoEvaluacion: this.form.controls.modoEvaluacion.value,
       evaluadoresDefault: this.form.controls.evaluadoresDefault.value,
+      secuencial: this.form.controls.secuencial.value,
       instancias: this.instancias.controls.map((c) => ({
         nombre: (c.get('nombre')!.value as string).trim(),
         evaluadoresRequeridos: c.get('evaluadoresRequeridos')!.value as number,
+        maxIntentos: c.get('maxIntentos')!.value as number,
       })),
     })
       .pipe(takeUntilDestroyed(this.destroyRef))

@@ -30,13 +30,13 @@ describe('TiposTrabajoConfigService', () => {
 
   it('guardar pega PUT con el payload de instancias', () => {
     const payload = {
-      modoEvaluacion: 'SINCRONO' as const, evaluadoresDefault: 2,
-      instancias: [{ nombre: 'TCC1', evaluadoresRequeridos: 2 }],
+      modoEvaluacion: 'SINCRONO' as const, evaluadoresDefault: 2, secuencial: true,
+      instancias: [{ nombre: 'TCC1', evaluadoresRequeridos: 2, maxIntentos: 1 }],
     };
     service.guardar('TCC', payload).subscribe();
     const req = http.expectOne(`${api}/admin/tipos-trabajo-config/TCC`);
     expect(req.request.method).toBe('PUT');
     expect(req.request.body.instancias.length).toBe(1);
-    req.flush({ tipo: 'TCC', ...payload, instancias: [{ orden: 0, nombre: 'TCC1', evaluadoresRequeridos: 2 }] });
+    req.flush({ tipo: 'TCC', ...payload, instancias: [{ orden: 0, nombre: 'TCC1', evaluadoresRequeridos: 2, maxIntentos: 1 }] });
   });
 });

@@ -28,6 +28,11 @@
             <input type="number" min="1" formControlName="evaluadoresDefault" class="ttc__input" />
           </label>
 
+          <label class="ttc__field ttc__field--checkbox">
+            <input type="checkbox" formControlName="secuencial" />
+            <span class="ttc__label">Evaluación secuencial</span>
+          </label>
+
           <fieldset class="ttc__field" formArrayName="instancias">
             <legend class="ttc__label">Instancias de evaluación</legend>
             @for (inst of instancias.controls; track $index) {
@@ -38,6 +43,9 @@
                 <input type="number" min="1" formControlName="evaluadoresRequeridos"
                        class="ttc__input ttc__input--num"
                        [attr.aria-label]="'Evaluadores de la instancia ' + ($index + 1)" />
+                <input type="number" min="1" formControlName="maxIntentos"
+                       class="ttc__input ttc__input--num"
+                       [attr.aria-label]="'Máx. intentos de la instancia ' + ($index + 1)" />
                 <ac-button type="button" size="sm" variant="ghost"
                            [ariaLabel]="'Subir instancia ' + ($index + 1)" (click)="subir($index)">↑</ac-button>
                 <ac-button type="button" size="sm" variant="ghost"

@@ -5,6 +5,7 @@ export interface InstanciaConfig {
   orden: number;
   nombre: string;
   evaluadoresRequeridos: number;
+  maxIntentos: number;
 }
 
 export interface TipoTrabajoConfig {
@@ -12,10 +13,12 @@ export interface TipoTrabajoConfig {
   modoEvaluacion: ModoEvaluacion;
   evaluadoresDefault: number;
   instancias: InstanciaConfig[];
+  secuencial: boolean;
 }
 
 export interface TipoTrabajoConfigPayload {
   modoEvaluacion: ModoEvaluacion;
   evaluadoresDefault: number;
-  instancias: { nombre: string; evaluadoresRequeridos: number }[];
+  secuencial: boolean;
+  instancias: { nombre: string; evaluadoresRequeridos: number; maxIntentos: number }[];
 }
