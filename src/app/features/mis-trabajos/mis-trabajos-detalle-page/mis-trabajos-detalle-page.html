@@ -73,6 +73,25 @@
       </ac-card>
     }
 
+    @if (t.orientadorId != null && (t.estado === 'EN_DESARROLLO' || t.estado === 'EN_EVALUACION')) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Banca evaluadora</h2>
+        <p class="detalle__hint">
+          Necesitás {{ evaluadoresRequeridos() }} · Aceptados {{ evalAceptados() }} · Pendientes {{ evalPendientes() }}
+        </p>
+        @if (puedeSolicitarEvaluadores()) {
+          <ac-solicitar-evaluadores-form
+            [trabajoId]="t.id"
+            [orientadorId]="t.orientadorId!"
+            [excluidos]="bancaExcluidos()"
+            [submitting]="submittingEval()"
+            (enviar)="onSolicitarEvaluador($event)" />
+        } @else {
+          <p class="detalle__hint">Banca completa.</p>
+        }
+      </ac-card>
+    }
+
     @if (invitaciones().length > 0) {
       <ac-card padding="md">
         <h2 class="detalle__h2">Historial de invitaciones</h2>

@@ -1,0 +1,37 @@
+<form class="eval-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  @if (loading()) {
+    <span class="eval-form__hint" role="status">Cargando evaluadores recomendados…</span>
+  } @else {
+    <fieldset class="eval-form__field">
+      <legend class="eval-form__label">Elegí un evaluador</legend>
+      <input type="search" class="eval-form__search" placeholder="Buscar por nombre…"
+             aria-label="Buscar evaluador por nombre"
+             [value]="query()" (input)="onQuery($any($event.target).value)" />
+      <ul class="eval-form__list">
+        @for (e of candidatos(); track e.evaluadorId) {
+          <li class="eval-form__item">
+            <label class="eval-form__item-label">
+              <input type="radio" formControlName="usuarioId" [value]="e.evaluadorId" (change)="seleccionar(e.evaluadorId)" />
+              <span class="eval-form__item-nombre">{{ e.nombre }}</span>
+              <span class="eval-form__item-rol">{{ e.rol === 'PROFESOR' ? 'Profesor' : 'Externo' }}</span>
+            </label>
+          </li>
+        } @empty {
+          <li class="eval-form__hint">No hay evaluadores que coincidan.</li>
+        }
+      </ul>
+    </fieldset>
+  }
+
+  <label class="eval-form__field">
+    <span class="eval-form__label">Mensaje (opcional)</span>
+    <textarea formControlName="motivo" rows="3" maxlength="1000"
+              class="eval-form__textarea"
+              placeholder="Contale por qué lo invitás a evaluar tu trabajo."></textarea>
+  </label>
+
+  <div class="eval-form__actions">
+    <ac-button size="sm" type="submit" [loading]="submitting()"
+               [disabled]="submitting() || form.invalid">Enviar solicitud</ac-button>
+  </div>
+</form>

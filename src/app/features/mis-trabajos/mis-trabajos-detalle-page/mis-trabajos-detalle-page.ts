@@ -17,17 +17,20 @@ import {
 import { isProblemDetail } from '@core/http/problem-detail';
 import { InvitarOrientadorForm } from '../components/invitar-orientador-form/invitar-orientador-form';
 import { SolicitarCoorientadorForm } from '../components/solicitar-coorientador-form/solicitar-coorientador-form';
+import { SolicitarEvaluadoresForm } from '../components/solicitar-evaluadores-form/solicitar-evaluadores-form';
 import { VersionesCard } from '../components/versiones-card/versiones-card';
 import { InvitacionOrientacionService } from '../invitacion-orientacion.service';
 import { InvitacionOrientacion } from '../invitacion-orientacion.models';
 import { MisTrabajosService } from '../mis-trabajos.service';
 import { SolicitudCoorientacionService } from '../solicitud-coorientacion.service';
 import { SolicitudCoorientacion } from '../solicitud-coorientacion.models';
+import { SolicitudEvaluacionService } from '../solicitud-evaluacion.service';
+import { SolicitudEvaluacion } from '../solicitud-evaluacion.models';
 
 @Component({
   selector: 'ac-mis-trabajos-detalle-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, Button, Card, InvitarOrientadorForm, SolicitarCoorientadorForm, VersionesCard],
+  imports: [RouterLink, Button, Card, InvitarOrientadorForm, SolicitarCoorientadorForm, SolicitarEvaluadoresForm, VersionesCard],
   templateUrl: './mis-trabajos-detalle-page.html',
   styleUrl: './mis-trabajos-detalle-page.scss',
 })
@@ -36,16 +39,20 @@ export class MisTrabajosDetallePage {
   private readonly trabajosService = inject(MisTrabajosService);
   private readonly invitacionService = inject(InvitacionOrientacionService);
   private readonly coorientacionService = inject(SolicitudCoorientacionService);
+  private readonly evaluacionService = inject(SolicitudEvaluacionService);
   private readonly auth = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly trabajo = signal<TrabajoListItem | null>(null);
   protected readonly invitaciones = signal<InvitacionOrientacion[]>([]);
   protected readonly solicitudesCoorientacion = signal<SolicitudCoorientacion[]>([]);
+  protected readonly solicitudesEvaluacion = signal<SolicitudEvaluacion[]>([]);
+  protected readonly evaluadoresRequeridos = signal<number>(0);
   protected readonly loading = signal<boolean>(true);
   protected readonly error = signal<string | null>(null);
   protected readonly submittingInv = signal<boolean>(false);
   protected readonly submittingCoorientacion = signal<boolean>(false);
+  protected readonly submittingEval = signal<boolean>(false);
   protected readonly actionMessage = signal<string | null>(null);
 
   protected readonly tipoLabel = TIPO_LABEL;
@@ -82,6 +89,22 @@ export class MisTrabajosDetallePage {
       && this.coorientacionPendiente() == null && this.coorientadorAsignado() == null;
   });
 
+  protected readonly evalAceptados = computed(() =>
+    this.solicitudesEvaluacion().filter((s) => s.estado === 'ACEPTADA').length);
+  protected readonly evalPendientes = computed(() =>
+    this.solicitudesEvaluacion().filter((s) => s.estado === 'PENDIENTE').length);
+  protected readonly bancaExcluidos = computed(() =>
+    this.solicitudesEvaluacion()
+      .filter((s) => s.estado === 'PENDIENTE' || s.estado === 'ACEPTADA')
+      .map((s) => s.invitadoId));
+  protected readonly puedeSolicitarEvaluadores = computed(() => {
+    const t = this.trabajo();
+    if (!t || t.orientadorId == null) return false;
+    if (t.estado !== 'EN_DESARROLLO' && t.estado !== 'EN_EVALUACION') return false;
+    const n = this.evaluadoresRequeridos();
+    return n > 0 && (this.evalAceptados() + this.evalPendientes()) < n;
+  });
+
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     forkJoin({
@@ -91,12 +114,21 @@ export class MisTrabajosDetallePage {
         catchError(() => of<InvitacionOrientacion[]>([]))),
       coorientaciones: this.coorientacionService.listarPorTrabajo(id).pipe(
         catchError(() => of<SolicitudCoorientacion[]>([]))),
+      evaluaciones: this.evaluacionService.listarPorTrabajo(id).pipe(
+        catchError(() => of<SolicitudEvaluacion[]>([]))),
     }).pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(({ trabajo, invitaciones, coorientaciones }) => {
+      .subscribe(({ trabajo, invitaciones, coorientaciones, evaluaciones }) => {
         this.trabajo.set(trabajo);
         this.invitaciones.set(invitaciones);
         this.solicitudesCoorientacion.set(coorientaciones);
+        this.solicitudesEvaluacion.set(evaluaciones);
         this.loading.set(false);
+        if (trabajo?.orientadorId != null) {
+          this.evaluacionService.sugerirEvaluadores(id)
+            .pipe(catchError(() => of({ evaluadoresRequeridos: 0, sugerencias: [] })),
+                  takeUntilDestroyed(this.destroyRef))
+            .subscribe((b) => this.evaluadoresRequeridos.set(b.evaluadoresRequeridos));
+        }
       });
   }
 
@@ -144,6 +176,18 @@ export class MisTrabajosDetallePage {
       .subscribe({
         next: (s) => { this.submittingCoorientacion.set(false); this.solicitudesCoorientacion.update((prev) => [s, ...prev]); },
         error: () => { this.submittingCoorientacion.set(false); },
+      });
+  }
+
+  protected onSolicitarEvaluador(payload: { usuarioId: number; motivo: string | null }): void {
+    const t = this.trabajo();
+    if (!t) return;
+    this.submittingEval.set(true);
+    this.evaluacionService.crear({ trabajoId: t.id, usuarioId: payload.usuarioId, motivo: payload.motivo })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (s) => { this.submittingEval.set(false); this.solicitudesEvaluacion.update((p) => [s, ...p]); },
+        error: () => { this.submittingEval.set(false); },
       });
   }
 
