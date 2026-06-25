@@ -3,7 +3,7 @@
     <h1 class="ttc__title">Estructura de evaluaciones por tipo</h1>
   </header>
 
-  <div class="ttc__tipos" role="tablist" aria-label="Tipos de trabajo">
+  <div class="ttc__tipos" role="group" aria-label="Tipos de trabajo">
     @for (t of tipos; track t) {
       <ac-button size="sm" [variant]="tipoSel() === t ? 'primary' : 'ghost'"
                  (click)="seleccionar(t)">{{ t }}</ac-button>
@@ -39,11 +39,11 @@
                        class="ttc__input ttc__input--num"
                        [attr.aria-label]="'Evaluadores de la instancia ' + ($index + 1)" />
                 <ac-button type="button" size="sm" variant="ghost"
-                           [attr.aria-label]="'Subir instancia ' + ($index + 1)" (click)="subir($index)">↑</ac-button>
+                           [ariaLabel]="'Subir instancia ' + ($index + 1)" (click)="subir($index)">↑</ac-button>
                 <ac-button type="button" size="sm" variant="ghost"
-                           [attr.aria-label]="'Bajar instancia ' + ($index + 1)" (click)="bajar($index)">↓</ac-button>
+                           [ariaLabel]="'Bajar instancia ' + ($index + 1)" (click)="bajar($index)">↓</ac-button>
                 <ac-button type="button" size="sm" variant="ghost"
-                           [attr.aria-label]="'Quitar instancia ' + ($index + 1)" (click)="quitarInstancia($index)">×</ac-button>
+                           [ariaLabel]="'Quitar instancia ' + ($index + 1)" (click)="quitarInstancia($index)">×</ac-button>
               </div>
             } @empty {
               <p class="ttc__hint">Sin instancias. Este tipo usará evaluación de ronda única.</p>

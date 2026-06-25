@@ -11,6 +11,7 @@ export type ButtonSize = 'sm' | 'md';
       [type]="type()"
       [disabled]="disabled()"
       [class]="classes()"
+      [attr.aria-label]="ariaLabel()"
       [attr.aria-busy]="loading() ? 'true' : null">
       <ng-content />
     </button>
@@ -27,6 +28,7 @@ export class Button {
   readonly disabled = input<boolean>(false);
   readonly loading = input<boolean>(false);
   readonly fullWidth = input<boolean>(false);
+  readonly ariaLabel = input<string | null>(null);
 
   protected readonly classes = computed(() => {
     const cls = ['ac-button', `ac-button--${this.variant()}`, `ac-button--${this.size()}`];
