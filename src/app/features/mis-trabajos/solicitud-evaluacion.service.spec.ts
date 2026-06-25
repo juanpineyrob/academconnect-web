@@ -41,4 +41,9 @@ describe('SolicitudEvaluacionService', () => {
     service.listarPorTrabajo(7).subscribe();
     http.expectOne(`${api}/api/solicitudes-evaluacion/trabajos/7`).flush([]);
   });
+
+  it('listarInstancias pega a /api/me/trabajos/{id}/instancias-evaluacion', () => {
+    service.listarInstancias(7).subscribe();
+    http.expectOne(`${api}/api/me/trabajos/7/instancias-evaluacion`).flush([]);
+  });
 });

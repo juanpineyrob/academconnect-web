@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
 import { Page } from '@core/http/page';
 import { RespuestaInvitacionRequest, EstadoInvitacion } from './invitacion-orientacion.models';
+import { InstanciaEvaluacion } from './instancia-evaluacion.models';
 import {
   SolicitudEvaluacion,
   SolicitudEvaluacionRequest,
@@ -48,5 +49,10 @@ export class SolicitudEvaluacionService {
   sugerirEvaluadores(trabajoId: number): Observable<SugerenciaBanca> {
     return this.http.get<SugerenciaBanca>(
       `${this.api}/api/me/trabajos/${trabajoId}/sugerir-evaluadores`);
+  }
+
+  listarInstancias(trabajoId: number): Observable<InstanciaEvaluacion[]> {
+    return this.http.get<InstanciaEvaluacion[]>(
+      `${this.api}/api/me/trabajos/${trabajoId}/instancias-evaluacion`);
   }
 }
