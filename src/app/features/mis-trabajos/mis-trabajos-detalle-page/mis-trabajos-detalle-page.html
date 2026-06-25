@@ -53,6 +53,26 @@
       </ac-card>
     }
 
+    @if (coorientadorAsignado(); as co) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Coorientador</h2>
+        <p>{{ co.invitadoNombre }}</p>
+      </ac-card>
+    } @else if (coorientacionPendiente(); as pend) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Coorientador</h2>
+        <p class="detalle__hint">Solicitud pendiente a {{ pend.invitadoNombre }}.</p>
+      </ac-card>
+    } @else if (puedeSolicitarCoorientador()) {
+      <ac-card padding="md">
+        <h2 class="detalle__h2">Solicitar coorientador</h2>
+        <ac-solicitar-coorientador-form
+          [orientadorId]="t.orientadorId!"
+          [submitting]="submittingCoorientacion()"
+          (enviar)="onSolicitarCoorientador($event)" />
+      </ac-card>
+    }
+
     @if (invitaciones().length > 0) {
       <ac-card padding="md">
         <h2 class="detalle__h2">Historial de invitaciones</h2>

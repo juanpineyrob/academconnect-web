@@ -1,0 +1,37 @@
+<form class="coorientador-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+  @if (loading()) {
+    <span class="coorientador-form__hint" role="status">Cargando candidatos…</span>
+  } @else {
+    <fieldset class="coorientador-form__field">
+      <legend class="coorientador-form__label">Elegí un profesor o externo</legend>
+      <input type="search" class="coorientador-form__search" placeholder="Buscar por nombre…"
+             aria-label="Buscar candidato por nombre"
+             [value]="query()" (input)="onQuery($any($event.target).value)" />
+      <ul class="coorientador-form__list">
+        @for (c of filtrados(); track c.id) {
+          <li class="coorientador-form__item">
+            <label class="coorientador-form__item-label">
+              <input type="radio" formControlName="usuarioId" [value]="c.id" (change)="seleccionar(c.id)" />
+              <span class="coorientador-form__item-nombre">{{ c.nombre }}</span>
+              <span class="coorientador-form__item-rol">{{ c.rol === 'PROFESOR' ? 'Profesor' : 'Externo' }}</span>
+            </label>
+          </li>
+        } @empty {
+          <li class="coorientador-form__hint">No hay candidatos que coincidan.</li>
+        }
+      </ul>
+    </fieldset>
+  }
+
+  <label class="coorientador-form__field">
+    <span class="coorientador-form__label">Mensaje (opcional)</span>
+    <textarea formControlName="motivo" rows="3" maxlength="1000"
+              class="coorientador-form__textarea"
+              placeholder="Contale por qué te gustaría que cooriente tu trabajo."></textarea>
+  </label>
+
+  <div class="coorientador-form__actions">
+    <ac-button size="sm" type="submit" [loading]="submitting()"
+               [disabled]="submitting() || form.invalid">Enviar solicitud</ac-button>
+  </div>
+</form>

@@ -16,15 +16,18 @@ import {
 } from '@features/repositorio/repositorio.models';
 import { isProblemDetail } from '@core/http/problem-detail';
 import { InvitarOrientadorForm } from '../components/invitar-orientador-form/invitar-orientador-form';
+import { SolicitarCoorientadorForm } from '../components/solicitar-coorientador-form/solicitar-coorientador-form';
 import { VersionesCard } from '../components/versiones-card/versiones-card';
 import { InvitacionOrientacionService } from '../invitacion-orientacion.service';
 import { InvitacionOrientacion } from '../invitacion-orientacion.models';
 import { MisTrabajosService } from '../mis-trabajos.service';
+import { SolicitudCoorientacionService } from '../solicitud-coorientacion.service';
+import { SolicitudCoorientacion } from '../solicitud-coorientacion.models';
 
 @Component({
   selector: 'ac-mis-trabajos-detalle-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, Button, Card, InvitarOrientadorForm, VersionesCard],
+  imports: [RouterLink, Button, Card, InvitarOrientadorForm, SolicitarCoorientadorForm, VersionesCard],
   templateUrl: './mis-trabajos-detalle-page.html',
   styleUrl: './mis-trabajos-detalle-page.scss',
 })
@@ -32,14 +35,17 @@ export class MisTrabajosDetallePage {
   private readonly route = inject(ActivatedRoute);
   private readonly trabajosService = inject(MisTrabajosService);
   private readonly invitacionService = inject(InvitacionOrientacionService);
+  private readonly coorientacionService = inject(SolicitudCoorientacionService);
   private readonly auth = inject(AuthService);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly trabajo = signal<TrabajoListItem | null>(null);
   protected readonly invitaciones = signal<InvitacionOrientacion[]>([]);
+  protected readonly solicitudesCoorientacion = signal<SolicitudCoorientacion[]>([]);
   protected readonly loading = signal<boolean>(true);
   protected readonly error = signal<string | null>(null);
   protected readonly submittingInv = signal<boolean>(false);
+  protected readonly submittingCoorientacion = signal<boolean>(false);
   protected readonly actionMessage = signal<string | null>(null);
 
   protected readonly tipoLabel = TIPO_LABEL;
@@ -65,6 +71,17 @@ export class MisTrabajosDetallePage {
     return !!t && !!u && t.estudianteId === u.userId;
   });
 
+  protected readonly coorientacionPendiente = computed(() =>
+    this.solicitudesCoorientacion().find((s) => s.estado === 'PENDIENTE') ?? null);
+  protected readonly coorientadorAsignado = computed(() =>
+    this.solicitudesCoorientacion().find((s) => s.estado === 'ACEPTADA') ?? null);
+  protected readonly puedeSolicitarCoorientador = computed(() => {
+    const t = this.trabajo();
+    return !!t && t.orientadorId != null
+      && t.estado !== 'APROBADO' && t.estado !== 'RECHAZADO' && t.estado !== 'CANCELADO'
+      && this.coorientacionPendiente() == null && this.coorientadorAsignado() == null;
+  });
+
   constructor() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     forkJoin({
@@ -72,10 +89,13 @@ export class MisTrabajosDetallePage {
         catchError((err: HttpErrorResponse) => { this.error.set(this.mapError(err)); return of(null); })),
       invitaciones: this.invitacionService.listarPorTrabajo(id).pipe(
         catchError(() => of<InvitacionOrientacion[]>([]))),
+      coorientaciones: this.coorientacionService.listarPorTrabajo(id).pipe(
+        catchError(() => of<SolicitudCoorientacion[]>([]))),
     }).pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(({ trabajo, invitaciones }) => {
+      .subscribe(({ trabajo, invitaciones, coorientaciones }) => {
         this.trabajo.set(trabajo);
         this.invitaciones.set(invitaciones);
+        this.solicitudesCoorientacion.set(coorientaciones);
         this.loading.set(false);
       });
   }
@@ -112,6 +132,18 @@ export class MisTrabajosDetallePage {
           this.actionMessage.set('Invitación cancelada.');
         },
         error: (err: HttpErrorResponse) => this.error.set(this.mapError(err)),
+      });
+  }
+
+  protected onSolicitarCoorientador(payload: { usuarioId: number; motivo: string | null }): void {
+    const t = this.trabajo();
+    if (!t) return;
+    this.submittingCoorientacion.set(true);
+    this.coorientacionService.crear({ trabajoId: t.id, usuarioId: payload.usuarioId, motivo: payload.motivo })
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (s) => { this.submittingCoorientacion.set(false); this.solicitudesCoorientacion.update((prev) => [s, ...prev]); },
+        error: () => { this.submittingCoorientacion.set(false); },
       });
   }
 
