@@ -44,6 +44,7 @@ const SECTIONS_EVALUADOR: NavSection[] = [
       { label: 'Evaluaciones asignadas', route: '/evaluaciones', exact: false },
       { label: 'Rúbricas', route: '/rubricas', exact: false },
       { label: 'Invitaciones de orientación', route: '/invitaciones-orientacion' },
+      { label: 'Solicitudes de coorientación', route: '/solicitudes-coorientacion' },
       { label: 'Mis publicaciones', route: '/mis-publicaciones', exact: false },
       { label: 'Hub de necesidades', route: '/hub', exact: false },
       { label: 'Repositorio', route: '/repositorio', exact: false },

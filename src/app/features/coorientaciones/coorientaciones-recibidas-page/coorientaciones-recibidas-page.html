@@ -1,0 +1,42 @@
+<section class="coorientaciones">
+  <header class="coorientaciones__header">
+    <h1 class="coorientaciones__title">Solicitudes de coorientación</h1>
+    <div class="coorientaciones__tabs" role="tablist">
+      <ac-button size="sm" [variant]="filtro() === 'PENDIENTE' ? 'primary' : 'ghost'"
+                 (click)="setFiltro('PENDIENTE')">Pendientes</ac-button>
+      <ac-button size="sm" [variant]="filtro() === 'HISTORICO' ? 'primary' : 'ghost'"
+                 (click)="setFiltro('HISTORICO')">Histórico</ac-button>
+    </div>
+  </header>
+
+  @if (error(); as e) { <p class="coorientaciones__error" role="alert">{{ e }}</p> }
+
+  @if (loading()) {
+    <p role="status">Cargando…</p>
+  } @else if (solicitudes().length === 0) {
+    <p>No hay solicitudes.</p>
+  } @else {
+    <ul class="coorientaciones__list">
+      @for (s of solicitudes(); track s.id) {
+        <li>
+          <ac-card padding="md">
+            <h2 class="coorientaciones__h2">{{ s.trabajoTitulo }}</h2>
+            @if (s.motivo) { <p>{{ s.motivo }}</p> }
+            @if (s.estado === 'PENDIENTE') {
+              <div class="coorientaciones__actions">
+                <ac-button size="sm" [loading]="actionId() === s.id" (click)="aceptar(s)">Aceptar</ac-button>
+                <ac-button size="sm" variant="ghost" [loading]="actionId() === s.id" (click)="rechazar(s)">Rechazar</ac-button>
+              </div>
+            } @else {
+              <p class="coorientaciones__estado">{{ s.estado }}</p>
+            }
+          </ac-card>
+        </li>
+      }
+    </ul>
+    <div class="coorientaciones__pager">
+      <ac-button size="sm" variant="ghost" [disabled]="first()" (click)="paginaAnterior()">Anterior</ac-button>
+      <ac-button size="sm" variant="ghost" [disabled]="last()" (click)="paginaSiguiente()">Siguiente</ac-button>
+    </div>
+  }
+</section>

@@ -6,6 +6,7 @@ import { homeForRole } from '@core/auth/home-for-role';
 import { ADMIN_ROUTES } from '@features/admin/admin.routes';
 import { AUTH_ROUTES } from '@features/auth/auth.routes';
 import { HUB_ROUTES } from '@features/hub/hub.routes';
+import { COORIENTACIONES_ROUTES } from '@features/coorientaciones/coorientaciones.routes';
 import { INVITACIONES_ROUTES } from '@features/invitaciones/invitaciones.routes';
 import { MIS_PUBLICACIONES_ROUTES } from '@features/mis-publicaciones/mis-publicaciones.routes';
 import { EVALUACIONES_ROUTES } from '@features/evaluaciones/evaluaciones.routes';
@@ -32,6 +33,7 @@ export const routes: Routes = [
       ...EVALUACIONES_ROUTES,
       ...RUBRICAS_ROUTES,
       ...INVITACIONES_ROUTES,
+      ...COORIENTACIONES_ROUTES,
       ...HUB_ROUTES,
       ...MIS_PUBLICACIONES_ROUTES,
       { path: '', pathMatch: 'full', redirectTo: roleAwareHome },
