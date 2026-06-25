@@ -69,6 +69,7 @@ const SECTIONS_ADMIN: NavSection[] = [
       { label: 'Rúbricas', route: '/rubricas', exact: false },
       { label: 'Repositorio', route: '/repositorio', exact: false },
       { label: 'Importar trabajos', route: '/admin/importar-trabajo' },
+      { label: 'Tipos de trabajo', route: '/admin/tipos-trabajo-config' },
       { label: 'Usuarios' },
       { label: 'Áreas' },
       { label: 'Auditoría' },

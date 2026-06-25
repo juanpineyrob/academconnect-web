@@ -68,4 +68,13 @@ export const ADMIN_ROUTES: Routes = [
       import('./importar-usuarios-page/importar-usuarios-page').then((m) => m.ImportarUsuariosPage),
     title: 'Importar usuarios · AcademConnect',
   },
+  {
+    path: 'admin/tipos-trabajo-config',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
+    loadComponent: () =>
+      import('./tipos-trabajo-config-page/tipos-trabajo-config-page')
+        .then((m) => m.TiposTrabajoConfigPage),
+    title: 'Configuración de evaluaciones · AcademConnect',
+  },
 ];

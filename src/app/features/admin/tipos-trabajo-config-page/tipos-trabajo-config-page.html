@@ -1,0 +1,67 @@
+<section class="ttc">
+  <header class="ttc__header">
+    <h1 class="ttc__title">Estructura de evaluaciones por tipo</h1>
+  </header>
+
+  <div class="ttc__tipos" role="tablist" aria-label="Tipos de trabajo">
+    @for (t of tipos; track t) {
+      <ac-button size="sm" [variant]="tipoSel() === t ? 'primary' : 'ghost'"
+                 (click)="seleccionar(t)">{{ t }}</ac-button>
+    }
+  </div>
+
+  @if (tipoSel(); as tipo) {
+    @if (loading()) {
+      <p role="status">Cargando…</p>
+    } @else {
+      <ac-card padding="lg">
+        <form class="ttc__form" [formGroup]="form" (ngSubmit)="guardar()" novalidate>
+          <label class="ttc__field">
+            <span class="ttc__label">Modo de evaluación</span>
+            <select formControlName="modoEvaluacion" class="ttc__select">
+              @for (m of modos; track m) { <option [value]="m">{{ m }}</option> }
+            </select>
+          </label>
+
+          <label class="ttc__field">
+            <span class="ttc__label">Evaluadores por defecto</span>
+            <input type="number" min="1" formControlName="evaluadoresDefault" class="ttc__input" />
+          </label>
+
+          <fieldset class="ttc__field" formArrayName="instancias">
+            <legend class="ttc__label">Instancias de evaluación</legend>
+            @for (inst of instancias.controls; track $index) {
+              <div class="ttc__instancia" [formGroupName]="$index">
+                <input type="text" formControlName="nombre" maxlength="200"
+                       class="ttc__input" [attr.aria-label]="'Nombre de la instancia ' + ($index + 1)"
+                       placeholder="Nombre (ej. TCC1)" />
+                <input type="number" min="1" formControlName="evaluadoresRequeridos"
+                       class="ttc__input ttc__input--num"
+                       [attr.aria-label]="'Evaluadores de la instancia ' + ($index + 1)" />
+                <ac-button type="button" size="sm" variant="ghost"
+                           [attr.aria-label]="'Subir instancia ' + ($index + 1)" (click)="subir($index)">↑</ac-button>
+                <ac-button type="button" size="sm" variant="ghost"
+                           [attr.aria-label]="'Bajar instancia ' + ($index + 1)" (click)="bajar($index)">↓</ac-button>
+                <ac-button type="button" size="sm" variant="ghost"
+                           [attr.aria-label]="'Quitar instancia ' + ($index + 1)" (click)="quitarInstancia($index)">×</ac-button>
+              </div>
+            } @empty {
+              <p class="ttc__hint">Sin instancias. Este tipo usará evaluación de ronda única.</p>
+            }
+            <ac-button type="button" size="sm" variant="ghost" (click)="agregarInstancia()">+ Agregar instancia</ac-button>
+          </fieldset>
+
+          @if (error(); as e) { <p class="ttc__error" role="alert">{{ e }}</p> }
+          @if (guardado()) { <p class="ttc__ok" role="status">Guardado.</p> }
+
+          <div class="ttc__actions">
+            <ac-button size="sm" type="submit" [loading]="saving()"
+                       [disabled]="saving() || form.invalid">Guardar</ac-button>
+          </div>
+        </form>
+      </ac-card>
+    }
+  } @else {
+    <p class="ttc__hint">Elegí un tipo de trabajo para configurar sus instancias.</p>
+  }
+</section>
