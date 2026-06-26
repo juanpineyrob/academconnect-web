@@ -14,7 +14,8 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
       const isLogin = req.url.endsWith('/auth/login');
-      if (err.status === 401 && !isLogin) {
+      const teniaSesion = auth.currentUser() !== null;
+      if (err.status === 401 && !isLogin && teniaSesion) {
         auth.clearSession();
         void router.navigate(['/login'], {
           queryParams: { returnUrl: router.url },
