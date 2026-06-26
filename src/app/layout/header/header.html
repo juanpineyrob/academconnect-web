@@ -44,7 +44,9 @@
     </svg>
   </button>
 
-  <ac-feed-dropdown />
+  @if (user()) {
+    <ac-feed-dropdown />
+  }
 
   @if (user(); as u) {
     <div class="header__user">
