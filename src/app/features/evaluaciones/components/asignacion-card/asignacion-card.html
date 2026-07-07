@@ -10,7 +10,11 @@
     <span>Asignada {{ a.asignadaEn | date: 'mediumDate' }}</span>
   </p>
   <p class="card__venc" [class.card__venc--alerta]="vencida()">
-    @if (vencida()) { Venció el } @else { Vence el }
-    {{ a.vencimientoEn | date: 'mediumDate' }}
+    @if (a.vencimientoEn) {
+      @if (vencida()) { Venció el } @else { Vence el }
+      {{ a.vencimientoEn | date: 'mediumDate' }}
+    } @else {
+      Sin fecha límite
+    }
   </p>
 </a>

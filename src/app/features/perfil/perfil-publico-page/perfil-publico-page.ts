@@ -15,8 +15,7 @@ import { LineasInvestigacion } from '../components/lineas-investigacion/lineas-i
 import { PerfilHeader } from '../components/perfil-header/perfil-header';
 import { PerfilStats } from '../components/perfil-stats/perfil-stats';
 import { PublicacionesRecientes } from '../components/publicaciones-recientes/publicaciones-recientes';
-import { Reconocimientos } from '../components/reconocimientos/reconocimientos';
-import { PerfilPublico, Reconocimiento, TrabajoResumen } from '../perfil.models';
+import { PerfilPublico, TrabajoResumen } from '../perfil.models';
 import { PerfilService } from '../perfil.service';
 
 @Component({
@@ -28,7 +27,6 @@ import { PerfilService } from '../perfil.service';
     PerfilHeader,
     PerfilStats,
     PublicacionesRecientes,
-    Reconocimientos,
   ],
   templateUrl: './perfil-publico-page.html',
   styleUrl: './perfil-publico-page.scss',
@@ -40,7 +38,6 @@ export class PerfilPublicoPage {
 
   protected readonly perfil = signal<PerfilPublico | null>(null);
   protected readonly trabajos = signal<TrabajoResumen[] | null>(null);
-  protected readonly reconocimientos = signal<Reconocimiento[]>([]);
   protected readonly loading = signal(true);
   protected readonly notFound = signal(false);
 
@@ -71,11 +68,6 @@ export class PerfilPublicoPage {
         next: (perfil) => {
           this.perfil.set(perfil);
           this.loading.set(false);
-
-          this.perfilService
-            .listarReconocimientos(id)
-            .pipe(takeUntilDestroyed(this.destroyRef))
-            .subscribe((rs) => this.reconocimientos.set(rs));
 
           if (perfil.rol === 'ESTUDIANTE') {
             this.perfilService

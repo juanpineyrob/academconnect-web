@@ -28,6 +28,7 @@ export class SolicitarEvaluadoresForm implements OnInit {
   readonly enviar = output<{ usuarioId: number; motivo: string | null }>();
 
   protected readonly sugerencias = signal<EvaluadorSugerido[]>([]);
+  protected readonly evaluadoresRequeridos = signal<number>(3);
   protected readonly loading = signal<boolean>(true);
   protected readonly query = signal<string>('');
 
@@ -36,10 +37,18 @@ export class SolicitarEvaluadoresForm implements OnInit {
     motivo: [''],
   });
 
+  protected readonly disponibles = computed(() => {
+    const fuera = new Set<number>([this.orientadorId(), ...this.excluidos()]);
+    return this.sugerencias().filter((e) => !fuera.has(e.evaluadorId));
+  });
+
+  protected readonly recomendados = computed(
+    () => this.disponibles().slice(0, this.evaluadoresRequeridos() || 3),
+  );
+
   protected readonly candidatos = computed(() => {
     const q = this.query().trim().toLowerCase();
-    const fuera = new Set<number>([this.orientadorId(), ...this.excluidos()]);
-    const base = this.sugerencias().filter((e) => !fuera.has(e.evaluadorId));
+    const base = this.disponibles();
     return q ? base.filter((e) => e.nombre.toLowerCase().includes(q)) : base;
   });
 
@@ -47,7 +56,11 @@ export class SolicitarEvaluadoresForm implements OnInit {
     this.service.sugerirEvaluadores(this.trabajoId())
       .pipe(catchError(() => of({ evaluadoresRequeridos: 0, sugerencias: [] })),
             takeUntilDestroyed(this.destroyRef))
-      .subscribe((b) => { this.sugerencias.set(b.sugerencias); this.loading.set(false); });
+      .subscribe((b) => {
+        this.sugerencias.set(b.sugerencias);
+        this.evaluadoresRequeridos.set(b.evaluadoresRequeridos);
+        this.loading.set(false);
+      });
   }
 
   protected seleccionar(id: number): void {

@@ -37,6 +37,14 @@ export const ADMIN_ROUTES: Routes = [
     title: 'Auditoría · AcademConnect',
   },
   {
+    path: 'admin/metricas',
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['ADMINISTRADOR'] },
+    loadComponent: () =>
+      import('./metricas-page/metricas-page').then((m) => m.MetricasPage),
+    title: 'Métricas · AcademConnect',
+  },
+  {
     path: 'admin/areas-tematicas',
     canActivate: [authGuard, roleGuard],
     data: { roles: ['ADMINISTRADOR'] },

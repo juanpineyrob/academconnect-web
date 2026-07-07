@@ -15,6 +15,7 @@ import {
   AreaTematicaRequest,
   EstadoSolicitud,
   ImportPreview,
+  Metricas,
   SolicitudCuenta,
   TrabajoAdminImportRequest,
 } from './admin.models';
@@ -180,6 +181,16 @@ export class AdminService {
     return this.http
       .get<EstudianteResponse[]>(`${this.api}/api/estudiantes`)
       .pipe(map((rs) => rs.filter((r) => r.activo).map(toOption)));
+  }
+
+  // ---- Métricas ----
+
+  obtenerMetricas(): Observable<Metricas> {
+    return this.http.get<Metricas>(`${this.api}/admin/metricas`);
+  }
+
+  exportarMetricasCsv(): Observable<Blob> {
+    return this.http.get(`${this.api}/admin/metricas/export.csv`, { responseType: 'blob' });
   }
 }
 

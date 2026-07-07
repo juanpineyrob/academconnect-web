@@ -1,0 +1,74 @@
+<section class="metr">
+  <header class="metr__header">
+    <a class="metr__back" routerLink="/admin">← Panel</a>
+    <div class="metr__headrow">
+      <div>
+        <h1 class="metr__title">Métricas</h1>
+        <p class="metr__lead">Panorama agregado del estado de los trabajos y la carga de evaluación.</p>
+      </div>
+      @if (!loading() && !error()) {
+        <ac-button variant="ghost" size="sm" [loading]="exporting()" (click)="exportarCsv()">
+          Exportar CSV
+        </ac-button>
+      }
+    </div>
+  </header>
+
+  @if (loading()) {
+    <p class="metr__estado" role="status">Cargando…</p>
+  } @else if (error()) {
+    <p class="metr__error" role="alert">
+      {{ error() }}
+      <button type="button" class="metr__retry" (click)="cargar()">Reintentar</button>
+    </p>
+  } @else if (metricas(); as m) {
+    <div class="metr__stats">
+      <ac-stat-card
+        label="Tiempo promedio de evaluación"
+        [value]="tiempoPromedioLabel()"
+        sublabel="Desde la asignación hasta la calificación" />
+      <ac-stat-card
+        label="Evaluadores con carga activa"
+        [value]="evaluadoresConCarga()"
+        sublabel="Con al menos una asignación pendiente" />
+      <ac-stat-card
+        label="Concentración de carga"
+        [value]="giniLabel()"
+        sublabel="Índice de Gini · 0 repartido parejo, 1 concentrado" />
+    </div>
+
+    <section class="metr__block">
+      <h2 class="metr__h2">Trabajos por estado</h2>
+      <ul role="list" class="metr__bars">
+        @for (b of barrasEstado(); track b.estado) {
+          <li class="bar">
+            <span class="bar__label">{{ b.label }}</span>
+            <span class="bar__track">
+              <span class="bar__fill" [class]="'bar__fill--' + b.tono" [style.inline-size.%]="b.pct"></span>
+            </span>
+            <span class="bar__value">{{ b.cantidad }}</span>
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section class="metr__block">
+      <h2 class="metr__h2">Carga por evaluador</h2>
+      @if (barrasEvaluador().length === 0) {
+        <p class="metr__estado">Ningún evaluador tiene asignaciones activas.</p>
+      } @else {
+        <ul role="list" class="metr__bars">
+          @for (b of barrasEvaluador(); track b.evaluadorId) {
+            <li class="bar">
+              <span class="bar__label">{{ b.nombre }}</span>
+              <span class="bar__track">
+                <span class="bar__fill bar__fill--enviado" [style.inline-size.%]="b.pct"></span>
+              </span>
+              <span class="bar__value">{{ b.cargaActiva | number: '1.0-0' }}</span>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+  }
+</section>

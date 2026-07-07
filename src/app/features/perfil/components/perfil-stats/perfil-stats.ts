@@ -25,11 +25,9 @@ interface Stat {
 export class PerfilStats {
   readonly perfil = input.required<Perfil | PerfilPublico>();
   readonly evaluadorStats = input<StatsEvaluador | null>(null);
-  readonly reconocimientosCount = input<number>(0);
 
   protected readonly stats = computed<Stat[]>(() => {
     const p = this.perfil();
-    const recs = this.reconocimientosCount();
 
     if (p.rol === 'ESTUDIANTE') {
       return [
@@ -42,11 +40,6 @@ export class PerfilStats {
           label: 'Líneas activas',
           value: p.areas.length,
           sublabel: 'Áreas derivadas de sus trabajos',
-        },
-        {
-          label: 'Reconocimientos',
-          value: recs,
-          sublabel: 'Distinciones recibidas',
         },
       ];
     }
@@ -62,11 +55,6 @@ export class PerfilStats {
         label: 'Trabajos orientados',
         value: p.trabajosPublicados,
         sublabel: 'Tutorías aprobadas',
-      },
-      {
-        label: 'Reconocimientos',
-        value: recs,
-        sublabel: 'Distinciones recibidas',
       },
     ];
   });

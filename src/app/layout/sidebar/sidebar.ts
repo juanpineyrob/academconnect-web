@@ -26,14 +26,6 @@ const SECTIONS_ESTUDIANTE: NavSection[] = [
       { label: 'Repositorio', route: '/repositorio', exact: false },
     ],
   },
-  {
-    title: 'Personal',
-    items: [{ label: 'Notificaciones' }, { label: 'Mensajes' }],
-  },
-  {
-    title: 'Sistema',
-    items: [{ label: 'Configuración' }],
-  },
 ];
 
 const SECTIONS_EVALUADOR: NavSection[] = [
@@ -47,17 +39,8 @@ const SECTIONS_EVALUADOR: NavSection[] = [
       { label: 'Solicitudes de coorientación', route: '/solicitudes-coorientacion' },
       { label: 'Solicitudes de evaluación', route: '/solicitudes-evaluacion' },
       { label: 'Mis publicaciones', route: '/mis-publicaciones', exact: false },
-      { label: 'Hub de necesidades', route: '/hub', exact: false },
       { label: 'Repositorio', route: '/repositorio', exact: false },
     ],
-  },
-  {
-    title: 'Comunidad',
-    items: [{ label: 'Red de colegas' }, { label: 'Mensajes' }],
-  },
-  {
-    title: 'Análisis',
-    items: [{ label: 'Métricas' }, { label: 'Reconocimientos' }],
   },
 ];
 
@@ -70,9 +53,7 @@ const SECTIONS_ADMIN: NavSection[] = [
       { label: 'Repositorio', route: '/repositorio', exact: false },
       { label: 'Importar trabajos', route: '/admin/importar-trabajo' },
       { label: 'Tipos de trabajo', route: '/admin/tipos-trabajo-config' },
-      { label: 'Usuarios' },
-      { label: 'Áreas' },
-      { label: 'Auditoría' },
+      { label: 'Métricas', route: '/admin/metricas' },
     ],
   },
 ];

@@ -16,7 +16,7 @@ export class AsignacionCard {
 
   protected readonly vencida = computed(() => {
     const a = this.asignacion();
-    return a.estado === 'ACTIVA' && new Date(a.vencimientoEn).getTime() < Date.now();
+    return a.estado === 'ACTIVA' && !!a.vencimientoEn && new Date(a.vencimientoEn).getTime() < Date.now();
   });
 
   protected readonly chip = computed<{ label: string; tono: 'aprobado' | 'rechazado' | 'enviado' }>(() => {

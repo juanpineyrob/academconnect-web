@@ -38,6 +38,11 @@ export class RepositorioService {
     return this.http.get<TrabajoListItem>(`${this.api}/api/trabajos/${id}`);
   }
 
+  /** Hub de necesidades: el estudiante toma el trabajo directamente, sin pedido intermedio. */
+  tomar(id: number): Observable<TrabajoListItem> {
+    return this.http.post<TrabajoListItem>(`${this.api}/api/trabajos/${id}/tomar`, {});
+  }
+
   listarAreas(): Observable<AreaTematica[]> {
     return this.http.get<AreaTematica[]>(`${this.api}/api/areas-tematicas`);
   }

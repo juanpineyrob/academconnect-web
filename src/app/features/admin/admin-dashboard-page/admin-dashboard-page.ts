@@ -61,5 +61,11 @@ export class AdminDashboardPage {
       route: '/admin/auditoria',
       disponible: true,
     },
+    {
+      titulo: 'Métricas',
+      descripcion: 'Distribución de trabajos por estado, tiempos de evaluación y carga por evaluador.',
+      route: '/admin/metricas',
+      disponible: true,
+    },
   ];
 }

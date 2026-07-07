@@ -25,11 +25,12 @@
       border: 1px solid var(--c-border);
       background: transparent;
       cursor: pointer;
+
+      &.confirm__primary {
+        background: var(--c-accent);
+        color: var(--c-text-on-primary);
+        border-color: var(--c-accent);
+      }
     }
-  }
-  &__primary {
-    background: var(--c-accent);
-    color: var(--c-text-on-primary);
-    border-color: var(--c-accent);
   }
 }

@@ -26,7 +26,6 @@ import { LineasInvestigacion } from '../components/lineas-investigacion/lineas-i
 import { PerfilHeader } from '../components/perfil-header/perfil-header';
 import { PerfilStats } from '../components/perfil-stats/perfil-stats';
 import { PublicacionesRecientes } from '../components/publicaciones-recientes/publicaciones-recientes';
-import { Reconocimientos } from '../components/reconocimientos/reconocimientos';
 
 @Component({
   selector: 'ac-perfil-propio-page',
@@ -39,7 +38,6 @@ import { Reconocimientos } from '../components/reconocimientos/reconocimientos';
     PerfilHeader,
     PerfilStats,
     PublicacionesRecientes,
-    Reconocimientos,
   ],
   templateUrl: './perfil-propio-page.html',
   styleUrl: './perfil-propio-page.scss',
@@ -53,7 +51,6 @@ export class PerfilPropioPage {
   protected readonly loading = signal(true);
   protected readonly loadError = signal<string | null>(null);
 
-  protected readonly reconocimientos = signal<import('../perfil.models').Reconocimiento[]>([]);
   protected readonly evaluadorStats = signal<import('../perfil.models').StatsEvaluador | null>(
     null,
   );
@@ -96,11 +93,6 @@ export class PerfilPropioPage {
   }
 
   private loadRelated(perfil: Perfil): void {
-    this.perfilService
-      .listarReconocimientos(perfil.id)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((rs) => this.reconocimientos.set(rs));
-
     if (perfil.rol === 'PROFESOR' || perfil.rol === 'EXTERNO') {
       this.perfilService
         .getStatsEvaluador()

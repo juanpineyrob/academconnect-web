@@ -81,15 +81,6 @@ export interface UsuarioAreasRequest {
   areas: { areaId: number; nivelExperticia: NivelExperticia }[];
 }
 
-export interface Reconocimiento {
-  id: number;
-  tipo: string;
-  descripcion: string;
-  anio: number;
-  otorgadoPorNombre: string | null;
-  createdAt: string;
-}
-
 export interface StatsEvaluador {
   evaluacionesCompletadas: number;
   tiempoMedioRespuestaDias: number;

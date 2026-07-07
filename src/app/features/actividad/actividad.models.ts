@@ -1,5 +1,6 @@
 export type TipoActividad =
   | 'TRABAJO_CREADO'
+  | 'TRABAJO_VINCULADO'
   | 'TRABAJO_PUBLICADO'
   | 'TRABAJO_CERRADO'
   | 'TRABAJO_EXPIRADO'

@@ -1,9 +1,39 @@
 <form class="eval-form" [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
   @if (loading()) {
-    <span class="eval-form__hint" role="status">Cargando evaluadores recomendados…</span>
+    <span class="eval-form__hint" role="status">Calculando evaluadores recomendados…</span>
   } @else {
+    @if (recomendados().length > 0) {
+      <fieldset class="eval-form__field">
+        <legend class="eval-form__label eval-form__label--recos">
+          <span class="eval-form__label-star" aria-hidden="true">★</span> Recomendados para vos
+        </legend>
+        <ul class="eval-form__recos">
+          @for (e of recomendados(); track e.evaluadorId) {
+            <li class="eval-form__reco">
+              <label class="eval-form__reco-label">
+                <input type="radio" class="eval-form__radio" formControlName="usuarioId"
+                       [value]="e.evaluadorId" (change)="seleccionar(e.evaluadorId)" />
+                <span class="eval-form__reco-check" aria-hidden="true"></span>
+                <span class="eval-form__reco-body">
+                  <span class="eval-form__reco-nombre">
+                    {{ e.nombre }}
+                    <span class="eval-form__item-rol">{{ e.rol === 'PROFESOR' ? 'Profesor' : 'Externo' }}</span>
+                  </span>
+                  <span class="eval-form__afinidad-wrap"
+                        [attr.aria-label]="'Afinidad ' + (e.afinidad * 100).toFixed(0) + '%'">
+                    <span class="eval-form__afinidad" aria-hidden="true" [style.--afinidad]="e.afinidad"></span>
+                    <span class="eval-form__afinidad-pct" aria-hidden="true">{{ (e.afinidad * 100).toFixed(0) }}% afinidad</span>
+                  </span>
+                </span>
+              </label>
+            </li>
+          }
+        </ul>
+      </fieldset>
+    }
+
     <fieldset class="eval-form__field">
-      <legend class="eval-form__label">Elegí un evaluador</legend>
+      <legend class="eval-form__label">Todos los evaluadores</legend>
       <div class="eval-form__group">
         <span class="eval-form__search-wrap">
           <svg class="eval-form__search-icon" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">

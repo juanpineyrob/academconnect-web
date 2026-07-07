@@ -8,7 +8,6 @@ import {
   Perfil,
   PerfilPublico,
   PerfilUpdateRequest,
-  Reconocimiento,
   StatsEvaluador,
   TrabajoResumen,
   UsuarioAreaTematica,
@@ -46,12 +45,6 @@ export class PerfilService {
 
   listarAreas(): Observable<AreaTematica[]> {
     return this.http.get<AreaTematica[]>(`${this.api}/api/areas-tematicas`);
-  }
-
-  listarReconocimientos(usuarioId: number): Observable<Reconocimiento[]> {
-    return this.http
-      .get<Reconocimiento[]>(`${this.api}/api/usuarios/${usuarioId}/reconocimientos`)
-      .pipe(catchError(() => of([] as Reconocimiento[])));
   }
 
   getStatsEvaluador(): Observable<StatsEvaluador | null> {

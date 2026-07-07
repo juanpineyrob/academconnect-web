@@ -26,28 +26,13 @@
       <ul class="detalle__kw">@for (k of t.keywords; track k) { <li>{{ k }}</li> }</ul>
     </ac-card>
 
-    @if (message()) { <p role="status" class="detalle__success">{{ message() }}</p> }
     @if (error()) { <p role="alert" class="detalle__error">{{ error() }}</p> }
 
-    @if (miSolicitud(); as s) {
+    @if (puedeTomar()) {
       <ac-card padding="md">
-        <h2 class="detalle__h2">Mi solicitud</h2>
-        <p>Estado: <strong>{{ s.estado }}</strong>.</p>
-        @if (s.respuesta) { <p class="detalle__meta">Respuesta: {{ s.respuesta }}</p> }
-        @if (s.estado === 'PENDIENTE') {
-          <ac-button variant="ghost" (click)="cancelar()">Cancelar solicitud</ac-button>
-        }
-      </ac-card>
-    } @else if (puedePostularse()) {
-      <ac-card padding="md">
-        <h2 class="detalle__h2">Postularme</h2>
-        <label class="detalle__field">
-          <span class="detalle__label">Mensaje (opcional)</span>
-          <textarea [formControl]="motivoControl" rows="3" maxlength="1000"
-                    class="detalle__textarea"
-                    placeholder="Contale al profesor por qué te interesa este tema."></textarea>
-        </label>
-        <ac-button (click)="postularse()" [loading]="submitting()" [disabled]="submitting()">Enviar postulación</ac-button>
+        <h2 class="detalle__h2">¿Te interesa este trabajo?</h2>
+        <p class="detalle__desc">Al confirmar, quedás vinculado como autor de inmediato.</p>
+        <ac-button size="sm" (click)="tomar()" [loading]="submitting()" [disabled]="submitting()">Tomar este trabajo</ac-button>
       </ac-card>
     }
   }

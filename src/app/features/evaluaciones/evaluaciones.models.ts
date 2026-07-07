@@ -11,7 +11,7 @@ export interface Asignacion {
   evaluadorNombre: string;
   templateSnapshot: string | null; // JSON crudo; null hasta que el evaluador elige rúbrica
   asignadaEn: string;
-  vencimientoEn: string;
+  vencimientoEn: string | null;
   estado: EstadoAsignacion;
   createdAt: string;
 }

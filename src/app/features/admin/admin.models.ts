@@ -111,3 +111,23 @@ export interface TrabajoAdminImportRequest {
   evaluadoEn?: string | null;
   archivoStorageKey?: string | null;
 }
+
+// ---- Métricas ----
+
+export interface TrabajosPorEstado {
+  estado: EstadoTrabajo;
+  cantidad: number;
+}
+
+export interface CargaEvaluador {
+  evaluadorId: number;
+  nombre: string;
+  cargaActiva: number;
+}
+
+export interface Metricas {
+  trabajosPorEstado: TrabajosPorEstado[];
+  tiempoPromedioEvaluacionHoras: number | null;
+  cargaPorEvaluador: CargaEvaluador[];
+  giniCarga: number;
+}

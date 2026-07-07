@@ -7,7 +7,7 @@ export const HUB_ROUTES: Routes = [
   {
     path: 'hub',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ESTUDIANTE', 'PROFESOR'] },
+    data: { roles: ['ESTUDIANTE'] },
     loadComponent: () =>
       import('./hub-page/hub-page').then((m) => m.HubPage),
     title: 'Hub · AcademConnect',
@@ -15,7 +15,7 @@ export const HUB_ROUTES: Routes = [
   {
     path: 'hub/:id',
     canActivate: [authGuard, roleGuard],
-    data: { roles: ['ESTUDIANTE', 'PROFESOR'] },
+    data: { roles: ['ESTUDIANTE'] },
     loadComponent: () =>
       import('./hub-detalle-page/hub-detalle-page').then((m) => m.HubDetallePage),
     title: 'Necesidad · AcademConnect',

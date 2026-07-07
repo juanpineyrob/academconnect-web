@@ -31,4 +31,10 @@ describe('AsignacionCard', () => {
     const el = render(mk({ vencimientoEn: '2000-01-01T00:00:00Z' }));
     expect(el.querySelector('.card__venc--alerta')).toBeTruthy();
   });
+
+  it('no marca como vencida una asignación sin fecha límite', () => {
+    const el = render(mk({ vencimientoEn: null }));
+    expect(el.querySelector('.card__venc--alerta')).toBeFalsy();
+    expect(el.querySelector('.card__venc')?.textContent).toContain('Sin fecha límite');
+  });
 });

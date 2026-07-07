@@ -13,10 +13,7 @@
   } @else if (perfil(); as p) {
     <ac-perfil-header [perfil]="p" [isOwn]="true" (editClick)="openEditPerfil()" />
 
-    <ac-perfil-stats
-      [perfil]="p"
-      [evaluadorStats]="evaluadorStats()"
-      [reconocimientosCount]="reconocimientos().length" />
+    <ac-perfil-stats [perfil]="p" [evaluadorStats]="evaluadorStats()" />
 
     <div class="perfil-page__cols">
       <div class="perfil-page__col perfil-page__col--main">
@@ -24,7 +21,6 @@
         @if (isEstudiante()) {
           <ac-publicaciones-recientes [items]="trabajos()" />
         }
-        <ac-reconocimientos [items]="reconocimientos()" />
       </div>
       <div class="perfil-page__col perfil-page__col--side">
         <ac-lineas-investigacion

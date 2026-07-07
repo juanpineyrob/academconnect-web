@@ -43,6 +43,13 @@ export const TIPO_CONFIG: Record<TipoActividad, TipoConfig> = {
     render: (p, esActor) => esActor ? `Creaste el trabajo "${titulo(p)}"` : `Nuevo trabajo "${titulo(p)}"`,
     link: trabajoLink,
   },
+  TRABAJO_VINCULADO: {
+    icon: ICONS.check,
+    render: (p, esActor) => esActor
+      ? `Tomaste el trabajo "${titulo(p)}"`
+      : `${estudiante(p)} tomó tu trabajo "${titulo(p)}"`,
+    link: trabajoLink,
+  },
   TRABAJO_PUBLICADO: {
     icon: ICONS.send,
     render: (p, esActor) => esActor ? `Publicaste "${titulo(p)}"` : `"${titulo(p)}" fue publicado`,
