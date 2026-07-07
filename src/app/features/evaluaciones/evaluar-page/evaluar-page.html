@@ -19,12 +19,19 @@
           <h1 class="eval__titulo">{{ a.trabajoTitulo }}</h1>
           @if (readonly()) {
             <p class="eval__badge">Evaluación enviada</p>
+          } @else if (!rubricaPendiente()) {
+            <button type="button" class="eval__cambiar" (click)="abrirSelector()">Cambiar rúbrica</button>
           }
         </header>
 
         @if (aviso()) { <p class="eval__aviso">{{ aviso() }}</p> }
 
-        @if (form(); as f) {
+        @if (rubricaPendiente()) {
+          <div class="eval__sinrubrica">
+            <p class="eval__sinrubrica-text">Elegí una rúbrica para comenzar a evaluar este trabajo.</p>
+            <button type="button" class="eval__enviar" (click)="abrirSelector()">Elegir rúbrica</button>
+          </div>
+        } @else if (form(); as f) {
           @if (!readonly()) {
             <section class="proy" aria-label="Proyección de la nota">
               <div class="proy__anillo">
@@ -98,5 +105,13 @@
       [submitting]="submitting()"
       (confirmar)="enviar()"
       (cancelar)="cancelarConfirmacion()" />
+
+    <ac-selector-rubrica-dialog
+      [open]="selectorOpen()"
+      [puedeCerrar]="!rubricaPendiente()"
+      (usarDefecto)="onUsarDefecto()"
+      (usarExistente)="onUsarExistente($event)"
+      (crear)="onCrearRubrica()"
+      (cerrar)="cerrarSelector()" />
   }
 }

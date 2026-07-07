@@ -26,6 +26,14 @@ export class EvaluacionesService {
     return this.http.get<Asignacion>(`${this.api}/api/asignaciones/${id}`);
   }
 
+  /** El evaluador elige/cambia la rúbrica de su asignación. templateId undefined ⇒ rúbrica por defecto. */
+  seleccionarRubrica(asignacionId: number, templateId?: number): Observable<Asignacion> {
+    return this.http.post<Asignacion>(
+      `${this.api}/api/asignaciones/${asignacionId}/rubrica`,
+      { templateEvaluacionId: templateId ?? null },
+    );
+  }
+
   cargarEvaluacion(asignacionId: number): Observable<Evaluacion> {
     return this.http.get<Evaluacion>(`${this.api}/api/asignaciones/${asignacionId}/evaluacion`);
   }
@@ -34,7 +42,8 @@ export class EvaluacionesService {
     return this.http.post<Evaluacion>(`${this.api}/api/evaluaciones`, req);
   }
 
-  parseSnapshot(json: string): TemplateSnapshot | null {
+  parseSnapshot(json: string | null): TemplateSnapshot | null {
+    if (!json) return null;
     try {
       const obj = JSON.parse(json);
       if (!obj || !Array.isArray(obj.criterios)) return null;

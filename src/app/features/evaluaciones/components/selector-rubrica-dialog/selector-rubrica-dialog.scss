@@ -1,0 +1,195 @@
+.selrub {
+  width: min(34rem, 92vw);
+  max-height: 88vh;
+  padding: var(--sp-5);
+  border: none;
+  border-radius: var(--r-lg);
+  background: var(--c-surface);
+  color: var(--c-text);
+  box-shadow: var(--sh-elevated);
+  font-family: var(--ff-sans);
+
+  &::backdrop {
+    background: rgba(10, 31, 68, 0.45);
+  }
+}
+
+.selrub__head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-bottom: var(--sp-4);
+}
+
+.selrub__overline {
+  margin: 0;
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--c-accent);
+}
+
+.selrub__title {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h3);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-snug);
+}
+
+.selrub__lead {
+  margin: 0;
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+}
+
+.selrub__aviso {
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-md);
+  background: var(--c-state-revision-bg);
+  color: var(--c-state-revision);
+  font-size: var(--fs-body-sm);
+}
+
+/* Acciones rápidas: por defecto / crear */
+.selrub__quick {
+  display: grid;
+  gap: var(--sp-2);
+  grid-template-columns: 1fr 1fr;
+  margin-bottom: var(--sp-5);
+}
+
+.selrub__quick-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-3) var(--sp-4);
+  text-align: left;
+  cursor: pointer;
+  background: var(--c-surface);
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  transition: border-color var(--t-fast), background var(--t-fast), box-shadow var(--t-fast);
+
+  &:hover {
+    border-color: var(--c-accent);
+    background: var(--c-accent-soft);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--c-accent);
+    box-shadow: var(--sh-focus);
+  }
+}
+
+.selrub__quick-title {
+  font-weight: var(--fw-semibold);
+  color: var(--c-text);
+}
+
+.selrub__quick-sub {
+  font-size: var(--fs-caption);
+  color: var(--c-text-muted);
+}
+
+/* Listado de rúbricas existentes */
+.selrub__section-label {
+  margin: 0 0 var(--sp-2);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-semibold);
+  color: var(--c-text);
+}
+
+.selrub__group-label {
+  margin: var(--sp-3) 0 var(--sp-1);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  color: var(--c-text-faint);
+}
+
+.selrub__hint {
+  margin: 0;
+  padding: var(--sp-2) 0;
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+}
+
+.selrub__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.selrub__item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  text-align: left;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: var(--r-sm);
+  transition: background var(--t-fast), border-color var(--t-fast);
+
+  &:hover {
+    background: var(--c-accent-soft);
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: var(--c-accent);
+    box-shadow: var(--sh-focus);
+  }
+}
+
+.selrub__item-nombre {
+  font-weight: var(--fw-medium);
+  color: var(--c-text);
+}
+
+.selrub__item-meta {
+  font-size: var(--fs-caption);
+  color: var(--c-text-muted);
+}
+
+.selrub__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--sp-5);
+}
+
+.selrub__cerrar {
+  padding: var(--sp-2) var(--sp-4);
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--c-border-strong);
+  border-radius: var(--r-md);
+  color: var(--c-text);
+  font: inherit;
+
+  &:hover {
+    background: var(--c-surface-muted);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--sh-focus);
+  }
+}
+
+@media (max-width: 480px) {
+  .selrub__quick {
+    grid-template-columns: 1fr;
+  }
+}

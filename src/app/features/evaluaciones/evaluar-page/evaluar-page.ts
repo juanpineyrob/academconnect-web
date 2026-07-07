@@ -28,12 +28,16 @@ import type { Asignacion, TemplateSnapshot } from '../evaluaciones.models';
 import { CriterioField } from '../components/criterio-field/criterio-field';
 import { DocumentoViewer } from '../components/documento-viewer/documento-viewer';
 import { ConfirmarEnvioDialog } from '../components/confirmar-envio-dialog/confirmar-envio-dialog';
+import { SelectorRubricaDialog } from '../components/selector-rubrica-dialog/selector-rubrica-dialog';
 import type { ConfirmaSalida } from '../unsaved.guard';
 
 @Component({
   selector: 'ac-evaluar-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, RouterLink, DecimalPipe, CriterioField, DocumentoViewer, ConfirmarEnvioDialog],
+  imports: [
+    ReactiveFormsModule, RouterLink, DecimalPipe,
+    CriterioField, DocumentoViewer, ConfirmarEnvioDialog, SelectorRubricaDialog,
+  ],
   templateUrl: './evaluar-page.html',
   styleUrl: './evaluar-page.scss',
 })
@@ -53,6 +57,8 @@ export class EvaluarPage implements ConfirmaSalida {
   protected readonly submitting = signal<boolean>(false);
   protected readonly confirmOpen = signal<boolean>(false);
   protected readonly enviado = signal<boolean>(false);
+  protected readonly rubricaPendiente = signal<boolean>(false);
+  protected readonly selectorOpen = signal<boolean>(false);
   protected readonly proyeccion = signal<number | null>(null);
   protected readonly proyMax = signal<number>(0);
   protected readonly avance = signal<AvanceRubrica>({ hechos: 0, total: 0 });
@@ -78,9 +84,12 @@ export class EvaluarPage implements ConfirmaSalida {
   });
 
   private id = 0;
+  private rubricaPreseleccion: number | null = null;
 
   constructor() {
     this.id = Number(this.route.snapshot.paramMap.get('asignacionId'));
+    const rubricaParam = this.route.snapshot.queryParamMap?.get('rubrica');
+    this.rubricaPreseleccion = rubricaParam ? Number(rubricaParam) : null;
     this.service
       .obtenerAsignacion(this.id)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -95,12 +104,34 @@ export class EvaluarPage implements ConfirmaSalida {
 
   private inicializar(a: Asignacion): void {
     this.asignacion.set(a);
+
+    const tieneRubrica = !!a.templateSnapshot && a.templateSnapshot.trim().length > 0;
+
+    // ACTIVA sin rúbrica ⇒ el evaluador debe elegirla antes de evaluar.
+    if (a.estado === 'ACTIVA' && !tieneRubrica) {
+      this.snapshot.set(null);
+      this.form.set(null);
+      this.rubricaPendiente.set(true);
+      if (this.rubricaPreseleccion != null) {
+        // Volvemos de crear una rúbrica: auto-seleccionarla.
+        const id = this.rubricaPreseleccion;
+        this.rubricaPreseleccion = null;
+        this.aplicarSeleccion(id);
+      } else {
+        this.selectorOpen.set(true);
+        this.loading.set(false);
+      }
+      return;
+    }
+
     const snap = this.service.parseSnapshot(a.templateSnapshot);
     if (!snap) {
       this.error.set('El template de esta evaluación está corrupto.');
       this.loading.set(false);
       return;
     }
+    this.rubricaPendiente.set(false);
+    this.selectorOpen.set(false);
     this.snapshot.set(snap);
 
     if (a.estado === 'CANCELADA') {
@@ -193,6 +224,47 @@ export class EvaluarPage implements ConfirmaSalida {
               ? 'Esta asignación ya no admite evaluación (completada o vencida).'
               : 'No se pudo enviar la evaluación. Volvé a intentar.',
           );
+        },
+      });
+  }
+
+  // --- Selección de rúbrica ---
+
+  protected onUsarDefecto(): void {
+    this.aplicarSeleccion(null);
+  }
+
+  protected onUsarExistente(templateId: number): void {
+    this.aplicarSeleccion(templateId);
+  }
+
+  protected onCrearRubrica(): void {
+    this.router.navigate(['/rubricas/nueva'], {
+      queryParams: { returnTo: `/evaluaciones/${this.id}` },
+    });
+  }
+
+  protected abrirSelector(): void {
+    this.selectorOpen.set(true);
+  }
+
+  protected cerrarSelector(): void {
+    this.selectorOpen.set(false);
+  }
+
+  private aplicarSeleccion(templateId: number | null): void {
+    this.selectorOpen.set(false);
+    this.loading.set(true);
+    // Cambiar de rúbrica descarta el avance: el borrador está atado a los criterios anteriores.
+    this.draft.clear(this.id);
+    this.service
+      .seleccionarRubrica(this.id, templateId ?? undefined)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: (a) => this.inicializar(a),
+        error: () => {
+          this.error.set('No se pudo seleccionar la rúbrica. Volvé a intentar.');
+          this.loading.set(false);
         },
       });
   }

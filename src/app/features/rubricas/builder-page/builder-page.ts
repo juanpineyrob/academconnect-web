@@ -84,6 +84,8 @@ export class BuilderPage implements ConfirmaSalida {
   protected readonly previewMax = computed(() => proyeccionMax(this.previewSnapshot()));
 
   protected editId: number | null = null;
+  /** Si venimos desde una evaluación (crear rúbrica), volvemos ahí y la auto-seleccionamos. */
+  private readonly returnTo = this.route.snapshot.queryParamMap?.get('returnTo') ?? null;
 
   constructor() {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -186,9 +188,13 @@ export class BuilderPage implements ConfirmaSalida {
     const req = toRubricaRequest(this.draft());
     const obs = this.editId ? this.service.actualizar(this.editId, req) : this.service.crear(req);
     obs.pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: () => {
+      next: (r) => {
         this.form.markAsPristine();
-        this.router.navigate(['/rubricas']);
+        if (!this.editId && this.returnTo?.startsWith('/')) {
+          this.router.navigateByUrl(`${this.returnTo}?rubrica=${r.id}`);
+        } else {
+          this.router.navigate(['/rubricas']);
+        }
       },
       error: () => this.enviando.set(false),
     });

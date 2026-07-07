@@ -1,0 +1,71 @@
+<dialog #dialog class="selrub" (cancel)="$event.preventDefault(); cerrar.emit()">
+  <header class="selrub__head">
+    <p class="selrub__overline">Evaluación</p>
+    <h2 class="selrub__title">Elegí una rúbrica para evaluar</h2>
+    <p class="selrub__lead">Define los criterios con los que vas a calificar este trabajo.</p>
+  </header>
+
+  @if (puedeCerrar()) {
+    <p class="selrub__aviso">Cambiar la rúbrica descartará el avance cargado en esta evaluación.</p>
+  }
+
+  <div class="selrub__quick">
+    <button type="button" class="selrub__quick-btn" (click)="usarDefecto.emit()">
+      <span class="selrub__quick-title">Usar la rúbrica por defecto</span>
+      <span class="selrub__quick-sub">La rúbrica genérica del sistema</span>
+    </button>
+    <button type="button" class="selrub__quick-btn" (click)="crear.emit()">
+      <span class="selrub__quick-title">Crear una rúbrica nueva</span>
+      <span class="selrub__quick-sub">Te llevamos al editor y volvés acá</span>
+    </button>
+  </div>
+
+  <section class="selrub__existentes" aria-label="Usar una rúbrica existente">
+    <h3 class="selrub__section-label">Usar una existente</h3>
+
+    @if (cargando()) {
+      <p class="selrub__hint" role="status">Cargando rúbricas…</p>
+    } @else {
+      <p class="selrub__group-label">Mis rúbricas</p>
+      @if (mias().length) {
+        <ul class="selrub__list">
+          @for (r of mias(); track r.id) {
+            <li>
+              <button type="button" class="selrub__item" (click)="usarExistente.emit(r.id)">
+                <span class="selrub__item-nombre">{{ r.nombre }}</span>
+                <span class="selrub__item-meta">{{ r.criterios.length }} criterios · umbral {{ r.umbralAprobacion }}</span>
+              </button>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="selrub__hint">No tenés rúbricas propias.</p>
+      }
+
+      <p class="selrub__group-label">Rúbricas públicas</p>
+      @if (publicas().length) {
+        <ul class="selrub__list">
+          @for (r of publicas(); track r.id) {
+            <li>
+              <button type="button" class="selrub__item" (click)="usarExistente.emit(r.id)">
+                <span class="selrub__item-nombre">{{ r.nombre }}</span>
+                <span class="selrub__item-meta">
+                  {{ r.criterios.length }} criterios · umbral {{ r.umbralAprobacion }}
+                  @if (r.autorNombre) { · {{ r.autorNombre }} }
+                </span>
+              </button>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="selrub__hint">No hay rúbricas públicas.</p>
+      }
+    }
+  </section>
+
+  @if (puedeCerrar()) {
+    <div class="selrub__actions">
+      <button type="button" class="selrub__cerrar" (click)="cerrar.emit()">Cancelar</button>
+    </div>
+  }
+</dialog>
