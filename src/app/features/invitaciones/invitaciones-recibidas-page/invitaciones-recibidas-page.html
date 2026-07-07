@@ -34,6 +34,9 @@
               <a [routerLink]="['/repositorio', i.trabajoId]" class="recibidas__link">{{ i.trabajoTitulo }}</a>
               <span class="recibidas__estado" [class]="'recibidas__estado--' + i.estado.toLowerCase()">{{ i.estado }}</span>
             </div>
+            <p class="recibidas__solicitante">
+              Solicitado por <span class="recibidas__solicitante-nombre">{{ i.solicitanteNombre }}</span>
+            </p>
             @if (i.motivo) { <p class="recibidas__motivo">{{ i.motivo }}</p> }
             @if (i.estado === 'PENDIENTE') {
               <label class="recibidas__respuesta">

@@ -4,22 +4,31 @@
   } @else {
     <fieldset class="eval-form__field">
       <legend class="eval-form__label">Elegí un evaluador</legend>
-      <input type="search" class="eval-form__search" placeholder="Buscar por nombre…"
-             aria-label="Buscar evaluador por nombre"
-             [value]="query()" (input)="onQuery($any($event.target).value)" />
-      <ul class="eval-form__list">
-        @for (e of candidatos(); track e.evaluadorId) {
-          <li class="eval-form__item">
-            <label class="eval-form__item-label">
-              <input type="radio" formControlName="usuarioId" [value]="e.evaluadorId" (change)="seleccionar(e.evaluadorId)" />
-              <span class="eval-form__item-nombre">{{ e.nombre }}</span>
-              <span class="eval-form__item-rol">{{ e.rol === 'PROFESOR' ? 'Profesor' : 'Externo' }}</span>
-            </label>
-          </li>
-        } @empty {
-          <li class="eval-form__hint">No hay evaluadores que coincidan.</li>
-        }
-      </ul>
+      <div class="eval-form__group">
+        <span class="eval-form__search-wrap">
+          <svg class="eval-form__search-icon" viewBox="0 0 20 20" width="16" height="16" aria-hidden="true">
+            <path d="M9 3a6 6 0 0 1 4.47 10l3.26 3.27a1 1 0 0 1-1.42 1.42L12.04 14.4A6 6 0 1 1 9 3Zm0 2a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z" fill="currentColor"/>
+          </svg>
+          <input type="search" class="eval-form__search" placeholder="Buscar por nombre…"
+                 aria-label="Buscar evaluador por nombre"
+                 [value]="query()" (input)="onQuery($any($event.target).value)" />
+        </span>
+        <ul class="eval-form__list">
+          @for (e of candidatos(); track e.evaluadorId) {
+            <li class="eval-form__item">
+              <label class="eval-form__item-label">
+                <input type="radio" class="eval-form__radio" formControlName="usuarioId"
+                       [value]="e.evaluadorId" (change)="seleccionar(e.evaluadorId)" />
+                <span class="eval-form__check" aria-hidden="true"></span>
+                <span class="eval-form__item-nombre">{{ e.nombre }}</span>
+                <span class="eval-form__item-rol">{{ e.rol === 'PROFESOR' ? 'Profesor' : 'Externo' }}</span>
+              </label>
+            </li>
+          } @empty {
+            <li class="eval-form__hint">No hay evaluadores que coincidan.</li>
+          }
+        </ul>
+      </div>
     </fieldset>
   }
 

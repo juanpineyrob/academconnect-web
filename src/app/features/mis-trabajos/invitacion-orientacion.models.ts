@@ -4,6 +4,8 @@ export interface InvitacionOrientacion {
   id: number;
   trabajoId: number;
   trabajoTitulo: string;
+  solicitanteId: number;
+  solicitanteNombre: string;
   profesorId: number;
   profesorNombre: string;
   estado: EstadoInvitacion;

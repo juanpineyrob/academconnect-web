@@ -4,6 +4,8 @@ export interface SolicitudCoorientacion {
   id: number;
   trabajoId: number;
   trabajoTitulo: string;
+  solicitanteId: number;
+  solicitanteNombre: string;
   invitadoId: number;
   invitadoNombre: string;
   estado: EstadoInvitacion;

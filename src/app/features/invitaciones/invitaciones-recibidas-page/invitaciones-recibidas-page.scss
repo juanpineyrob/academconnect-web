@@ -147,6 +147,17 @@
   }
 }
 
+.recibidas__solicitante {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+}
+
+.recibidas__solicitante-nombre {
+  font-weight: var(--fw-semibold);
+  color: var(--c-text);
+}
+
 .recibidas__motivo {
   margin: var(--sp-3) 0 0;
   color: var(--c-text-muted);

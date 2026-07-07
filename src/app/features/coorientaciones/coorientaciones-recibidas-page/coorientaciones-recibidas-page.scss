@@ -1,2 +1,191 @@
-.coorientaciones__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.75rem; }
-.coorientaciones__tabs, .coorientaciones__actions, .coorientaciones__pager { display: flex; gap: 0.5rem; }
+.coorientaciones {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+  max-width: 960px;
+  margin: 0 auto;
+  padding: var(--sp-6) var(--sp-5) var(--sp-8);
+}
+
+.coorientaciones__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.coorientaciones__intro {
+  display: grid;
+  gap: var(--sp-2);
+}
+
+.coorientaciones__title {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: clamp(1.75rem, 3vw, 2.25rem);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  color: var(--c-text);
+}
+
+.coorientaciones__lead {
+  margin: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body);
+  color: var(--c-text-muted);
+}
+
+.coorientaciones__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  border-bottom: 1px solid var(--c-border);
+}
+
+.coorientaciones__tab {
+  padding: var(--sp-2) var(--sp-3);
+  border: none;
+  border-bottom: 2px solid transparent;
+  background: transparent;
+  color: var(--c-text-muted);
+  font-family: var(--ff-sans);
+  font-size: var(--fs-body-sm);
+  cursor: pointer;
+  transition: color var(--t-fast), border-color var(--t-fast);
+
+  &:hover {
+    color: var(--c-text);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--sh-focus);
+    border-radius: var(--r-sm);
+  }
+}
+
+.coorientaciones__tab--active {
+  color: var(--c-text);
+  border-bottom-color: var(--c-accent);
+  font-weight: var(--fw-semibold);
+}
+
+.coorientaciones__empty {
+  margin: 0;
+  color: var(--c-text-muted);
+}
+
+.coorientaciones__error {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: var(--c-state-rechazado-bg);
+  border: 1px solid rgba(179, 38, 30, 0.2);
+  color: var(--c-state-rechazado);
+}
+
+.coorientaciones__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.coorientaciones__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.coorientaciones__h2 {
+  margin: 0;
+  font-family: var(--ff-serif);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-regular);
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-snug);
+  color: var(--c-text);
+  min-inline-size: 0;
+}
+
+.coorientaciones__estado {
+  flex-shrink: 0;
+  font-family: var(--ff-sans);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--ls-wide);
+  text-transform: uppercase;
+  border-radius: var(--r-pill);
+  padding: 2px var(--sp-2);
+  white-space: nowrap;
+  color: var(--c-state-borrador);
+  background: var(--c-state-borrador-bg);
+
+  &--pendiente {
+    color: var(--c-state-revision);
+    background: var(--c-state-revision-bg);
+  }
+
+  &--aceptada {
+    color: var(--c-state-aprobado);
+    background: var(--c-state-aprobado-bg);
+  }
+
+  &--rechazada {
+    color: var(--c-state-rechazado);
+    background: var(--c-state-rechazado-bg);
+  }
+}
+
+.coorientaciones__solicitante {
+  margin: var(--sp-2) 0 0;
+  font-size: var(--fs-body-sm);
+  color: var(--c-text-muted);
+}
+
+.coorientaciones__solicitante-nombre {
+  font-weight: var(--fw-semibold);
+  color: var(--c-text);
+}
+
+.coorientaciones__motivo {
+  margin: var(--sp-3) 0 0;
+  color: var(--c-text-muted);
+  line-height: var(--lh-normal);
+}
+
+.coorientaciones__respuesta-historico {
+  margin: var(--sp-3) 0 0;
+  padding: var(--sp-2) var(--sp-4);
+  border-left: 3px solid var(--c-border-strong);
+  background: var(--c-surface-muted);
+  color: var(--c-text-muted);
+  font-style: italic;
+  white-space: pre-wrap;
+  line-height: var(--lh-normal);
+}
+
+.coorientaciones__actions {
+  display: flex;
+  gap: var(--sp-2);
+  margin-top: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.coorientaciones__pager {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .coorientaciones {
+    padding: var(--sp-5) var(--sp-4) var(--sp-7);
+  }
+}

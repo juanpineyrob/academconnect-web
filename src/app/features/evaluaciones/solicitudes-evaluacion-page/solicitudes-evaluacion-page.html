@@ -1,12 +1,19 @@
 <section class="sol-eval">
   <header class="sol-eval__header">
-    <h1 class="sol-eval__title">Solicitudes de evaluación</h1>
-    <div class="sol-eval__tabs" role="tablist">
-      <ac-button size="sm" [variant]="filtro() === 'PENDIENTE' ? 'primary' : 'ghost'"
-                 (click)="setFiltro('PENDIENTE')">Pendientes</ac-button>
-      <ac-button size="sm" [variant]="filtro() === 'HISTORICO' ? 'primary' : 'ghost'"
-                 (click)="setFiltro('HISTORICO')">Histórico</ac-button>
+    <div class="sol-eval__intro">
+      <h1 class="sol-eval__title">Solicitudes de evaluación</h1>
+      <p class="sol-eval__lead">Trabajos para los que te proponen como evaluador.</p>
     </div>
+    <nav class="sol-eval__tabs" aria-label="Filtrar solicitudes">
+      <button type="button" class="sol-eval__tab"
+              [class.sol-eval__tab--active]="filtro() === 'PENDIENTE'"
+              [attr.aria-pressed]="filtro() === 'PENDIENTE'"
+              (click)="setFiltro('PENDIENTE')">Pendientes</button>
+      <button type="button" class="sol-eval__tab"
+              [class.sol-eval__tab--active]="filtro() === 'HISTORICO'"
+              [attr.aria-pressed]="filtro() === 'HISTORICO'"
+              (click)="setFiltro('HISTORICO')">Histórico</button>
+    </nav>
   </header>
 
   @if (error(); as e) { <p class="sol-eval__error" role="alert">{{ e }}</p> }
@@ -14,29 +21,39 @@
   @if (loading()) {
     <p role="status">Cargando…</p>
   } @else if (solicitudes().length === 0) {
-    <p>No hay solicitudes.</p>
+    <p class="sol-eval__empty">
+      @if (filtro() === 'PENDIENTE') { No tenés solicitudes pendientes. }
+      @else { No hay solicitudes en el histórico. }
+    </p>
   } @else {
     <ul class="sol-eval__list">
       @for (s of solicitudes(); track s.id) {
         <li>
           <ac-card padding="md">
-            <h2 class="sol-eval__h2">{{ s.trabajoTitulo }}</h2>
-            @if (s.motivo) { <p>{{ s.motivo }}</p> }
+            <div class="sol-eval__row">
+              <h2 class="sol-eval__h2">{{ s.trabajoTitulo }}</h2>
+              <span class="sol-eval__estado"
+                    [class]="'sol-eval__estado--' + s.estado.toLowerCase()">{{ s.estado }}</span>
+            </div>
+            <p class="sol-eval__solicitante">
+              Solicitado por <span class="sol-eval__solicitante-nombre">{{ s.solicitanteNombre }}</span>
+            </p>
+            @if (s.motivo) { <p class="sol-eval__motivo">{{ s.motivo }}</p> }
             @if (s.estado === 'PENDIENTE') {
               <div class="sol-eval__actions">
                 <ac-button size="sm" [loading]="actionId() === s.id" (click)="aceptar(s)">Aceptar</ac-button>
                 <ac-button size="sm" variant="ghost" [loading]="actionId() === s.id" (click)="rechazar(s)">Rechazar</ac-button>
               </div>
-            } @else {
-              <p class="sol-eval__estado">{{ s.estado }}</p>
+            } @else if (s.respuesta) {
+              <p class="sol-eval__respuesta-historico">{{ s.respuesta }}</p>
             }
           </ac-card>
         </li>
       }
     </ul>
-    <div class="sol-eval__pager">
-      <ac-button size="sm" variant="ghost" [disabled]="first()" (click)="paginaAnterior()">Anterior</ac-button>
-      <ac-button size="sm" variant="ghost" [disabled]="last()" (click)="paginaSiguiente()">Siguiente</ac-button>
-    </div>
+    <nav class="sol-eval__pager" aria-label="Paginación">
+      <ac-button size="sm" variant="ghost" [disabled]="first() || loading()" (click)="paginaAnterior()">← Anterior</ac-button>
+      <ac-button size="sm" variant="ghost" [disabled]="last() || loading()" (click)="paginaSiguiente()">Siguiente →</ac-button>
+    </nav>
   }
 </section>
