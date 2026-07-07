@@ -8,48 +8,6 @@
   min-height: 64px;
 }
 
-.header__search {
-  position: relative;
-  display: flex;
-  align-items: center;
-  flex: 1;
-  max-width: 480px;
-  background: var(--c-surface-muted);
-  border: 1px solid var(--c-border);
-  border-radius: var(--r-md);
-  padding: 0 var(--sp-3);
-  height: 38px;
-  color: var(--c-text-faint);
-}
-
-.header__search-icon {
-  flex-shrink: 0;
-}
-
-.header__search-input {
-  flex: 1;
-  background: transparent;
-  border: none;
-  outline: none;
-  padding: 0 var(--sp-3);
-  font-family: var(--ff-sans);
-  font-size: var(--fs-body-sm);
-  color: var(--c-text-faint);
-  cursor: not-allowed;
-}
-
-.header__search-pill {
-  font-size: 0.65rem;
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--ls-wide);
-  text-transform: uppercase;
-  color: var(--c-text-faint);
-  background: var(--c-surface);
-  border: 1px solid var(--c-border);
-  border-radius: var(--r-pill);
-  padding: 2px var(--sp-2);
-}
-
 .header__actions {
   display: flex;
   align-items: center;
